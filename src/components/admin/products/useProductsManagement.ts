@@ -38,7 +38,7 @@ export const useProductsManagement = () => {
     name: "",
     description: "",
     price: 0,
-    category: "",
+    category: [],
     is_prescription: false,
     status: "active",
     featured: false,
