@@ -70,12 +70,12 @@ export const useProductsManagement = () => {
 
       if (searchQuery) {
         query = query.or(
-          `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`,
+          `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`,
         );
       }
 
       if (selectedCategory !== "all") {
-        query = query.eq("category", selectedCategory);
+        query = query.contains("category", [selectedCategory]);
       }
 
       // Sort alphabetically by name instead of by date
