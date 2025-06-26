@@ -35,6 +35,25 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
   // Ensure value is always an array
   const safeValue = Array.isArray(value) ? value : [];
 
+  // Don't render if productCategories is not available
+  if (
+    !productCategories ||
+    !Array.isArray(productCategories) ||
+    productCategories.length === 0
+  ) {
+    return (
+      <div className={cn("space-y-2", className)}>
+        <Button
+          variant="outline"
+          disabled
+          className="w-full justify-between text-left font-normal"
+        >
+          <span className="truncate text-gray-500">Loading categories...</span>
+        </Button>
+      </div>
+    );
+  }
+
   const handleSelect = (categoryName: string) => {
     const newValue = safeValue.includes(categoryName)
       ? safeValue.filter((item) => item !== categoryName)
