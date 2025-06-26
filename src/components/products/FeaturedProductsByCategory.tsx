@@ -31,24 +31,33 @@ export const FeaturedProductsByCategory = () => {
   );
   console.log("🏠 Total featured products received:", allProducts.length);
 
-  // Group featured products by category, handle empty categories
+  // Group featured products by category, handle empty categories and arrays
   const categorizedProducts = allProducts.reduce(
     (acc: Record<string, Product[]>, product: Product) => {
-      let category = product.category;
+      // Handle both array and string categories for backward compatibility
+      const categories = Array.isArray(product.category)
+        ? product.category
+        : product.category
+          ? [product.category]
+          : [];
 
-      // Handle empty or null categories
-      if (!category || category.trim() === "") {
-        category = "General Medicines";
+      // Handle empty categories
+      if (categories.length === 0) {
+        categories.push("General Medicines");
         console.log(
           "⚠️ Featured product without category, assigning to General Medicines:",
           product.name,
         );
       }
 
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(product);
+      // Add product to each category it belongs to
+      categories.forEach((category) => {
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(product);
+      });
+
       return acc;
     },
     {},
