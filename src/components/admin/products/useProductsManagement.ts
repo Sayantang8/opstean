@@ -138,11 +138,17 @@ export const useProductsManagement = () => {
     setEditingProduct(productToEdit);
 
     // Fix: Ensure all properties match the newProduct state type
+    // Handle both array and string categories for backward compatibility
+    const categories = Array.isArray(product.category)
+      ? product.category
+      : product.category
+        ? [product.category]
+        : [];
     const productForForm = {
       name: product.name,
       description: product.description || "",
       price: product.price || 0,
-      category: product.category || "",
+      category: categories,
       is_prescription: product.is_prescription || false,
       status: product.status || "active",
       featured: product.featured || false,
