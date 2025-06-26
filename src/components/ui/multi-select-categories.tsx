@@ -18,7 +18,7 @@ import {
 import { productCategories } from "@/data/productCategories";
 
 interface MultiSelectCategoriesProps {
-  value: string[];
+  value: string[] | undefined | null;
   onChange: (value: string[]) => void;
   placeholder?: string;
   className?: string;
