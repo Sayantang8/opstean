@@ -72,10 +72,10 @@ export const ProductCard = ({
             </AspectRatio>
           )}
 
-          {/* Categories in top right corner */}
+          {/* Categories in top right corner - Column Layout */}
           {categories.length > 0 && (
-            <div className="absolute top-2 right-2 flex flex-col gap-1 max-w-[50%] z-10">
-              {categories.slice(0, 2).map((categoryName, index) => {
+            <div className="absolute top-2 right-2 flex flex-col gap-2 max-w-[60%] z-10">
+              {categories.slice(0, 3).map((categoryName, index) => {
                 const categoryInfo = productCategories.find(
                   (cat) => cat.name === categoryName,
                 );
@@ -106,7 +106,7 @@ export const ProductCard = ({
 
                 // Smart truncation for category names
                 const getDisplayName = (name: string) => {
-                  if (name.length <= 12) return name;
+                  if (name.length <= 10) return name;
 
                   // Smart truncation for common words
                   const smartTruncate = (text: string) => {
@@ -114,11 +114,11 @@ export const ProductCard = ({
                       const words = text.split(" ");
                       if (words.length === 2) {
                         return words
-                          .map((word) => word.substring(0, 4))
+                          .map((word) => word.substring(0, 3))
                           .join(" ");
                       }
                     }
-                    return text.substring(0, 10);
+                    return text.substring(0, 8) + "...";
                   };
 
                   return smartTruncate(name);
@@ -127,23 +127,33 @@ export const ProductCard = ({
                 return (
                   <div
                     key={`${categoryName}-${index}`}
-                    className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-semibold shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:scale-105 ml-auto ${getCategoryStyle(categoryInfo)}`}
+                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:scale-105 ml-auto min-w-fit ${getCategoryStyle(categoryInfo)}`}
                     title={categoryName}
+                    style={{
+                      boxShadow:
+                        "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                    }}
                   >
-                    <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0" />
-                    <span className="whitespace-nowrap">
+                    <span className="w-2.5 h-2.5 rounded-full bg-white/90 flex-shrink-0" />
+                    <span className="whitespace-nowrap text-left">
                       {getDisplayName(categoryName)}
                     </span>
                   </div>
                 );
               })}
-              {categories.length > 2 && (
+              {categories.length > 3 && (
                 <div
-                  className="inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-indigo-600 text-white shadow-lg backdrop-blur-sm ml-auto"
-                  title={`${categories.length - 2} more: ${categories.slice(2).join(", ")}`}
+                  className="flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-lg backdrop-blur-sm ml-auto min-w-fit"
+                  title={`${categories.length - 3} more: ${categories.slice(3).join(", ")}`}
+                  style={{
+                    boxShadow:
+                      "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                  }}
                 >
-                  <span className="w-2 h-2 rounded-full bg-white/80 mr-1.5" />+
-                  {categories.length - 2} more
+                  <span className="w-2.5 h-2.5 rounded-full bg-white/90 mr-1.5 flex-shrink-0" />
+                  <span className="whitespace-nowrap">
+                    +{categories.length - 3}
+                  </span>
                 </div>
               )}
             </div>
