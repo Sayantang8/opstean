@@ -83,7 +83,7 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value.includes(category.name)
+                      safeValue.includes(category.name)
                         ? "opacity-100"
                         : "opacity-0",
                     )}
