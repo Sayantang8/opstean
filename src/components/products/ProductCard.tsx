@@ -74,64 +74,76 @@ export const ProductCard = ({
 
           {/* Categories in top right corner */}
           {categories.length > 0 && (
-            <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 max-w-[140px] justify-end">
-              {categories.slice(0, 3).map((categoryName, index) => {
+            <div className="absolute top-2 right-2 flex flex-col gap-1 max-w-[50%] z-10">
+              {categories.slice(0, 2).map((categoryName, index) => {
                 const categoryInfo = productCategories.find(
                   (cat) => cat.name === categoryName,
                 );
 
-                // Get proper styling based on category
+                // Get proper styling based on category with more vibrant colors
                 const getCategoryStyle = (category: any) => {
-                  if (!category)
-                    return "bg-gray-100 text-gray-700 border-gray-200";
+                  if (!category) return "bg-gray-500 text-white";
 
                   switch (category.id) {
                     case "antibiotics":
-                      return "bg-blue-50 text-blue-700 border-blue-200 shadow-blue-100";
+                      return "bg-blue-600 text-white";
                     case "eye-care":
-                      return "bg-green-50 text-green-700 border-green-200 shadow-green-100";
+                      return "bg-emerald-600 text-white";
                     case "child-care":
-                      return "bg-pink-50 text-pink-700 border-pink-200 shadow-pink-100";
+                      return "bg-rose-500 text-white";
                     case "cardio-care":
-                      return "bg-red-50 text-red-700 border-red-200 shadow-red-100";
+                      return "bg-red-600 text-white";
                     case "gastro":
-                      return "bg-orange-50 text-orange-700 border-orange-200 shadow-orange-100";
+                      return "bg-orange-600 text-white";
                     case "general-segment":
-                      return "bg-purple-50 text-purple-700 border-purple-200 shadow-purple-100";
+                      return "bg-violet-600 text-white";
                     case "women-care":
-                      return "bg-teal-50 text-teal-700 border-teal-200 shadow-teal-100";
+                      return "bg-teal-600 text-white";
                     default:
-                      return "bg-gray-50 text-gray-700 border-gray-200 shadow-gray-100";
+                      return "bg-slate-600 text-white";
                   }
+                };
+
+                // Smart truncation for category names
+                const getDisplayName = (name: string) => {
+                  if (name.length <= 12) return name;
+
+                  // Smart truncation for common words
+                  const smartTruncate = (text: string) => {
+                    if (text.includes(" ")) {
+                      const words = text.split(" ");
+                      if (words.length === 2) {
+                        return words
+                          .map((word) => word.substring(0, 4))
+                          .join(" ");
+                      }
+                    }
+                    return text.substring(0, 10);
+                  };
+
+                  return smartTruncate(name);
                 };
 
                 return (
                   <div
                     key={`${categoryName}-${index}`}
-                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md ${getCategoryStyle(categoryInfo)}`}
+                    className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-semibold shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:scale-105 ml-auto ${getCategoryStyle(categoryInfo)}`}
+                    title={categoryName}
                   >
-                    {categoryInfo && (
-                      <span
-                        className={`w-2 h-2 rounded-full flex-shrink-0 ${categoryInfo.color}`}
-                      />
-                    )}
-                    <span
-                      className="truncate max-w-[60px]"
-                      title={categoryName}
-                    >
-                      {categoryName.length > 8
-                        ? `${categoryName.substring(0, 8)}...`
-                        : categoryName}
+                    <span className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0" />
+                    <span className="whitespace-nowrap">
+                      {getDisplayName(categoryName)}
                     </span>
                   </div>
                 );
               })}
-              {categories.length > 3 && (
+              {categories.length > 2 && (
                 <div
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-sm backdrop-blur-sm"
-                  title={`${categories.length - 3} more categories: ${categories.slice(3).join(", ")}`}
+                  className="inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-indigo-600 text-white shadow-lg backdrop-blur-sm ml-auto"
+                  title={`${categories.length - 2} more: ${categories.slice(2).join(", ")}`}
                 >
-                  +{categories.length - 3}
+                  <span className="w-2 h-2 rounded-full bg-white/80 mr-1.5" />+
+                  {categories.length - 2} more
                 </div>
               )}
             </div>
