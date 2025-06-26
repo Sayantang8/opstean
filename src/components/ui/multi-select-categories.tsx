@@ -69,38 +69,44 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
-          <Command>
-            <CommandInput placeholder="Search categories..." />
-            <CommandEmpty>No categories found.</CommandEmpty>
-            <CommandGroup className="max-h-64 overflow-auto">
-              {productCategories.map((category) => (
-                <CommandItem
-                  key={category.id}
-                  value={category.name}
-                  onSelect={() => handleSelect(category.name)}
-                  className="cursor-pointer"
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      safeValue.includes(category.name)
-                        ? "opacity-100"
-                        : "opacity-0",
-                    )}
-                  />
-                  <span
-                    className={`w-3 h-3 rounded-full mr-2 ${category.color}`}
-                  />
-                  <div className="flex flex-col">
-                    <span className="font-medium">{category.name}</span>
-                    <span className="text-xs text-gray-500">
-                      {category.description}
-                    </span>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </Command>
+          {productCategories && productCategories.length > 0 ? (
+            <Command>
+              <CommandInput placeholder="Search categories..." />
+              <CommandEmpty>No categories found.</CommandEmpty>
+              <CommandGroup className="max-h-64 overflow-auto">
+                {productCategories.map((category) => (
+                  <CommandItem
+                    key={category.id}
+                    value={category.name}
+                    onSelect={() => handleSelect(category.name)}
+                    className="cursor-pointer"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        safeValue.includes(category.name)
+                          ? "opacity-100"
+                          : "opacity-0",
+                      )}
+                    />
+                    <span
+                      className={`w-3 h-3 rounded-full mr-2 ${category.color}`}
+                    />
+                    <div className="flex flex-col">
+                      <span className="font-medium">{category.name}</span>
+                      <span className="text-xs text-gray-500">
+                        {category.description}
+                      </span>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </Command>
+          ) : (
+            <div className="p-4 text-center text-gray-500">
+              Loading categories...
+            </div>
+          )}
         </PopoverContent>
       </Popover>
 
