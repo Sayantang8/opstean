@@ -131,7 +131,7 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
               </Badge>
             );
           })}
-          {value.length > 1 && (
+          {safeValue.length > 1 && (
             <Button
               type="button"
               variant="ghost"
