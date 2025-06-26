@@ -25,22 +25,25 @@ interface MultiSelectCategoriesProps {
 }
 
 export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
-  value = [],
+  value,
   onChange,
   placeholder = "Select categories...",
   className,
 }) => {
   const [open, setOpen] = useState(false);
 
+  // Ensure value is always an array
+  const safeValue = Array.isArray(value) ? value : [];
+
   const handleSelect = (categoryName: string) => {
-    const newValue = value.includes(categoryName)
-      ? value.filter((item) => item !== categoryName)
-      : [...value, categoryName];
+    const newValue = safeValue.includes(categoryName)
+      ? safeValue.filter((item) => item !== categoryName)
+      : [...safeValue, categoryName];
     onChange(newValue);
   };
 
   const handleRemove = (categoryName: string) => {
-    onChange(value.filter((item) => item !== categoryName));
+    onChange(safeValue.filter((item) => item !== categoryName));
   };
 
   const handleClearAll = () => {
