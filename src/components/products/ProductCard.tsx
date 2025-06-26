@@ -36,6 +36,13 @@ export const ProductCard = ({
   console.log("🎯 Rendering ProductCard for:", product.name);
   console.log("🎯 Product data:", product);
 
+  // Handle both array and string categories for backward compatibility
+  const categories = Array.isArray(product.category)
+    ? product.category
+    : product.category
+      ? [product.category]
+      : [];
+
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 border border-gray-200 bg-white flex flex-col h-full">
       <CardHeader className="p-0">
@@ -63,6 +70,39 @@ export const ProductCard = ({
                 </span>
               </div>
             </AspectRatio>
+          )}
+
+          {/* Categories in top right corner */}
+          {categories.length > 0 && (
+            <div className="absolute top-2 right-2 flex flex-col gap-1 max-w-[120px]">
+              {categories.slice(0, 2).map((categoryName, index) => {
+                const categoryInfo = productCategories.find(
+                  (cat) => cat.name === categoryName,
+                );
+                return (
+                  <Badge
+                    key={`${categoryName}-${index}`}
+                    variant="secondary"
+                    className="text-xs px-2 py-1 bg-white/90 backdrop-blur-sm text-gray-700 border shadow-sm"
+                  >
+                    {categoryInfo && (
+                      <span
+                        className={`w-2 h-2 rounded-full mr-1 ${categoryInfo.color}`}
+                      />
+                    )}
+                    <span className="truncate">{categoryName}</span>
+                  </Badge>
+                );
+              })}
+              {categories.length > 2 && (
+                <Badge
+                  variant="secondary"
+                  className="text-xs px-2 py-1 bg-white/90 backdrop-blur-sm text-gray-500 border shadow-sm"
+                >
+                  +{categories.length - 2} more
+                </Badge>
+              )}
+            </div>
           )}
 
           {product.featured && (
