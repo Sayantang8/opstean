@@ -127,6 +127,13 @@ export const useProductsManagement = () => {
 
   const handleEditProduct = (product: Product) => {
     console.log("🔧 Admin: Setting product for editing:", product);
+    // Handle both array and string categories for backward compatibility
+    const categories = Array.isArray(product.category)
+      ? product.category
+      : product.category
+        ? [product.category]
+        : [];
+
     const productToEdit = {
       ...product,
       composition: product.composition || "",
@@ -134,16 +141,11 @@ export const useProductsManagement = () => {
       usage: product.usage || "",
       precautions: product.precautions || "",
       manufacturer: product.manufacturer || "",
+      category: categories,
     };
     setEditingProduct(productToEdit);
 
     // Fix: Ensure all properties match the newProduct state type
-    // Handle both array and string categories for backward compatibility
-    const categories = Array.isArray(product.category)
-      ? product.category
-      : product.category
-        ? [product.category]
-        : [];
     const productForForm = {
       name: product.name,
       description: product.description || "",
