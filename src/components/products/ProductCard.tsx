@@ -74,33 +74,65 @@ export const ProductCard = ({
 
           {/* Categories in top right corner */}
           {categories.length > 0 && (
-            <div className="absolute top-2 right-2 flex flex-col gap-1 max-w-[120px]">
-              {categories.slice(0, 2).map((categoryName, index) => {
+            <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 max-w-[140px] justify-end">
+              {categories.slice(0, 3).map((categoryName, index) => {
                 const categoryInfo = productCategories.find(
                   (cat) => cat.name === categoryName,
                 );
+
+                // Get proper styling based on category
+                const getCategoryStyle = (category: any) => {
+                  if (!category)
+                    return "bg-gray-100 text-gray-700 border-gray-200";
+
+                  switch (category.id) {
+                    case "antibiotics":
+                      return "bg-blue-50 text-blue-700 border-blue-200 shadow-blue-100";
+                    case "eye-care":
+                      return "bg-green-50 text-green-700 border-green-200 shadow-green-100";
+                    case "child-care":
+                      return "bg-pink-50 text-pink-700 border-pink-200 shadow-pink-100";
+                    case "cardio-care":
+                      return "bg-red-50 text-red-700 border-red-200 shadow-red-100";
+                    case "gastro":
+                      return "bg-orange-50 text-orange-700 border-orange-200 shadow-orange-100";
+                    case "general-segment":
+                      return "bg-purple-50 text-purple-700 border-purple-200 shadow-purple-100";
+                    case "women-care":
+                      return "bg-teal-50 text-teal-700 border-teal-200 shadow-teal-100";
+                    default:
+                      return "bg-gray-50 text-gray-700 border-gray-200 shadow-gray-100";
+                  }
+                };
+
                 return (
-                  <Badge
+                  <div
                     key={`${categoryName}-${index}`}
-                    variant="secondary"
-                    className="text-xs px-2 py-1 bg-white/90 backdrop-blur-sm text-gray-700 border shadow-sm"
+                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md ${getCategoryStyle(categoryInfo)}`}
                   >
                     {categoryInfo && (
                       <span
-                        className={`w-2 h-2 rounded-full mr-1 ${categoryInfo.color}`}
+                        className={`w-2 h-2 rounded-full flex-shrink-0 ${categoryInfo.color}`}
                       />
                     )}
-                    <span className="truncate">{categoryName}</span>
-                  </Badge>
+                    <span
+                      className="truncate max-w-[60px]"
+                      title={categoryName}
+                    >
+                      {categoryName.length > 8
+                        ? `${categoryName.substring(0, 8)}...`
+                        : categoryName}
+                    </span>
+                  </div>
                 );
               })}
-              {categories.length > 2 && (
-                <Badge
-                  variant="secondary"
-                  className="text-xs px-2 py-1 bg-white/90 backdrop-blur-sm text-gray-500 border shadow-sm"
+              {categories.length > 3 && (
+                <div
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-sm backdrop-blur-sm"
+                  title={`${categories.length - 3} more categories: ${categories.slice(3).join(", ")}`}
                 >
-                  +{categories.length - 2} more
-                </Badge>
+                  +{categories.length - 3}
+                </div>
               )}
             </div>
           )}
