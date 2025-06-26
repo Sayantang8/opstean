@@ -71,26 +71,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div>
-          <Label>Category</Label>
-          <Select
-            value={product.category}
-            onValueChange={(value) =>
-              setProduct({ ...product, category: value })
+          <Label>Categories</Label>
+          <MultiSelectCategories
+            value={product.category || []}
+            onChange={(categories) =>
+              setProduct({ ...product, category: categories })
             }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              {productCategories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.name}>
-                  {cat.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            placeholder="Select categories..."
+          />
         </div>
         <div>
           <Label>Manufacturer</Label>
