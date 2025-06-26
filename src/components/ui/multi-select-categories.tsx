@@ -61,9 +61,9 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
             className="w-full justify-between text-left font-normal"
           >
             <span className="truncate">
-              {value.length === 0
+              {safeValue.length === 0
                 ? placeholder
-                : `${value.length} categories selected`}
+                : `${safeValue.length} categories selected`}
             </span>
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
