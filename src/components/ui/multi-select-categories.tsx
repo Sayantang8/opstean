@@ -130,11 +130,12 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
       </Popover>
 
       {/* Selected categories */}
-      {safeValue.length > 0 && (
+      {safeValue.length > 0 && productCategories && (
         <div className="flex flex-wrap gap-2">
           {safeValue.map((categoryName) => {
+            if (!categoryName) return null;
             const category = productCategories.find(
-              (cat) => cat.name === categoryName,
+              (cat) => cat && cat.name === categoryName,
             );
             return (
               <Badge
