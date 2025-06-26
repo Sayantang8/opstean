@@ -1,15 +1,9 @@
 import React, { useState } from "react";
-import { Check, ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, X, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -31,6 +25,7 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
   className,
 }) => {
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Ensure value is always an array
   const safeValue = Array.isArray(value) ? value : [];
@@ -69,6 +64,13 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
     onChange([]);
   };
 
+  // Filter categories based on search term
+  const filteredCategories = productCategories.filter(
+    (category) =>
+      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.description.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <div className={cn("space-y-2", className)}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -88,44 +90,51 @@ export const MultiSelectCategories: React.FC<MultiSelectCategoriesProps> = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
-          {productCategories && productCategories.length > 0 ? (
-            <Command>
-              <CommandInput placeholder="Search categories..." />
-              <CommandEmpty>No categories found.</CommandEmpty>
-              <CommandGroup className="max-h-64 overflow-auto">
-                {productCategories.map((category) => (
-                  <CommandItem
-                    key={category.id}
-                    value={category.name}
-                    onSelect={() => handleSelect(category.name)}
-                    className="cursor-pointer"
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        safeValue.includes(category.name)
-                          ? "opacity-100"
-                          : "opacity-0",
-                      )}
-                    />
-                    <span
-                      className={`w-3 h-3 rounded-full mr-2 ${category.color}`}
-                    />
-                    <div className="flex flex-col">
-                      <span className="font-medium">{category.name}</span>
-                      <span className="text-xs text-gray-500">
-                        {category.description}
-                      </span>
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </Command>
-          ) : (
-            <div className="p-4 text-center text-gray-500">
-              Loading categories...
+          <div className="border-b border-gray-200">
+            <div className="flex items-center px-3 py-2">
+              <Search className="mr-2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search categories..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              />
             </div>
-          )}
+          </div>
+
+          <div className="max-h-64 overflow-y-auto p-1">
+            {filteredCategories.length === 0 ? (
+              <div className="py-6 text-center text-sm text-gray-500">
+                No categories found.
+              </div>
+            ) : (
+              filteredCategories.map((category) => (
+                <div
+                  key={category.id}
+                  onClick={() => handleSelect(category.name)}
+                  className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      safeValue.includes(category.name)
+                        ? "opacity-100"
+                        : "opacity-0",
+                    )}
+                  />
+                  <span
+                    className={`w-3 h-3 rounded-full mr-2 ${category.color}`}
+                  />
+                  <div className="flex flex-col">
+                    <span className="font-medium">{category.name}</span>
+                    <span className="text-xs text-gray-500">
+                      {category.description}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </PopoverContent>
       </Popover>
 
