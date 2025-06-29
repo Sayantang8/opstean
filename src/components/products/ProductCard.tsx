@@ -49,7 +49,7 @@ export const ProductCard = ({
       (cat) => cat.name === categoryName,
     );
 
-    if (!categoryInfo) return "bg-slate-100 text-slate-700 border-slate-300";
+    if (!categoryInfo) return "bg-slate-50 text-slate-700 border-slate-200";
 
     switch (categoryInfo.id) {
       case "antibiotics":
@@ -122,18 +122,27 @@ export const ProductCard = ({
             {product.name || "Unnamed Product"}
           </h3>
 
-          {/* Display each category as a separate, individual badge */}
+          {/* Display each category as a completely separate individual badge */}
           {categories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
-              {categories.map((categoryName, categoryIndex) => (
-                <span
-                  key={`category-${product.id}-${categoryIndex}`}
-                  className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors duration-200 ${getCategoryStyle(categoryName)}`}
-                  title={`Category: ${categoryName}`}
-                >
-                  {categoryName}
-                </span>
-              ))}
+              {categories.map((categoryName, idx) => {
+                // Ensure we're working with a string, not an array
+                const cleanCategoryName = typeof categoryName === 'string' 
+                  ? categoryName.trim() 
+                  : String(categoryName).trim();
+                
+                if (!cleanCategoryName) return null;
+                
+                return (
+                  <Badge
+                    key={`${product.id}-category-${idx}-${cleanCategoryName}`}
+                    variant="outline"
+                    className={`${getCategoryStyle(cleanCategoryName)} text-xs font-medium px-3 py-1 rounded-full border transition-all duration-200 hover:shadow-sm`}
+                  >
+                    {cleanCategoryName}
+                  </Badge>
+                );
+              })}
             </div>
           )}
 
