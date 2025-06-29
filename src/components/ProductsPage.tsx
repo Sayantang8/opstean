@@ -52,8 +52,8 @@ const ProductsPage = () => {
       }
       
       if (selectedCategory !== 'all') {
-        // Handle both array and string categories for filtering
-        query = query.or(`category.cs.{${selectedCategory}},category.ilike.%${selectedCategory}%`);
+        // Use the correct contains operator for array columns
+        query = query.contains('category', [selectedCategory]);
       }
       
       // Only show active products on the public products page
