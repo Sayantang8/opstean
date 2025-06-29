@@ -43,6 +43,34 @@ export const ProductCard = ({
       ? [product.category]
       : [];
 
+  // Get category styling
+  const getCategoryStyle = (categoryName: string) => {
+    const categoryInfo = productCategories.find(
+      (cat) => cat.name === categoryName,
+    );
+
+    if (!categoryInfo) return "bg-gray-100 text-gray-700 border border-gray-300";
+
+    switch (categoryInfo.id) {
+      case "antibiotics":
+        return "bg-blue-100 text-blue-800 border border-blue-200";
+      case "eye-care":
+        return "bg-emerald-100 text-emerald-800 border border-emerald-200";
+      case "child-care":
+        return "bg-rose-100 text-rose-800 border border-rose-200";
+      case "cardio-care":
+        return "bg-red-100 text-red-800 border border-red-200";
+      case "gastro":
+        return "bg-orange-100 text-orange-800 border border-orange-200";
+      case "general-segment":
+        return "bg-violet-100 text-violet-800 border border-violet-200";
+      case "women-care":
+        return "bg-teal-100 text-teal-800 border border-teal-200";
+      default:
+        return "bg-gray-100 text-gray-700 border border-gray-300";
+    }
+  };
+
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 border border-gray-200 bg-white flex flex-col h-full">
       <CardHeader className="p-0">
@@ -94,62 +122,18 @@ export const ProductCard = ({
             {product.name || "Unnamed Product"}
           </h3>
 
-          {/* Categories displayed as clean badges below the title */}
+          {/* Categories displayed as separate, clear badges */}
           {categories.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {categories.slice(0, 3).map((categoryName, index) => {
-                const categoryInfo = productCategories.find(
-                  (cat) => cat.name === categoryName,
-                );
-
-                // Get proper styling based on category with vibrant colors
-                const getCategoryStyle = (category: any) => {
-                  if (!category) return "bg-gray-500 text-white";
-
-                  switch (category.id) {
-                    case "antibiotics":
-                      return "bg-blue-600 text-white";
-                    case "eye-care":
-                      return "bg-emerald-600 text-white";
-                    case "child-care":
-                      return "bg-rose-500 text-white";
-                    case "cardio-care":
-                      return "bg-red-600 text-white";
-                    case "gastro":
-                      return "bg-orange-600 text-white";
-                    case "general-segment":
-                      return "bg-violet-600 text-white";
-                    case "women-care":
-                      return "bg-teal-600 text-white";
-                    default:
-                      return "bg-slate-600 text-white";
-                  }
-                };
-
-                // Smart truncation for category names
-                const getDisplayName = (name: string) => {
-                  if (name.length <= 12) return name;
-                  return name.substring(0, 10) + "...";
-                };
-
-                return (
-                  <Badge
-                    key={`${categoryName}-${index}`}
-                    className={`text-xs font-medium px-2 py-1 rounded-md shadow-sm ${getCategoryStyle(categoryInfo)}`}
-                    title={categoryName}
-                  >
-                    {getDisplayName(categoryName)}
-                  </Badge>
-                );
-              })}
-              {categories.length > 3 && (
-                <Badge
-                  className="text-xs font-medium px-2 py-1 rounded-md bg-gray-500 text-white shadow-sm"
-                  title={`${categories.length - 3} more: ${categories.slice(3).join(", ")}`}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((categoryName, index) => (
+                <span
+                  key={`${categoryName}-${index}`}
+                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getCategoryStyle(categoryName)}`}
+                  title={categoryName}
                 >
-                  +{categories.length - 3}
-                </Badge>
-              )}
+                  {categoryName}
+                </span>
+              ))}
             </div>
           )}
 
