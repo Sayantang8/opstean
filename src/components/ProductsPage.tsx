@@ -15,7 +15,7 @@ import Footer from '@/components/Footer';
 interface Product {
   id: number;
   name: string;
-  category: string;
+  category: string[] | string;
   description?: string;
   price: number;
   stock: number;
@@ -52,7 +52,8 @@ const ProductsPage = () => {
       }
       
       if (selectedCategory !== 'all') {
-        query = query.eq('category', selectedCategory);
+        // Handle both array and string categories for filtering
+        query = query.or(`category.cs.{${selectedCategory}},category.ilike.%${selectedCategory}%`);
       }
       
       // Only show active products on the public products page
@@ -114,6 +115,72 @@ const ProductsPage = () => {
       case 'inactive': return 'secondary';
       case 'discontinued': return 'destructive';
       default: return 'secondary';
+    }
+  };
+
+  // Parse categories properly - handle string that looks like array format
+  const parseCategories = (categoryData: string[] | string): string[] => {
+    if (Array.isArray(categoryData)) {
+      return categoryData.filter(cat => cat && typeof cat === 'string' && cat.trim());
+    }
+    
+    if (typeof categoryData === 'string') {
+      const trimmed = categoryData.trim();
+      
+      // Check if it's a string that looks like an array: ["Eye Care","Child Care"]
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          // Parse the JSON-like string
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return parsed.filter(cat => cat && typeof cat === 'string' && cat.trim());
+          }
+        } catch (e) {
+          console.log("Failed to parse category string as JSON:", trimmed);
+          // If JSON parsing fails, try manual parsing
+          const manualParsed = trimmed
+            .slice(1, -1) // Remove [ and ]
+            .split(',')
+            .map(item => item.trim().replace(/^["']|["']$/g, '')) // Remove quotes
+            .filter(item => item.length > 0);
+          return manualParsed;
+        }
+      }
+      
+      // If it's just a regular string, return as single item array
+      if (trimmed) {
+        return [trimmed];
+      }
+    }
+    
+    return [];
+  };
+
+  // Get category styling for each individual category
+  const getCategoryStyle = (categoryName: string) => {
+    const categoryInfo = productCategories.find(
+      (cat) => cat.name === categoryName,
+    );
+
+    if (!categoryInfo) return "bg-slate-50 text-slate-700 border-slate-200";
+
+    switch (categoryInfo.id) {
+      case "antibiotics":
+        return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
+      case "eye-care":
+        return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
+      case "child-care":
+        return "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100";
+      case "cardio-care":
+        return "bg-red-50 text-red-700 border-red-200 hover:bg-red-100";
+      case "gastro":
+        return "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100";
+      case "general-segment":
+        return "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100";
+      case "women-care":
+        return "bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100";
+      default:
+        return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
     }
   };
 
@@ -206,7 +273,7 @@ const ProductsPage = () => {
             </div>
           </div>
 
-          {/* Products Grid */}
+          {/* Products Grid - Single unified grid without category grouping */}
           {products.length === 0 ? (
             <div className="text-center p-8 bg-white rounded-lg shadow-md">
               <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -222,88 +289,112 @@ const ProductsPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover-lift transition-all duration-300 border border-gray-100 cursor-pointer group flex flex-col h-full"
-                  onClick={() => openProductDetail(product)}
-                >
-                  <div className="relative overflow-hidden">
-                    {product.image_url ? (
-                      <AspectRatio ratio={4/3} className="bg-gray-100">
-                        <img
-                          src={product.image_url}
-                          alt={product.name}
-                          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 p-2"
-                          onError={(e) => {
-                            console.log('❌ Image failed to load:', product.image_url);
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      </AspectRatio>
-                    ) : (
-                      <AspectRatio ratio={4/3} className="bg-gray-200">
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Package className="h-16 w-16 text-gray-400" />
-                        </div>
-                      </AspectRatio>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
-                    {/* Badges */}
-                    <div className="absolute top-2 right-2 flex flex-col gap-1">
-                      {product.featured && (
-                        <Badge className="bg-yellow-500 text-white">
-                          <Star className="h-3 w-3 mr-1" />
-                          Featured
+              {products.map((product) => {
+                const categories = parseCategories(product.category);
+                
+                return (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover-lift transition-all duration-300 border border-gray-100 cursor-pointer group flex flex-col h-full"
+                    onClick={() => openProductDetail(product)}
+                  >
+                    <div className="relative overflow-hidden">
+                      {product.image_url ? (
+                        <AspectRatio ratio={4/3} className="bg-gray-100">
+                          <img
+                            src={product.image_url}
+                            alt={product.name}
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 p-2"
+                            onError={(e) => {
+                              console.log('❌ Image failed to load:', product.image_url);
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </AspectRatio>
+                      ) : (
+                        <AspectRatio ratio={4/3} className="bg-gray-200">
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Package className="h-16 w-16 text-gray-400" />
+                          </div>
+                        </AspectRatio>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      
+                      {/* Badges */}
+                      <div className="absolute top-2 right-2 flex flex-col gap-1">
+                        {product.featured && (
+                          <Badge className="bg-yellow-500 text-white">
+                            <Star className="h-3 w-3 mr-1" />
+                            Featured
+                          </Badge>
+                        )}
+                        {product.is_prescription && (
+                          <Badge variant="outline" className="bg-white">Rx</Badge>
+                        )}
+                      </div>
+                      
+                      <div className="absolute top-2 left-2">
+                        <Badge variant={getStatusBadgeColor(product.status)}>
+                          {product.status}
                         </Badge>
-                      )}
-                      {product.is_prescription && (
-                        <Badge variant="outline" className="bg-white">Rx</Badge>
-                      )}
+                      </div>
                     </div>
-                    
-                    <div className="absolute top-2 left-2">
-                      <Badge variant={getStatusBadgeColor(product.status)}>
-                        {product.status}
-                      </Badge>
+
+                    <div className="p-4 flex-1 flex flex-col">
+                      <h3 className="text-lg font-bold text-navy mb-2 group-hover:text-teal transition-colors duration-300 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      
+                      {/* Display each category as a completely separate individual badge */}
+                      {categories.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {categories.map((categoryName, idx) => {
+                            const cleanCategoryName = categoryName.trim();
+                            
+                            if (!cleanCategoryName) return null;
+                            
+                            return (
+                              <Badge
+                                key={`${product.id}-category-${idx}-${cleanCategoryName}`}
+                                variant="outline"
+                                className={`${getCategoryStyle(cleanCategoryName)} text-xs font-medium px-3 py-1 rounded-full border transition-all duration-200 hover:shadow-sm`}
+                              >
+                                {cleanCategoryName}
+                              </Badge>
+                            );
+                          })}
+                        </div>
+                      )}
+                      
+                      <div className="space-y-1 mb-3 text-sm text-gray-600">
+                        {product.manufacturer && (
+                          <p><span className="font-medium">Manufacturer:</span> {product.manufacturer}</p>
+                        )}
+                        {product.product_form && (
+                          <p><span className="font-medium">Form:</span> {product.product_form}</p>
+                        )}
+                      </div>
+                      
+                      <p className="text-gray-700 text-sm mb-3 line-clamp-2 flex-1">
+                        {product.description || 'No description available'}
+                      </p>
+
+                      <div className="flex justify-end mt-auto">
+                        <Button
+                          size="sm"
+                          className="bg-teal/10 text-teal hover:bg-teal hover:text-white transition-all duration-300"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openProductDetail(product);
+                          }}
+                        >
+                          View Details
+                        </Button>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="p-4 flex-1 flex flex-col">
-                    <h3 className="text-lg font-bold text-navy mb-2 group-hover:text-teal transition-colors duration-300 line-clamp-2">
-                      {product.name}
-                    </h3>
-                    
-                    <div className="space-y-1 mb-3 text-sm text-gray-600">
-                      <p><span className="font-medium">Category:</span> {product.category}</p>
-                      {product.manufacturer && (
-                        <p><span className="font-medium">Manufacturer:</span> {product.manufacturer}</p>
-                      )}
-                      {product.product_form && (
-                        <p><span className="font-medium">Form:</span> {product.product_form}</p>
-                      )}
-                    </div>
-                    
-                    <p className="text-gray-700 text-sm mb-3 line-clamp-2 flex-1">
-                      {product.description || 'No description available'}
-                    </p>
-
-                    <div className="flex justify-end mt-auto">
-                      <Button
-                        size="sm"
-                        className="bg-teal/10 text-teal hover:bg-teal hover:text-white transition-all duration-300"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openProductDetail(product);
-                        }}
-                      >
-                        View Details
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -350,8 +441,31 @@ const ProductsPage = () => {
                         )}
                       </div>
                       
+                      {/* Display categories in detail dialog */}
+                      {parseCategories(selectedProduct.category).length > 0 && (
+                        <div>
+                          <h4 className="font-semibold text-navy mb-2">Categories</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {parseCategories(selectedProduct.category).map((categoryName, idx) => {
+                              const cleanCategoryName = categoryName.trim();
+                              
+                              if (!cleanCategoryName) return null;
+                              
+                              return (
+                                <Badge
+                                  key={`detail-${selectedProduct.id}-category-${idx}-${cleanCategoryName}`}
+                                  variant="outline"
+                                  className={`${getCategoryStyle(cleanCategoryName)} text-sm font-medium px-3 py-1 rounded-full border`}
+                                >
+                                  {cleanCategoryName}
+                                </Badge>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div><strong>Category:</strong> {selectedProduct.category}</div>
                         {selectedProduct.manufacturer && (
                           <div><strong>Manufacturer:</strong> {selectedProduct.manufacturer}</div>
                         )}
