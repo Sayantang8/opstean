@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -39,21 +39,16 @@ const ProductsPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
-  // Use the same query as admin and homepage for consistency
-  const { data: products = [], isLoading, error, refetch } = useQuery<Product[]>({
-    queryKey: ['products', searchQuery, selectedCategory],
+  // Fetch all products without category filtering in the query
+  const { data: allProducts = [], isLoading, error, refetch } = useQuery<Product[]>({
+    queryKey: ['products', searchQuery], // Remove selectedCategory from query key
     queryFn: async () => {
       console.log('🔍 ProductsPage: Fetching products from Supabase...');
       let query = supabase.from('products').select('*');
       
-      // Apply filters
+      // Apply search filter
       if (searchQuery.trim()) {
         query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,manufacturer.ilike.%${searchQuery}%`);
-      }
-      
-      if (selectedCategory !== 'all') {
-        // Use the correct contains operator for array columns
-        query = query.contains('category', [selectedCategory]);
       }
       
       // Only show active products on the public products page
@@ -77,6 +72,56 @@ const ProductsPage = () => {
     staleTime: 0,
     gcTime: 0,
   });
+
+  // Parse categories properly - handle string that looks like array format
+  const parseCategories = (categoryData: string[] | string): string[] => {
+    if (Array.isArray(categoryData)) {
+      return categoryData.filter(cat => cat && typeof cat === 'string' && cat.trim());
+    }
+    
+    if (typeof categoryData === 'string') {
+      const trimmed = categoryData.trim();
+      
+      // Check if it's a string that looks like an array: ["Eye Care","Child Care"]
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          // Parse the JSON-like string
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return parsed.filter(cat => cat && typeof cat === 'string' && cat.trim());
+          }
+        } catch (e) {
+          console.log("Failed to parse category string as JSON:", trimmed);
+          // If JSON parsing fails, try manual parsing
+          const manualParsed = trimmed
+            .slice(1, -1) // Remove [ and ]
+            .split(',')
+            .map(item => item.trim().replace(/^["']|["']$/g, '')) // Remove quotes
+            .filter(item => item.length > 0);
+          return manualParsed;
+        }
+      }
+      
+      // If it's just a regular string, return as single item array
+      if (trimmed) {
+        return [trimmed];
+      }
+    }
+    
+    return [];
+  };
+
+  // Filter products on the frontend based on parsed categories
+  const products = useMemo(() => {
+    if (selectedCategory === 'all') {
+      return allProducts;
+    }
+
+    return allProducts.filter(product => {
+      const categories = parseCategories(product.category);
+      return categories.some(cat => cat.trim() === selectedCategory);
+    });
+  }, [allProducts, selectedCategory]);
 
   // Add effect to refetch when component mounts
   useEffect(() => {
@@ -116,44 +161,6 @@ const ProductsPage = () => {
       case 'discontinued': return 'destructive';
       default: return 'secondary';
     }
-  };
-
-  // Parse categories properly - handle string that looks like array format
-  const parseCategories = (categoryData: string[] | string): string[] => {
-    if (Array.isArray(categoryData)) {
-      return categoryData.filter(cat => cat && typeof cat === 'string' && cat.trim());
-    }
-    
-    if (typeof categoryData === 'string') {
-      const trimmed = categoryData.trim();
-      
-      // Check if it's a string that looks like an array: ["Eye Care","Child Care"]
-      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-        try {
-          // Parse the JSON-like string
-          const parsed = JSON.parse(trimmed);
-          if (Array.isArray(parsed)) {
-            return parsed.filter(cat => cat && typeof cat === 'string' && cat.trim());
-          }
-        } catch (e) {
-          console.log("Failed to parse category string as JSON:", trimmed);
-          // If JSON parsing fails, try manual parsing
-          const manualParsed = trimmed
-            .slice(1, -1) // Remove [ and ]
-            .split(',')
-            .map(item => item.trim().replace(/^["']|["']$/g, '')) // Remove quotes
-            .filter(item => item.length > 0);
-          return manualParsed;
-        }
-      }
-      
-      // If it's just a regular string, return as single item array
-      if (trimmed) {
-        return [trimmed];
-      }
-    }
-    
-    return [];
   };
 
   // Get category styling for each individual category
