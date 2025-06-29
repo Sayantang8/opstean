@@ -43,31 +43,31 @@ export const ProductCard = ({
       ? [product.category]
       : [];
 
-  // Get category styling
+  // Get category styling for each individual category
   const getCategoryStyle = (categoryName: string) => {
     const categoryInfo = productCategories.find(
       (cat) => cat.name === categoryName,
     );
 
-    if (!categoryInfo) return "bg-gray-100 text-gray-700 border border-gray-300";
+    if (!categoryInfo) return "bg-slate-100 text-slate-700 border-slate-300";
 
     switch (categoryInfo.id) {
       case "antibiotics":
-        return "bg-blue-100 text-blue-800 border border-blue-200";
+        return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
       case "eye-care":
-        return "bg-emerald-100 text-emerald-800 border border-emerald-200";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
       case "child-care":
-        return "bg-rose-100 text-rose-800 border border-rose-200";
+        return "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100";
       case "cardio-care":
-        return "bg-red-100 text-red-800 border border-red-200";
+        return "bg-red-50 text-red-700 border-red-200 hover:bg-red-100";
       case "gastro":
-        return "bg-orange-100 text-orange-800 border border-orange-200";
+        return "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100";
       case "general-segment":
-        return "bg-violet-100 text-violet-800 border border-violet-200";
+        return "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100";
       case "women-care":
-        return "bg-teal-100 text-teal-800 border border-teal-200";
+        return "bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100";
       default:
-        return "bg-gray-100 text-gray-700 border border-gray-300";
+        return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
     }
   };
 
@@ -122,14 +122,14 @@ export const ProductCard = ({
             {product.name || "Unnamed Product"}
           </h3>
 
-          {/* Categories displayed as separate, clear badges */}
+          {/* Display each category as a separate, individual badge */}
           {categories.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {categories.map((categoryName, index) => (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {categories.map((categoryName, categoryIndex) => (
                 <span
-                  key={`${categoryName}-${index}`}
-                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getCategoryStyle(categoryName)}`}
-                  title={categoryName}
+                  key={`category-${product.id}-${categoryIndex}`}
+                  className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors duration-200 ${getCategoryStyle(categoryName)}`}
+                  title={`Category: ${categoryName}`}
                 >
                   {categoryName}
                 </span>
