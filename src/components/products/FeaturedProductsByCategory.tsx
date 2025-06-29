@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useProductsQuery } from "./useProductsQuery";
 import { ProductCard } from "./ProductCard";
-import { categoryIcons } from "./CategoryIcons";
 
 interface Product {
   id: number;
@@ -30,44 +29,6 @@ export const FeaturedProductsByCategory = () => {
     allProducts,
   );
   console.log("🏠 Total featured products received:", allProducts.length);
-
-  // Group featured products by category, handle empty categories and arrays
-  const categorizedProducts = allProducts.reduce(
-    (acc: Record<string, Product[]>, product: Product) => {
-      // Handle both array and string categories for backward compatibility
-      const categories = Array.isArray(product.category)
-        ? product.category
-        : product.category
-          ? [product.category]
-          : [];
-
-      // Handle empty categories
-      if (categories.length === 0) {
-        categories.push("General Medicines");
-        console.log(
-          "⚠️ Featured product without category, assigning to General Medicines:",
-          product.name,
-        );
-      }
-
-      // Add product to each category it belongs to
-      categories.forEach((category) => {
-        if (!acc[category]) {
-          acc[category] = [];
-        }
-        acc[category].push(product);
-      });
-
-      return acc;
-    },
-    {},
-  );
-
-  console.log("📂 Final categorized featured products:", categorizedProducts);
-  console.log(
-    "📂 Featured categories to render:",
-    Object.keys(categorizedProducts),
-  );
 
   const handleLearnMore = (productId: number) => {
     console.log(
@@ -112,7 +73,7 @@ export const FeaturedProductsByCategory = () => {
     );
   }
 
-  if (Object.keys(categorizedProducts).length === 0) {
+  if (allProducts.length === 0) {
     return (
       <div className="text-center p-12 bg-gray-50 rounded-lg">
         <h3 className="text-xl font-semibold text-gray-700 mb-2">
@@ -133,63 +94,25 @@ export const FeaturedProductsByCategory = () => {
   }
 
   return (
-    <div className="space-y-12">
-      {Object.entries(categorizedProducts).map(
-        ([category, products], categoryIndex) => {
+    <div className="space-y-6">
+      {/* Single grid showing all featured products without category grouping */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {allProducts.map((product: Product, index) => {
           console.log(
-            `🎨 Rendering featured category section: ${category} with ${products.length} products`,
+            `🎯 Rendering featured product ${index + 1}:`,
+            product.name,
           );
           return (
-            <div key={category} className="space-y-6">
-              {/* Category Header */}
-              <div className="text-center">
-                <div className="flex justify-center items-center mb-4">
-                  <div className="text-blue-600 mr-3">
-                    {categoryIcons[category as keyof typeof categoryIcons] || (
-                      <svg
-                        className="w-8 h-8"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900">
-                    {category}
-                  </h3>
-                </div>
-                <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full"></div>
-              </div>
-
-              {/* Products Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {products.slice(0, 4).map((product: Product, index) => {
-                  console.log(
-                    `🎯 Rendering featured product ${index + 1} in ${category}:`,
-                    product.name,
-                  );
-                  return (
-                    <ProductCard
-                      key={`${product.id}-${categoryIndex}-${index}`}
-                      product={product}
-                      index={index}
-                      categoryIndex={categoryIndex}
-                      onLearnMore={handleLearnMore}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+            <ProductCard
+              key={`featured-product-${product.id}-${index}`}
+              product={product}
+              index={index}
+              categoryIndex={0} // Not needed anymore since we're not grouping by category
+              onLearnMore={handleLearnMore}
+            />
           );
-        },
-      )}
+        })}
+      </div>
     </div>
   );
 };
