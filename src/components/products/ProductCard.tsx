@@ -72,15 +72,37 @@ export const ProductCard = ({
             </AspectRatio>
           )}
 
-          {/* Categories in top right corner - Column Layout */}
+          {/* Featured badge in top left */}
+          {product.featured && (
+            <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md">
+              Featured
+            </div>
+          )}
+
+          {/* Prescription badge in top right */}
+          {product.is_prescription && (
+            <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold shadow-md">
+              Rx
+            </div>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent className="p-4 flex-1 flex flex-col">
+        <div className="space-y-3 flex-1">
+          <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
+            {product.name || "Unnamed Product"}
+          </h3>
+
+          {/* Categories displayed as clean badges below the title */}
           {categories.length > 0 && (
-            <div className="absolute top-2 right-2 flex flex-col gap-2 max-w-[60%] z-10">
+            <div className="flex flex-wrap gap-1.5">
               {categories.slice(0, 3).map((categoryName, index) => {
                 const categoryInfo = productCategories.find(
                   (cat) => cat.name === categoryName,
                 );
 
-                // Get proper styling based on category with more vibrant colors
+                // Get proper styling based on category with vibrant colors
                 const getCategoryStyle = (category: any) => {
                   if (!category) return "bg-gray-500 text-white";
 
@@ -106,72 +128,30 @@ export const ProductCard = ({
 
                 // Smart truncation for category names
                 const getDisplayName = (name: string) => {
-                  if (name.length <= 10) return name;
-
-                  // Smart truncation for common words
-                  const smartTruncate = (text: string) => {
-                    if (text.includes(" ")) {
-                      const words = text.split(" ");
-                      if (words.length === 2) {
-                        return words
-                          .map((word) => word.substring(0, 3))
-                          .join(" ");
-                      }
-                    }
-                    return text.substring(0, 8) + "...";
-                  };
-
-                  return smartTruncate(name);
+                  if (name.length <= 12) return name;
+                  return name.substring(0, 10) + "...";
                 };
 
                 return (
-                  <div
+                  <Badge
                     key={`${categoryName}-${index}`}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:scale-105 ml-auto min-w-fit ${getCategoryStyle(categoryInfo)}`}
+                    className={`text-xs font-medium px-2 py-1 rounded-md shadow-sm ${getCategoryStyle(categoryInfo)}`}
                     title={categoryName}
-                    style={{
-                      boxShadow:
-                        "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                    }}
                   >
-                    <span className="w-2.5 h-2.5 rounded-full bg-white/90 flex-shrink-0" />
-                    <span className="whitespace-nowrap text-left">
-                      {getDisplayName(categoryName)}
-                    </span>
-                  </div>
+                    {getDisplayName(categoryName)}
+                  </Badge>
                 );
               })}
               {categories.length > 3 && (
-                <div
-                  className="flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-lg backdrop-blur-sm ml-auto min-w-fit"
+                <Badge
+                  className="text-xs font-medium px-2 py-1 rounded-md bg-gray-500 text-white shadow-sm"
                   title={`${categories.length - 3} more: ${categories.slice(3).join(", ")}`}
-                  style={{
-                    boxShadow:
-                      "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                  }}
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-white/90 mr-1.5 flex-shrink-0" />
-                  <span className="whitespace-nowrap">
-                    +{categories.length - 3}
-                  </span>
-                </div>
+                  +{categories.length - 3}
+                </Badge>
               )}
             </div>
           )}
-
-          {product.featured && (
-            <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              Featured
-            </div>
-          )}
-        </div>
-      </CardHeader>
-
-      <CardContent className="p-4 flex-1 flex flex-col">
-        <div className="space-y-3 flex-1">
-          <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
-            {product.name || "Unnamed Product"}
-          </h3>
 
           {product.manufacturer && (
             <p className="text-sm text-gray-600">
