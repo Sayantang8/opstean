@@ -34,14 +34,48 @@ export const ProductCard = ({
   onLearnMore,
 }: ProductCardProps) => {
   console.log("🎯 Rendering ProductCard for:", product.name);
-  console.log("🎯 Product data:", product);
+  console.log("🎯 Product category raw data:", product.category);
 
-  // Handle both array and string categories for backward compatibility
-  const categories = Array.isArray(product.category)
-    ? product.category
-    : product.category
-      ? [product.category]
-      : [];
+  // Parse categories properly - handle string that looks like array format
+  const parseCategories = (categoryData: string[] | string): string[] => {
+    if (Array.isArray(categoryData)) {
+      return categoryData.filter(cat => cat && typeof cat === 'string' && cat.trim());
+    }
+    
+    if (typeof categoryData === 'string') {
+      const trimmed = categoryData.trim();
+      
+      // Check if it's a string that looks like an array: ["Eye Care","Child Care"]
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          // Parse the JSON-like string
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return parsed.filter(cat => cat && typeof cat === 'string' && cat.trim());
+          }
+        } catch (e) {
+          console.log("Failed to parse category string as JSON:", trimmed);
+          // If JSON parsing fails, try manual parsing
+          const manualParsed = trimmed
+            .slice(1, -1) // Remove [ and ]
+            .split(',')
+            .map(item => item.trim().replace(/^["']|["']$/g, '')) // Remove quotes
+            .filter(item => item.length > 0);
+          return manualParsed;
+        }
+      }
+      
+      // If it's just a regular string, return as single item array
+      if (trimmed) {
+        return [trimmed];
+      }
+    }
+    
+    return [];
+  };
+
+  const categories = parseCategories(product.category);
+  console.log("🎯 Parsed categories:", categories);
 
   // Get category styling for each individual category
   const getCategoryStyle = (categoryName: string) => {
@@ -126,10 +160,7 @@ export const ProductCard = ({
           {categories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
               {categories.map((categoryName, idx) => {
-                // Ensure we're working with a string, not an array
-                const cleanCategoryName = typeof categoryName === 'string' 
-                  ? categoryName.trim() 
-                  : String(categoryName).trim();
+                const cleanCategoryName = categoryName.trim();
                 
                 if (!cleanCategoryName) return null;
                 
