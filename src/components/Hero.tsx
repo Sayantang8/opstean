@@ -1,9 +1,10 @@
-
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
   
   const slides = [
     {
@@ -89,7 +90,7 @@ const Hero = () => {
             Contact Us
           </Button>
           <Button 
-            onClick={() => smoothScrollToSection('products')}
+            onClick={() => navigate('/products')}
             variant="outline"
             className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-navy px-8 py-6 text-lg rounded-lg transition-all duration-300 animate-fade-in shadow-2xl"
             style={{ animationDelay: "0.6s" }}
