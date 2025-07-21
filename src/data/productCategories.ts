@@ -56,5 +56,54 @@ export const productCategories: ProductCategory[] = [
     description: "Women's health and wellness products",
     icon: "user",
     color: "bg-teal-500"
+  },
+  {
+    id: "urology-care",
+    name: "Urology Care",
+    description: "Urological health and treatment products",
+    icon: "activity",
+    color: "bg-indigo-500"
+  },
+  {
+    id: "pain-care",
+    name: "Pain Care",
+    description: "Pain management and relief medications",
+    icon: "zap",
+    color: "bg-red-600"
+  },
+  {
+    id: "gyno-care",
+    name: "Gyno Care",
+    description: "Gynecological health and women's care products",
+    icon: "heart",
+    color: "bg-pink-600"
+  },
+  {
+    id: "ortho-care",
+    name: "Ortho Care",
+    description: "Orthopedic and bone health products",
+    icon: "shield",
+    color: "bg-gray-600"
+  },
+  {
+    id: "cold-care",
+    name: "Cold Care",
+    description: "Cold, flu and respiratory care products",
+    icon: "thermometer",
+    color: "bg-cyan-500"
+  },
+  {
+    id: "nuro-care",
+    name: "Nuro Care",
+    description: "Neurological and brain health products",
+    icon: "brain",
+    color: "bg-violet-600"
+  },
+  {
+    id: "derma-care",
+    name: "Derma Care",
+    description: "Dermatological and skin care products",
+    icon: "sun",
+    color: "bg-amber-500"
   }
 ];

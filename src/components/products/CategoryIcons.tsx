@@ -11,7 +11,9 @@ import {
   Shield,
   Leaf,
   Zap,
-  Stethoscope
+  Stethoscope,
+  Brain,
+  Sun
 } from 'lucide-react';
 
 export const categoryIcons = {
@@ -25,5 +27,12 @@ export const categoryIcons = {
   "Derma Care": <Shield className="w-8 h-8" />,
   "Cold Management": <Thermometer className="w-8 h-8" />,
   "Nutritional Supplements": <Leaf className="w-8 h-8" />,
-  "Pain Management": <Zap className="w-8 h-8" />
+  "Pain Management": <Zap className="w-8 h-8" />,
+  "Urology Care": <Activity className="w-8 h-8" />,
+  "Pain Care": <Zap className="w-8 h-8" />,
+  "Gyno Care": <Heart className="w-8 h-8" />,
+  "Ortho Care": <Shield className="w-8 h-8" />,
+  "Cold Care": <Thermometer className="w-8 h-8" />,
+  "Nuro Care": <Brain className="w-8 h-8" />,
+  "Derma Care": <Sun className="w-8 h-8" />
 };
