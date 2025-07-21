@@ -212,7 +212,6 @@ const ProductsPage = () => {
   const getCategoryStyle = (categoryName: string) => {
     const categoryInfo = productCategories.find(
       (cat) => cat.name === categoryName,
-      women-care
     );
 
     if (!categoryInfo) return "bg-slate-50 text-slate-700 border-slate-200";
