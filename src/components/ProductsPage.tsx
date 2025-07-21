@@ -212,14 +212,13 @@ const ProductsPage = () => {
   const getCategoryStyle = (categoryName: string) => {
     const categoryInfo = productCategories.find(
       (cat) => cat.name === categoryName,
+      women-care
     );
 
     if (!categoryInfo) return "bg-slate-50 text-slate-700 border-slate-200";
 
     switch (categoryInfo.id) {
       case "antibiotics":
-        return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
-      case "women-care":
         return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
       case "eye-care":
         return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
