@@ -219,6 +219,8 @@ const ProductsPage = () => {
     switch (categoryInfo.id) {
       case "antibiotics":
         return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
+      case "women-care":
+        return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
       case "eye-care":
         return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
       case "child-care":
