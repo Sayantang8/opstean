@@ -51,13 +51,6 @@ export const productCategories: ProductCategory[] = [
     color: "bg-purple-500"
   },
   {
-    id: "women-care",
-    name: "Women Care",
-    description: "Women's health and wellness products",
-    icon: "user",
-    color: "bg-teal-500"
-  },
-  {
     id: "urology-care",
     name: "Urology Care",
     description: "Urological health and treatment products",
