@@ -230,8 +230,6 @@ const ProductsPage = () => {
         return "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100";
       case "general-segment":
         return "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100";
-      case "women-care":
-        return "bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100";
       case "urology-care":
         return "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100";
       case "pain-care":
@@ -242,7 +240,7 @@ const ProductsPage = () => {
         return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
       case "cold-care":
         return "bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100";
-      case "nuro-care":
+      case "neuro-care":
         return "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100";
       case "derma-care":
         return "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100";
