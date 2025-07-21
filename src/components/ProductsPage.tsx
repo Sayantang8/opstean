@@ -75,20 +75,66 @@ const ProductsPage = () => {
 
   // Parse categories properly - handle string that looks like array format
   const parseCategories = (categoryData: string[] | string): string[] => {
+    console.log('🔧 Parsing category data:', categoryData, typeof categoryData);
+    
     if (Array.isArray(categoryData)) {
-      return categoryData.filter(cat => cat && typeof cat === 'string' && cat.trim());
+      // Handle array that might contain stringified JSON
+      const flatCategories: string[] = [];
+      categoryData.forEach(item => {
+        if (typeof item === 'string') {
+          // Check if this item is a stringified JSON array
+          const trimmed = item.trim();
+          if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              if (Array.isArray(parsed)) {
+                flatCategories.push(...parsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+              } else {
+                flatCategories.push(trimmed);
+              }
+            } catch (e) {
+              // If parsing fails, treat as regular string
+              flatCategories.push(trimmed);
+            }
+          } else if (trimmed) {
+            flatCategories.push(trimmed);
+          }
+        }
+      });
+      return flatCategories.filter(cat => cat && cat.trim());
     }
     
     if (typeof categoryData === 'string') {
       const trimmed = categoryData.trim();
       
-      // Check if it's a string that looks like an array: ["Eye Care","Child Care"]
+      // Handle nested JSON strings like "[\"Women Care\",\"General Segment\"]"
       if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
         try {
           // Parse the JSON-like string
           const parsed = JSON.parse(trimmed);
           if (Array.isArray(parsed)) {
-            return parsed.filter(cat => cat && typeof cat === 'string' && cat.trim());
+            // Handle nested arrays or strings within the parsed array
+            const flatCategories: string[] = [];
+            parsed.forEach(item => {
+              if (typeof item === 'string') {
+                const itemTrimmed = item.trim();
+                if (itemTrimmed.startsWith('[') && itemTrimmed.endsWith(']')) {
+                  try {
+                    const nestedParsed = JSON.parse(itemTrimmed);
+                    if (Array.isArray(nestedParsed)) {
+                      flatCategories.push(...nestedParsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+                    } else {
+                      flatCategories.push(itemTrimmed);
+                    }
+                  } catch (e) {
+                    flatCategories.push(itemTrimmed);
+                  }
+                } else if (itemTrimmed) {
+                  flatCategories.push(itemTrimmed);
+                }
+              }
+            });
+            return flatCategories.filter(cat => cat && cat.trim());
           }
         } catch (e) {
           console.log("Failed to parse category string as JSON:", trimmed);
