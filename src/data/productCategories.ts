@@ -93,8 +93,8 @@ export const productCategories: ProductCategory[] = [
     color: "bg-cyan-500"
   },
   {
-    id: "nuro-care",
-    name: "Nuro Care",
+    id: "neuro-care",
+    name: "Neuro Care",
     description: "Neurological and brain health products",
     icon: "brain",
     color: "bg-violet-600"
