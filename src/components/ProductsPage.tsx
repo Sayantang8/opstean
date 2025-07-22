@@ -434,6 +434,9 @@ const ProductsPage = () => {
                         {product.manufacturer && (
                           <p><span className="font-medium">Manufacturer:</span> {product.manufacturer}</p>
                         )}
+                        {product.show_manufacturer !== false && product.manufacturer && (
+                          <p><span className="font-medium">Manufacturer:</span> {product.manufacturer}</p>
+                        )}
                         {product.product_form && (
                           <p><span className="font-medium">Form:</span> {product.product_form}</p>
                         )}

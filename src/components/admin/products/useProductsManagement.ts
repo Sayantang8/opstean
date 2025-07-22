@@ -48,6 +48,7 @@ export const useProductsManagement = () => {
     usage: "",
     precautions: "",
     manufacturer: "",
+    show_manufacturer: true,
   });
 
   const { uploadingImage, handleImageUpload } = useImageUpload();
@@ -63,20 +64,10 @@ export const useProductsManagement = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["products", searchQuery, selectedCategory],
+    queryKey: ["products"],
     queryFn: async () => {
       console.log("🔧 Admin: Fetching products from Supabase...");
-      let query = supabase.from("products").select("*");
-
-      if (searchQuery) {
-        query = query.or(
-          `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`,
-        );
-      }
-
-      if (selectedCategory !== "all") {
-        query = query.contains("category", [selectedCategory]);
-      }
+      const query = supabase.from("products").select("*");
 
       // Sort alphabetically by name instead of by date
       const { data, error } = await query.order("name", { ascending: true });
@@ -92,6 +83,99 @@ export const useProductsManagement = () => {
       return data as Product[];
     },
   });
+  // Parse categories properly for filtering
+  const parseCategories = (categoryData: string[] | string): string[] => {
+    if (Array.isArray(categoryData)) {
+      const flatCategories: string[] = [];
+      categoryData.forEach(item => {
+        if (typeof item === 'string') {
+          const trimmed = item.trim();
+          if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              if (Array.isArray(parsed)) {
+                flatCategories.push(...parsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+              } else {
+                flatCategories.push(trimmed);
+              }
+            } catch (e) {
+              flatCategories.push(trimmed);
+            }
+          } else if (trimmed) {
+            flatCategories.push(trimmed);
+          }
+        }
+      });
+      return flatCategories.filter(cat => cat && cat.trim());
+    }
+    
+    if (typeof categoryData === 'string') {
+      const trimmed = categoryData.trim();
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            const flatCategories: string[] = [];
+            parsed.forEach(item => {
+              if (typeof item === 'string') {
+                const itemTrimmed = item.trim();
+                if (itemTrimmed.startsWith('[') && itemTrimmed.endsWith(']')) {
+                  try {
+                    const nestedParsed = JSON.parse(itemTrimmed);
+                    if (Array.isArray(nestedParsed)) {
+                      flatCategories.push(...nestedParsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+                    } else {
+                      flatCategories.push(itemTrimmed);
+                    }
+                  } catch (e) {
+                    flatCategories.push(itemTrimmed);
+                  }
+                } else if (itemTrimmed) {
+                  flatCategories.push(itemTrimmed);
+                }
+              }
+            });
+            return flatCategories.filter(cat => cat && cat.trim());
+          }
+        } catch (e) {
+          const manualParsed = trimmed
+            .slice(1, -1)
+            .split(',')
+            .map(item => item.trim().replace(/^["']|["']$/g, ''))
+            .filter(item => item.length > 0);
+          return manualParsed;
+        }
+      }
+      if (trimmed) {
+        return [trimmed];
+      }
+    }
+    return [];
+  };
+
+  // Filter products on frontend based on search and category
+  const filteredProducts = useMemo(() => {
+    let filtered = products;
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(product =>
+        product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.manufacturer?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Apply category filter
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(product => {
+        const categories = parseCategories(product.category || []);
+        return categories.some(cat => cat.trim() === selectedCategory);
+      });
+    }
+
+    return filtered;
+  }, [products, searchQuery, selectedCategory]);
 
   const handleCreateProduct = () => {
     if (!newProduct.name) {
@@ -120,6 +204,7 @@ export const useProductsManagement = () => {
           usage: "",
           precautions: "",
           manufacturer: "",
+          show_manufacturer: true,
         });
       },
     });
@@ -141,6 +226,7 @@ export const useProductsManagement = () => {
       usage: product.usage || "",
       precautions: product.precautions || "",
       manufacturer: product.manufacturer || "",
+      show_manufacturer: product.show_manufacturer !== false,
       category: categories,
     };
     setEditingProduct(productToEdit);
@@ -160,6 +246,7 @@ export const useProductsManagement = () => {
       usage: product.usage || "",
       precautions: product.precautions || "",
       manufacturer: product.manufacturer || "",
+      show_manufacturer: product.show_manufacturer !== false,
     };
     setNewProduct(productForForm);
     setIsEditDialogOpen(true);
@@ -255,7 +342,7 @@ export const useProductsManagement = () => {
     setNewProduct,
 
     // Data
-    products,
+    products: filteredProducts,
     isLoading,
     error,
 

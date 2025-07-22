@@ -31,6 +31,7 @@ interface Product {
   usage?: string;
   precautions?: string;
   manufacturer?: string;
+  show_manufacturer?: boolean;
   created_at?: string;
 }
 
@@ -49,6 +50,78 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   uploadingImage,
   onImageUpload,
 }) => {
+  // Parse categories properly for display in edit form
+  const parseCategories = (categoryData: string[] | string): string[] => {
+    if (Array.isArray(categoryData)) {
+      const flatCategories: string[] = [];
+      categoryData.forEach(item => {
+        if (typeof item === 'string') {
+          const trimmed = item.trim();
+          if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              if (Array.isArray(parsed)) {
+                flatCategories.push(...parsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+              } else {
+                flatCategories.push(trimmed);
+              }
+            } catch (e) {
+              flatCategories.push(trimmed);
+            }
+          } else if (trimmed) {
+            flatCategories.push(trimmed);
+          }
+        }
+      });
+      return flatCategories.filter(cat => cat && cat.trim());
+    }
+    
+    if (typeof categoryData === 'string') {
+      const trimmed = categoryData.trim();
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            const flatCategories: string[] = [];
+            parsed.forEach(item => {
+              if (typeof item === 'string') {
+                const itemTrimmed = item.trim();
+                if (itemTrimmed.startsWith('[') && itemTrimmed.endsWith(']')) {
+                  try {
+                    const nestedParsed = JSON.parse(itemTrimmed);
+                    if (Array.isArray(nestedParsed)) {
+                      flatCategories.push(...nestedParsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+                    } else {
+                      flatCategories.push(itemTrimmed);
+                    }
+                  } catch (e) {
+                    flatCategories.push(itemTrimmed);
+                  }
+                } else if (itemTrimmed) {
+                  flatCategories.push(itemTrimmed);
+                }
+              }
+            });
+            return flatCategories.filter(cat => cat && cat.trim());
+          }
+        } catch (e) {
+          const manualParsed = trimmed
+            .slice(1, -1)
+            .split(',')
+            .map(item => item.trim().replace(/^["']|["']$/g, ''))
+            .filter(item => item.length > 0);
+          return manualParsed;
+        }
+      }
+      if (trimmed) {
+        return [trimmed];
+      }
+    }
+    return [];
+  };
+
+  // Get parsed categories for the form
+  const currentCategories = parseCategories(product.category || []);
   return (
     <div className="space-y-6 py-4">
       {/* Basic Information */}
@@ -85,7 +158,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <Label className="text-sm font-medium text-gray-700">Categories</Label>
               <div className="mt-1">
                 <MultiSelectCategories
-                  value={product.category || []}
+                  value={currentCategories}
                   onChange={(categories) =>
                     setProduct({ ...product, category: categories })
                   }
@@ -241,7 +314,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           <CardTitle className="text-lg font-semibold text-gray-900">Product Settings</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
               <div>
                 <Label className="text-sm font-medium text-gray-900">Prescription Required</Label>
@@ -263,6 +336,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 checked={product.featured}
                 onCheckedChange={(checked) =>
                   setProduct({ ...product, featured: checked })
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div>
+                <Label className="text-sm font-medium text-gray-900">Show Manufacturer</Label>
+                <p className="text-xs text-gray-500 mt-1">Display manufacturer on product cards</p>
+              </div>
+              <Switch
+                checked={product.show_manufacturer !== false}
+                onCheckedChange={(checked) =>
+                  setProduct({ ...product, show_manufacturer: checked })
                 }
               />
             </div>

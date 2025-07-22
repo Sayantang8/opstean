@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -48,7 +47,7 @@ export const ProductSearchFilter: React.FC<ProductSearchFilterProps> = ({
         </div>
         
         <div className="mt-4 text-sm text-gray-600">
-          Total products in database: {productsCount}
+          Showing {productsCount} products
           {searchQuery && ` (filtered by "${searchQuery}")`}
           {selectedCategory !== 'all' && ` (filtered by ${selectedCategory})`}
         </div>
