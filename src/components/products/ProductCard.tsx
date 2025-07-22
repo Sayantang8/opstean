@@ -235,7 +235,7 @@ export const ProductCard = ({
             </div>
           )}
 
-          {product.show_manufacturer !== false && product.manufacturer && (
+          {product.manufacturer && (
             <p className="text-sm text-gray-600">
               <span className="font-semibold">Manufacturer:</span>{" "}
               {product.manufacturer}
