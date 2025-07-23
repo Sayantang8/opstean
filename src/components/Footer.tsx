@@ -95,14 +95,27 @@ const Footer = () => {
             <div className="w-full">
               <h4 className="text-sm font-semibold mb-2">Our Location</h4>
               <div 
-                className="w-full h-32 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity bg-gray-700 flex items-center justify-center"
+                className="w-full h-32 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity relative"
                 onClick={handleMapClick}
                 title="Click to open in Google Maps"
               >
-                <div className="text-center">
-                  <MapPin className="w-8 h-8 text-teal mx-auto mb-2" />
-                  <p className="text-xs text-gray-300">Click to view on Google Maps</p>
-                  <p className="text-xs text-gray-400">Thakurpukur, Kolkata</p>
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.0722354332956!2d88.3068886768592!3d22.463919636941903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027ba740e84c69%3A0xe90c52c1d7cc2898!2sOpstean%20Healthcare%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1753259389554!5m2!1sen!2sin"
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0 }} 
+                  allowFullScreen 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Opstean Healthcare Location - Footer Map"
+                ></iframe>
+                
+                <div className="absolute inset-0 bg-black bg-opacity-30 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                  <div className="text-center">
+                    <MapPin className="w-6 h-6 text-white mx-auto mb-1" />
+                    <p className="text-xs text-white font-medium">Opstean Healthcare</p>
+                    <p className="text-xs text-gray-200">Thakurpukur, Kolkata</p>
+                  </div>
                 </div>
               </div>
             </div>

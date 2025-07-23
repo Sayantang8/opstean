@@ -288,22 +288,24 @@ const Contact = () => {
               onClick={handleMapClick}
               title="Click to open in Google Maps"
             >
-              <div className="absolute inset-0 bg-gray-200 group-hover:bg-transparent transition-all duration-300 z-10 flex items-center justify-center">
-                <span className="text-gray-600 text-sm font-medium group-hover:opacity-0 transition-opacity">
-                  Click to open in Google Maps
-                </span>
-              </div>
-
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3684.2992715394897!2d88.29708451488306!3d22.470860485194348!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027184a4c2d4e7%3A0x3d8b5c8b5a8b5b8b!2s3%2C%20Uttarag%20Apartment%2C%20Vivekananda%20Rd%2C%20Mukund%20Das%20Colony%2C%20Thakurpukur%2C%20Kolkata%2C%20West%20Bengal%20700063!5e0!3m2!1sen!2sin!4v1735718245876!5m2!1sen!2sin" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.0722354332956!2d88.3068886768592!3d22.463919636941903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027ba740e84c69%3A0xe90c52c1d7cc2898!2sOpstean%20Healthcare%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1753259389554!5m2!1sen!2sin"
                 width="100%" 
                 height="100%" 
-                style={{ border: 0, pointerEvents: 'none' }} 
+                style={{ border: 0 }} 
                 allowFullScreen 
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Opstean Healthcare Location - Thakurpukur, Kolkata"
               ></iframe>
+              
+              <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                <div className="bg-white bg-opacity-90 px-3 py-2 rounded-lg shadow-lg group-hover:opacity-0 transition-opacity duration-300">
+                  <span className="text-gray-800 text-sm font-medium">
+                    Click to open in Google Maps
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
