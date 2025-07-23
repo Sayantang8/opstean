@@ -51,6 +51,90 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   uploadingImage,
   onImageUpload,
 }) => {
+  // Enhanced category parsing to handle nested JSON strings
+  const parseCategories = (categoryData: string[] | string): string[] => {
+    console.log('🔧 ProductForm - Parsing category data:', categoryData, typeof categoryData);
+    
+    if (Array.isArray(categoryData)) {
+      // Handle array that might contain stringified JSON
+      const flatCategories: string[] = [];
+      categoryData.forEach(item => {
+        if (typeof item === 'string') {
+          // Check if this item is a stringified JSON array
+          const trimmed = item.trim();
+          if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              if (Array.isArray(parsed)) {
+                flatCategories.push(...parsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+              } else {
+                flatCategories.push(trimmed);
+              }
+            } catch (e) {
+              // If parsing fails, treat as regular string
+              flatCategories.push(trimmed);
+            }
+          } else if (trimmed) {
+            flatCategories.push(trimmed);
+          }
+        }
+      });
+      return flatCategories.filter(cat => cat && cat.trim());
+    }
+    
+    if (typeof categoryData === 'string') {
+      const trimmed = categoryData.trim();
+      
+      // Handle nested JSON strings like "[\"Women Care\",\"General Segment\"]"
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          // Parse the JSON-like string
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            // Handle nested arrays or strings within the parsed array
+            const flatCategories: string[] = [];
+            parsed.forEach(item => {
+              if (typeof item === 'string') {
+                const itemTrimmed = item.trim();
+                if (itemTrimmed.startsWith('[') && itemTrimmed.endsWith(']')) {
+                  try {
+                    const nestedParsed = JSON.parse(itemTrimmed);
+                    if (Array.isArray(nestedParsed)) {
+                      flatCategories.push(...nestedParsed.filter(cat => cat && typeof cat === 'string' && cat.trim()));
+                    } else {
+                      flatCategories.push(itemTrimmed);
+                    }
+                  } catch (e) {
+                    flatCategories.push(itemTrimmed);
+                  }
+                } else if (itemTrimmed) {
+                  flatCategories.push(itemTrimmed);
+                }
+              }
+            });
+            return flatCategories.filter(cat => cat && cat.trim());
+          }
+        } catch (e) {
+          console.log("Failed to parse category string as JSON:", trimmed);
+          // If JSON parsing fails, try manual parsing
+          const manualParsed = trimmed
+            .slice(1, -1) // Remove [ and ]
+            .split(',')
+            .map(item => item.trim().replace(/^["']|["']$/g, '')) // Remove quotes
+            .filter(item => item.length > 0);
+          return manualParsed;
+        }
+      }
+      
+      // If it's just a regular string, return as single item array
+      if (trimmed) {
+        return [trimmed];
+      }
+    }
+    
+    return [];
+  };
+
   // Get category styling for each individual category
   const getCategoryStyle = (categoryName: string) => {
     const categoryInfo = productCategories.find(
@@ -92,14 +176,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   };
 
   const handleRemoveCategory = (categoryToRemove: string) => {
-    const updatedCategories = (product.category || []).filter(
+    const currentCategories = parseCategories(product.category || []);
+    const updatedCategories = currentCategories.filter(
       (cat: string) => cat !== categoryToRemove
     );
     setProduct({ ...product, category: updatedCategories });
   };
 
   const handleAddCategory = (categoryToAdd: string) => {
-    const currentCategories = product.category || [];
+    const currentCategories = parseCategories(product.category || []);
     if (!currentCategories.includes(categoryToAdd)) {
       setProduct({ ...product, category: [...currentCategories, categoryToAdd] });
     }
@@ -142,11 +227,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               {isEditing ? (
                 <div className="mt-1 space-y-3">
                   {/* Display current categories as removable badges */}
-                  {product.category && product.category.length > 0 && (
+                  {parseCategories(product.category || []).length > 0 && (
                     <div>
                       <p className="text-xs text-gray-600 mb-2">Current Categories:</p>
                       <div className="flex flex-wrap gap-2">
-                        {product.category.map((categoryName: string, idx: number) => {
+                        {parseCategories(product.category || []).map((categoryName: string, idx: number) => {
                           const cleanCategoryName = categoryName.trim();
                           if (!cleanCategoryName) return null;
                           
@@ -181,7 +266,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       </SelectTrigger>
                       <SelectContent>
                         {productCategories
-                          .filter(cat => !(product.category || []).includes(cat.name))
+                          .filter(cat => !parseCategories(product.category || []).includes(cat.name))
                           .map((category) => (
                             <SelectItem key={category.id} value={category.name}>
                               <div className="flex items-center gap-2">

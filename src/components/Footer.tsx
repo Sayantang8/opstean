@@ -108,15 +108,8 @@ const Footer = () => {
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Opstean Healthcare Location - Footer Map"
+                className="w-full h-full"
                 ></iframe>
-                
-                <div className="absolute inset-0 bg-black bg-opacity-30 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center pointer-events-none">
-                  <div className="text-center">
-                    <MapPin className="w-6 h-6 text-white mx-auto mb-1" />
-                    <p className="text-xs text-white font-medium">Opstean Healthcare</p>
-                    <p className="text-xs text-gray-200">Thakurpukur, Kolkata</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

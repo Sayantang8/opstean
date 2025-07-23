@@ -297,15 +297,8 @@ const Contact = () => {
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Opstean Healthcare Location - Thakurpukur, Kolkata"
+                className="w-full h-full"
               ></iframe>
-              
-              <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center pointer-events-none">
-                <div className="bg-white bg-opacity-90 px-3 py-2 rounded-lg shadow-lg group-hover:opacity-0 transition-opacity duration-300">
-                  <span className="text-gray-800 text-sm font-medium">
-                    Click to open in Google Maps
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
