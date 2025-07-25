@@ -25,6 +25,7 @@ interface ProductCardProps {
   index: number;
   categoryIndex: number;
   onLearnMore: (productId: number) => void;
+  showCategories?: boolean;
 }
 
 export const ProductCard = ({
@@ -32,6 +33,7 @@ export const ProductCard = ({
   index,
   categoryIndex,
   onLearnMore,
+  showCategories = true,
 }: ProductCardProps) => {
   console.log("🎯 Rendering ProductCard for:", product.name);
   console.log("🎯 Product category raw data:", product.category);
@@ -39,7 +41,7 @@ export const ProductCard = ({
   // Parse categories properly - handle string that looks like array format
   const parseCategories = (categoryData: string[] | string): string[] => {
     console.log('🔧 ProductCard - Parsing category data:', categoryData, typeof categoryData);
-    
+
     if (Array.isArray(categoryData)) {
       // Handle array that might contain stringified JSON
       const flatCategories: string[] = [];
@@ -66,10 +68,10 @@ export const ProductCard = ({
       });
       return flatCategories.filter(cat => cat && cat.trim());
     }
-    
+
     if (typeof categoryData === 'string') {
       const trimmed = categoryData.trim();
-      
+
       // Handle nested JSON strings like "[\"Women Care\",\"General Segment\"]"
       if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
         try {
@@ -110,13 +112,13 @@ export const ProductCard = ({
           return manualParsed;
         }
       }
-      
+
       // If it's just a regular string, return as single item array
       if (trimmed) {
         return [trimmed];
       }
     }
-    
+
     return [];
   };
 
@@ -215,13 +217,13 @@ export const ProductCard = ({
           </h3>
 
           {/* Display each category as a completely separate individual badge */}
-          {categories.length > 0 && (
+          {showCategories && categories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
               {categories.map((categoryName, idx) => {
                 const cleanCategoryName = categoryName.trim();
-                
+
                 if (!cleanCategoryName) return null;
-                
+
                 return (
                   <Badge
                     key={`${product.id}-category-${idx}-${cleanCategoryName}`}
