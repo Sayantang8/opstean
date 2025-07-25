@@ -109,6 +109,7 @@ export const FeaturedProductsByCategory = () => {
               index={index}
               categoryIndex={0} // Not needed anymore since we're not grouping by category
               onLearnMore={handleLearnMore}
+              showCategories={false}
             />
           );
         })}
