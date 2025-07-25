@@ -237,7 +237,7 @@ export const ProductCard = ({
 
           {product.manufacturer && (
             <p className="text-sm text-gray-600">
-              <span className="font-semibold">Manufacturer:</span>{" "}
+              <span className="font-semibold">Marketed by:</span>{" "}
               {product.manufacturer}
             </p>
           )}
