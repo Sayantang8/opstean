@@ -3,7 +3,9 @@ import { motion, useAnimation } from 'framer-motion';
 
 const CompanyGrowthChart = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const pathRef = useRef<SVGPathElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const logoControls = useAnimation();
   const pathControls = useAnimation();
 
@@ -24,7 +26,7 @@ const CompanyGrowthChart = () => {
 
   // Create smooth SVG path
   const createSmoothPath = (points: typeof pathPoints) => {
-    if (points.length < 2) return '';
+    if (points.length < 2) {return ''};
 
     let path = `M ${points[0].x} ${points[0].y}`;
 
@@ -63,7 +65,7 @@ const CompanyGrowthChart = () => {
 
   // Calculate path segment lengths for perfect timing
   const calculatePathTiming = useCallback(() => {
-    if (!pathRef.current) return [0, 0.33, 0.66, 1];
+    if (!pathRef.current) {return [0, 0.33, 0.66, 1]};
 
     const pathLength = pathRef.current.getTotalLength();
     const segmentLengths = [];
@@ -94,7 +96,7 @@ const CompanyGrowthChart = () => {
 
   // Animation sequence - logo moves with the tip of the drawing line
   const startAnimation = useCallback(async () => {
-    if (!pathRef.current || hasAnimated) return;
+    if (!pathRef.current || hasAnimated) {return};
 
     setHasAnimated(true);
     const pathLength = pathRef.current.getTotalLength();
@@ -156,14 +158,44 @@ const CompanyGrowthChart = () => {
     });
   }, [pathControls, logoControls, pathPoints, hasAnimated, calculatePathTiming]);
 
+  // Intersection Observer to detect when component is visible
   useEffect(() => {
-    // Start animation after component mounts
-    const timer = setTimeout(startAnimation, 500);
-    return () => clearTimeout(timer);
-  }, [startAnimation]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setIsVisible(true);
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the component is visible
+        rootMargin: '0px 0px -100px 0px' // Start animation a bit before fully visible
+      }
+    );
+
+    const currentContainer = containerRef.current;
+    if (currentContainer) {
+      observer.observe(currentContainer);
+    }
+
+    return () => {
+      if (currentContainer) {
+        observer.unobserve(currentContainer);
+      }
+    };
+  }, [hasAnimated]);
+
+  // Start animation when component becomes visible
+  useEffect(() => {
+    if (isVisible && !hasAnimated) {
+      const timer = setTimeout(startAnimation, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, hasAnimated, startAnimation]);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-3 md:p-6 mb-12 animate-fade-in">
+    <div ref={containerRef} className="bg-white rounded-xl shadow-lg p-3 md:p-6 mb-12 animate-fade-in">
       <div className="text-center mb-4 md:mb-6">
         <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-navy mb-2 md:mb-4">
           Our Growth Journey
