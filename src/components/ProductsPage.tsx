@@ -39,32 +39,44 @@ const ProductsPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
+  // Check for category parameter in URL on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      console.log('🎯 ProductsPage: Found category in URL:', categoryParam);
+      setSelectedCategory(categoryParam);
+      // Clean up URL without refreshing
+      window.history.replaceState({}, '', '/products');
+    }
+  }, []);
+
   // Fetch all products without category filtering in the query
   const { data: allProducts = [], isLoading, error, refetch } = useQuery<Product[]>({
     queryKey: ['products', searchQuery], // Remove selectedCategory from query key
     queryFn: async () => {
       console.log('🔍 ProductsPage: Fetching products from Supabase...');
       let query = supabase.from('products').select('*');
-      
+
       // Apply search filter
       if (searchQuery.trim()) {
         query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,manufacturer.ilike.%${searchQuery}%`);
       }
-      
+
       // Only show active products on the public products page
       query = query.eq('status', 'active');
-      
+
       // Sort alphabetically by name instead of by date
       const { data, error } = await query.order('name', { ascending: true });
-      
+
       if (error) {
         console.error('❌ ProductsPage: Error fetching products:', error);
         throw error;
       }
-      
+
       console.log('✅ ProductsPage: Products fetched:', data);
       console.log('📊 ProductsPage: Total active products:', data?.length || 0);
-      
+
       return data as Product[];
     },
     refetchOnMount: true,
@@ -76,7 +88,7 @@ const ProductsPage = () => {
   // Parse categories properly - handle string that looks like array format
   const parseCategories = (categoryData: string[] | string): string[] => {
     console.log('🔧 Parsing category data:', categoryData, typeof categoryData);
-    
+
     if (Array.isArray(categoryData)) {
       // Handle array that might contain stringified JSON
       const flatCategories: string[] = [];
@@ -103,10 +115,10 @@ const ProductsPage = () => {
       });
       return flatCategories.filter(cat => cat && cat.trim());
     }
-    
+
     if (typeof categoryData === 'string') {
       const trimmed = categoryData.trim();
-      
+
       // Handle nested JSON strings like "[\"Women Care\",\"General Segment\"]"
       if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
         try {
@@ -147,13 +159,13 @@ const ProductsPage = () => {
           return manualParsed;
         }
       }
-      
+
       // If it's just a regular string, return as single item array
       if (trimmed) {
         return [trimmed];
       }
     }
-    
+
     return [];
   };
   // Filter products on the frontend based on parsed categories
@@ -188,6 +200,20 @@ const ProductsPage = () => {
     window.addEventListener('openProductDetails', handleOpenProductDetails as EventListener);
     return () => window.removeEventListener('openProductDetails', handleOpenProductDetails as EventListener);
   }, [products]);
+
+  // Listen for category navigation events from navbar
+  useEffect(() => {
+    const handleNavigateToCategory = (event: CustomEvent) => {
+      const { category } = event.detail;
+      console.log('🎯 ProductsPage: Received category navigation event:', category);
+      setSelectedCategory(category);
+      // Clear search when navigating to specific category
+      setSearchQuery('');
+    };
+
+    window.addEventListener('navigateToCategory', handleNavigateToCategory as EventListener);
+    return () => window.removeEventListener('navigateToCategory', handleNavigateToCategory as EventListener);
+  }, []);
 
   console.log('🏪 ProductsPage - Current products state:', products);
   console.log('🏪 ProductsPage - Products count:', products.length);
@@ -286,7 +312,7 @@ const ProductsPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      
+
       {/* Main Content */}
       <div className="flex-1 pt-20"> {/* Added padding-top to account for fixed navbar */}
         <div className="container mx-auto px-4 py-8">
@@ -329,7 +355,7 @@ const ProductsPage = () => {
                 </Button>
               </div>
             </div>
-            
+
             <div className="mt-4 text-sm text-gray-600">
               Showing {products.length} products
               {searchQuery && ` for "${searchQuery}"`}
@@ -343,8 +369,8 @@ const ProductsPage = () => {
               <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-600 mb-4">No products found.</p>
               <p className="text-sm text-gray-500">
-                {searchQuery || selectedCategory !== 'all' 
-                  ? 'Try adjusting your search or filter criteria.' 
+                {searchQuery || selectedCategory !== 'all'
+                  ? 'Try adjusting your search or filter criteria.'
                   : 'Products you add from the admin panel will appear here!'}
               </p>
               <Button onClick={() => refetch()} className="mt-4 bg-teal hover:bg-navy">
@@ -355,7 +381,7 @@ const ProductsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product) => {
                 const categories = parseCategories(product.category);
-                
+
                 return (
                   <div
                     key={product.id}
@@ -364,7 +390,7 @@ const ProductsPage = () => {
                   >
                     <div className="relative overflow-hidden">
                       {product.image_url ? (
-                        <AspectRatio ratio={4/3} className="bg-gray-100">
+                        <AspectRatio ratio={4 / 3} className="bg-gray-100">
                           <img
                             src={product.image_url}
                             alt={product.name}
@@ -376,14 +402,14 @@ const ProductsPage = () => {
                           />
                         </AspectRatio>
                       ) : (
-                        <AspectRatio ratio={4/3} className="bg-gray-200">
+                        <AspectRatio ratio={4 / 3} className="bg-gray-200">
                           <div className="w-full h-full flex items-center justify-center">
                             <Package className="h-16 w-16 text-gray-400" />
                           </div>
                         </AspectRatio>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      
+
                       {/* Badges */}
                       <div className="absolute top-2 right-2 flex flex-col gap-1">
                         {product.featured && (
@@ -396,7 +422,7 @@ const ProductsPage = () => {
                           <Badge variant="outline" className="bg-white">Rx</Badge>
                         )}
                       </div>
-                      
+
                       <div className="absolute top-2 left-2">
                         <Badge variant={getStatusBadgeColor(product.status)}>
                           {product.status}
@@ -408,15 +434,15 @@ const ProductsPage = () => {
                       <h3 className="text-lg font-bold text-navy mb-2 group-hover:text-teal transition-colors duration-300 line-clamp-2">
                         {product.name}
                       </h3>
-                      
+
                       {/* Display each category as a completely separate individual badge */}
                       {categories.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-3">
                           {categories.map((categoryName, idx) => {
                             const cleanCategoryName = categoryName.trim();
-                            
+
                             if (!cleanCategoryName) return null;
-                            
+
                             return (
                               <Badge
                                 key={`${product.id}-category-${idx}-${cleanCategoryName}`}
@@ -429,7 +455,7 @@ const ProductsPage = () => {
                           })}
                         </div>
                       )}
-                      
+
                       <div className="space-y-1 mb-3 text-sm text-gray-600">
                         {product.manufacturer && (
                           <p><span className="font-medium">Manufacturer:</span> {product.manufacturer}</p>
@@ -438,7 +464,7 @@ const ProductsPage = () => {
                           <p><span className="font-medium">Form:</span> {product.product_form}</p>
                         )}
                       </div>
-                      
+
                       <p className="text-gray-700 text-sm mb-3 line-clamp-2 flex-1">
                         {product.description || 'No description available'}
                       </p>
@@ -470,13 +496,13 @@ const ProductsPage = () => {
                   {selectedProduct?.name}
                 </DialogTitle>
               </DialogHeader>
-              
+
               {selectedProduct && (
                 <div className="space-y-6">
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="md:w-1/3">
                       {selectedProduct.image_url ? (
-                        <AspectRatio ratio={4/3}>
+                        <AspectRatio ratio={4 / 3}>
                           <img
                             src={selectedProduct.image_url}
                             alt={selectedProduct.name}
@@ -484,14 +510,14 @@ const ProductsPage = () => {
                           />
                         </AspectRatio>
                       ) : (
-                        <AspectRatio ratio={4/3} className="bg-gray-200 rounded-lg">
+                        <AspectRatio ratio={4 / 3} className="bg-gray-200 rounded-lg">
                           <div className="w-full h-full flex items-center justify-center">
                             <Package className="h-16 w-16 text-gray-400" />
                           </div>
                         </AspectRatio>
                       )}
                     </div>
-                    
+
                     <div className="md:w-2/3 space-y-4">
                       <div className="flex flex-wrap gap-2">
                         <Badge variant={getStatusBadgeColor(selectedProduct.status)}>
@@ -504,7 +530,7 @@ const ProductsPage = () => {
                           <Badge variant="outline">Prescription Required</Badge>
                         )}
                       </div>
-                      
+
                       {/* Display categories in detail dialog */}
                       {parseCategories(selectedProduct.category).length > 0 && (
                         <div>
@@ -512,9 +538,9 @@ const ProductsPage = () => {
                           <div className="flex flex-wrap gap-2">
                             {parseCategories(selectedProduct.category).map((categoryName, idx) => {
                               const cleanCategoryName = categoryName.trim();
-                              
+
                               if (!cleanCategoryName) return null;
-                              
+
                               return (
                                 <Badge
                                   key={`detail-${selectedProduct.id}-category-${idx}-${cleanCategoryName}`}
@@ -528,7 +554,7 @@ const ProductsPage = () => {
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         {selectedProduct.manufacturer && (
                           <div><strong>Manufacturer:</strong> {selectedProduct.manufacturer}</div>
@@ -543,7 +569,7 @@ const ProductsPage = () => {
                           <div><strong>SKU:</strong> {selectedProduct.sku}</div>
                         )}
                       </div>
-                      
+
                       {selectedProduct.description && (
                         <div>
                           <h4 className="font-semibold text-navy mb-2">Description</h4>
@@ -552,7 +578,7 @@ const ProductsPage = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   {/* Additional Details */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {selectedProduct.composition && (
@@ -561,14 +587,14 @@ const ProductsPage = () => {
                         <p className="text-gray-700">{selectedProduct.composition}</p>
                       </div>
                     )}
-                    
+
                     {selectedProduct.usage && (
                       <div>
                         <h4 className="font-semibold text-navy mb-2">Usage Instructions</h4>
                         <p className="text-gray-700">{selectedProduct.usage}</p>
                       </div>
                     )}
-                    
+
                     {selectedProduct.precautions && (
                       <div>
                         <h4 className="font-semibold text-navy mb-2">Precautions</h4>
@@ -582,7 +608,7 @@ const ProductsPage = () => {
           </Dialog>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );
