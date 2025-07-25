@@ -458,7 +458,7 @@ const ProductsPage = () => {
 
                       <div className="space-y-1 mb-3 text-sm text-gray-600">
                         {product.manufacturer && (
-                          <p><span className="font-medium">Manufacturer:</span> {product.manufacturer}</p>
+                          <p><span className="font-medium">Marketed by:</span> {product.manufacturer}</p>
                         )}
                         {product.product_form && (
                           <p><span className="font-medium">Form:</span> {product.product_form}</p>
@@ -557,7 +557,7 @@ const ProductsPage = () => {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         {selectedProduct.manufacturer && (
-                          <div><strong>Manufacturer:</strong> {selectedProduct.manufacturer}</div>
+                          <div><strong>Marketed by:</strong> {selectedProduct.manufacturer}</div>
                         )}
                         {selectedProduct.dosage && (
                           <div><strong>Dosage:</strong> {selectedProduct.dosage}</div>
