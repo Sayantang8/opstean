@@ -1,10 +1,108 @@
-import { useEffect, useRef } from 'react';
-import { Users, Award, Target, Stethoscope } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Users } from 'lucide-react';
+
+// Animated Counter Component with Circular Progress
+const StatCard = ({ number, label, suffix = '', color }: {
+  number: number;
+  label: string;
+  suffix?: string;
+  color: string;
+}) => {
+  const [count, setCount] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isVisible) {
+            setIsVisible(true);
+            animateCounter();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  const animateCounter = () => {
+    const duration = 2000; // 2 seconds
+    const steps = 60;
+    const increment = number / steps;
+    const stepDuration = duration / steps;
+
+    let currentCount = 0;
+    const timer = setInterval(() => {
+      currentCount += increment;
+      if (currentCount >= number) {
+        currentCount = number;
+        clearInterval(timer);
+      }
+      setCount(Math.floor(currentCount));
+      setProgress((currentCount / number) * 100);
+    }, stepDuration);
+  };
+
+  const circumference = 2 * Math.PI * 45; // radius = 45
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
+
+  return (
+    <div
+      ref={cardRef}
+      className="bg-white rounded-xl p-8 shadow-lg text-center hover-lift transform transition-all duration-300"
+    >
+      <div className="relative w-32 h-32 mx-auto mb-6">
+        {/* Background Circle */}
+        <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="#e5e7eb"
+            strokeWidth="8"
+            fill="none"
+          />
+          {/* Animated Progress Circle */}
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="#2D8B9D"
+            strokeWidth="8"
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            className="transition-all duration-1000 ease-out"
+          />
+        </svg>
+
+        {/* Counter Number */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-3xl font-bold text-navy">
+            {count}{suffix}
+          </span>
+        </div>
+      </div>
+
+      <h4 className="text-lg font-semibold text-navy mb-2">{label}</h4>
+      <div className="w-16 h-1 bg-gradient-to-r from-teal to-navy mx-auto rounded-full"></div>
+    </div>
+  );
+};
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -16,18 +114,18 @@ const About = () => {
       },
       { threshold: 0.3 }
     );
-    
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-    
+
     cardRefs.current.forEach((card) => {
       if (card) observer.observe(card);
     });
-    
+
     return () => observer.disconnect();
   }, []);
-  
+
   const featureCards = [
     {
       title: 'Certified (WHO, CGMP)',
@@ -66,7 +164,7 @@ const About = () => {
       )
     }
   ];
-  
+
   return (
     <section id="about" className="py-20 bg-white" ref={sectionRef}>
       <div className="container mx-auto px-6">
@@ -79,7 +177,7 @@ const About = () => {
             <p className="text-gray-700 mb-6 leading-relaxed">
               We are Kolkata based one of the fast growing pharmaceutical company in India. We came into existence in 2010, and in 2021, the company was formed into a legal corporation. We are going to start our new manufacturing facility 'OPSTEAN LABORATORIES' very soon.
             </p>
-            
+
             {/* Minimal Leadership Team Section */}
             <div className="bg-gray-50 rounded-lg p-3 mb-6 border-l-2 border-teal">
               <h3 className="text-base font-semibold text-navy mb-1 flex items-center">
@@ -90,30 +188,30 @@ const About = () => {
                 <span className="font-medium">Directors:</span> Mr. Pintu Goswami, Mrs. Mahuya Goswami, Mrs. Nivedita Goswami
               </div>
             </div>
-            
+
             <p className="text-gray-700 leading-relaxed">
               'OPSTEAN' means 'RISE' in Frisian language. We are focused on our customer's need and necessities, it has resulted into new high-tech products and we are known to give prompt & high value services to our customers. Opstean Healthcare Pvt. Ltd. is committed to achieve and maintain excellence in our products and for the complete satisfaction of our customers.
             </p>
           </div>
           <div className="rounded-lg overflow-hidden shadow-xl">
-            <img 
-              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80" 
-              alt="Opstean Healthcare Facility" 
+            <img
+              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80"
+              alt="Opstean Healthcare Facility"
               className="w-full h-full object-cover"
             />
           </div>
         </div>
-        
+
         <div className="mt-16 mb-12">
           <h3 className="text-2xl font-bold text-navy text-center mb-8">Why Are We the Best in India?</h3>
           <p className="text-gray-700 text-center max-w-4xl mx-auto leading-relaxed">
             Opstean Healthcare Pvt. Ltd. is the leading and best Pharmaceuticals company. We are popular in the segment for our world class high quality medicines. Our aim is to provide best medicines to our customers at an affordable price with uncompromising quality. We offer high quality medicines to our clients which are made with superior quality ingredients which are free from any side effects. Every single product that rolls out of Opstean Healthcare Pvt. Ltd. is made under the supervision of medical experts. We have a well- qualified and knowledgeable team of professionals for each department in our organization.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {featureCards.map((card, index) => (
-            <div 
+            <div
               key={index}
               ref={el => cardRefs.current[index] = el}
               className="bg-white rounded-lg p-8 shadow-lg text-center hover-lift fade-in-section"
@@ -134,6 +232,31 @@ const About = () => {
             <p className="text-gray-700 text-center text-lg leading-relaxed">
               <strong>Vision & Mission:</strong> To establish Opstean Healthcare Pvt. Ltd. as the Pharmaceutical and Pharmaceutical Impurity Company, recognized as the leader in this field by one and all.
             </p>
+          </div>
+        </div>
+
+        {/* Statistics Section */}
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold text-navy text-center mb-12">Our Achievements</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <StatCard
+              number={115}
+              label="Field of Expertise"
+              suffix="+"
+              color="teal"
+            />
+            <StatCard
+              number={15}
+              label="Years of Excellence"
+              suffix="+"
+              color="blue"
+            />
+            <StatCard
+              number={120}
+              label="Products"
+              suffix="+"
+              color="purple"
+            />
           </div>
         </div>
       </div>
