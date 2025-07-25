@@ -240,7 +240,7 @@ const About = () => {
           <h3 className="text-2xl font-bold text-navy text-center mb-12">Our Achievements</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <StatCard
-              number={115}
+              number={250}
               label="Field of Expertise"
               suffix="+"
               color="teal"
@@ -252,7 +252,7 @@ const About = () => {
               color="blue"
             />
             <StatCard
-              number={120}
+              number={83}
               label="Products"
               suffix="+"
               color="purple"
