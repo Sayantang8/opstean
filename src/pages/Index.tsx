@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useQueryClient } from '@tanstack/react-query';
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import ProductCatalog from "@/components/ProductCatalog";
 import About from "@/components/About";
 import CompanyGrowthChart from "@/components/CompanyGrowthChart";
 import Products from "@/components/Products";
@@ -27,7 +28,7 @@ const Index = () => {
       },
       { threshold: 0.1 }
     );
-    
+
     // Observe all elements with the fade-in-section class
     document.querySelectorAll('.fade-in-section').forEach((el) => {
       observer.observe(el);
@@ -36,14 +37,15 @@ const Index = () => {
     // Invalidate products cache for fresh data
     queryClient.invalidateQueries({ queryKey: ['products'] });
     logger.info('Index page loaded', { component: 'Index' });
-    
+
     return () => observer.disconnect();
   }, [queryClient]);
-  
+
   return (
     <div className="relative">
       <Navbar />
       <Hero />
+      <ProductCatalog />
       <About />
       <div className="container mx-auto px-6">
         <CompanyGrowthChart />

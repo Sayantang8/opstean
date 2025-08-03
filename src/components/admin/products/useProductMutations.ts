@@ -34,18 +34,19 @@ export const useProductMutations = () => {
         .insert([productData])
         .select()
         .single();
-      
+
       if (error) {
         console.error('❌ Admin: Error creating product:', error);
         throw error;
       }
-      
+
       console.log('✅ Admin: Product created successfully:', data);
       return data;
     },
     onSuccess: (data) => {
       console.log('🔧 Admin: Product created, invalidating cache...');
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['category-counts'] });
       toast({
         title: "Success",
         description: `Product "${data.name}" created successfully and will now appear on the homepage and products page!`,
@@ -68,17 +69,18 @@ export const useProductMutations = () => {
         .from('products')
         .update(updates)
         .eq('id', id);
-      
+
       if (error) {
         console.error('❌ Admin: Error updating product:', error);
         throw error;
       }
-      
+
       console.log('✅ Admin: Product updated successfully');
     },
     onSuccess: () => {
       console.log('🔧 Admin: Product updated, invalidating cache...');
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['category-counts'] });
       toast({
         title: "Success",
         description: "Product updated successfully",
@@ -101,17 +103,18 @@ export const useProductMutations = () => {
         .from('products')
         .delete()
         .eq('id', id);
-      
+
       if (error) {
         console.error('❌ Admin: Error deleting product:', error);
         throw error;
       }
-      
+
       console.log('✅ Admin: Product deleted successfully');
     },
     onSuccess: () => {
       console.log('🔧 Admin: Product deleted, invalidating cache...');
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['category-counts'] });
       toast({
         title: "Success",
         description: "Product deleted successfully",

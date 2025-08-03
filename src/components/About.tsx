@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Users } from 'lucide-react';
 
 // Animated Counter Component with Circular Progress
@@ -12,6 +12,24 @@ const StatCard = ({ number, label, suffix = '', color }: {
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const animateCounter = useCallback(() => {
+    const duration = 2000; // 2 seconds
+    const steps = 60;
+    const increment = number / steps;
+    const stepDuration = duration / steps;
+
+    let currentCount = 0;
+    const timer = setInterval(() => {
+      currentCount += increment;
+      if (currentCount >= number) {
+        currentCount = number;
+        clearInterval(timer);
+      }
+      setCount(Math.floor(currentCount));
+      setProgress((currentCount / number) * 100);
+    }, stepDuration);
+  }, [number, setCount, setProgress]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,25 +49,7 @@ const StatCard = ({ number, label, suffix = '', color }: {
     }
 
     return () => observer.disconnect();
-  }, [isVisible]);
-
-  const animateCounter = () => {
-    const duration = 2000; // 2 seconds
-    const steps = 60;
-    const increment = number / steps;
-    const stepDuration = duration / steps;
-
-    let currentCount = 0;
-    const timer = setInterval(() => {
-      currentCount += increment;
-      if (currentCount >= number) {
-        currentCount = number;
-        clearInterval(timer);
-      }
-      setCount(Math.floor(currentCount));
-      setProgress((currentCount / number) * 100);
-    }, stepDuration);
-  };
+  }, [animateCounter, isVisible]);
 
   const circumference = 2 * Math.PI * 45; // radius = 45
   const strokeDashoffset = circumference - (progress / 100) * circumference;
@@ -57,7 +57,8 @@ const StatCard = ({ number, label, suffix = '', color }: {
   return (
     <div
       ref={cardRef}
-      className="bg-white rounded-xl p-8 shadow-lg text-center hover-lift transform transition-all duration-300"
+      className="rounded-xl p-8 shadow-lg text-center hover-lift transform transition-all duration-300"
+      style={{ backgroundColor: '#b3e7ff' }}
     >
       <div className="relative w-32 h-32 mx-auto mb-6">
         {/* Background Circle */}
@@ -66,7 +67,7 @@ const StatCard = ({ number, label, suffix = '', color }: {
             cx="50"
             cy="50"
             r="45"
-            stroke="#e5e7eb"
+            stroke="rgba(255, 255, 255, 0.3)"
             strokeWidth="8"
             fill="none"
           />
@@ -75,7 +76,7 @@ const StatCard = ({ number, label, suffix = '', color }: {
             cx="50"
             cy="50"
             r="45"
-            stroke="#2D8B9D"
+            stroke="#00aeff"
             strokeWidth="8"
             fill="none"
             strokeLinecap="round"
@@ -87,14 +88,14 @@ const StatCard = ({ number, label, suffix = '', color }: {
 
         {/* Counter Number */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-3xl font-bold text-navy">
+          <span className="text-3xl font-bold" style={{ color: '#007ab3' }}>
             {count}{suffix}
           </span>
         </div>
       </div>
 
-      <h4 className="text-lg font-semibold text-navy mb-2">{label}</h4>
-      <div className="w-16 h-1 bg-gradient-to-r from-teal to-navy mx-auto rounded-full"></div>
+      <h4 className="text-lg font-semibold mb-2" style={{ color: '#007ab3' }}>{label}</h4>
+      <div className="w-16 h-1 mx-auto rounded-full" style={{ backgroundColor: '#007ab3' }}></div>
     </div>
   );
 };
@@ -120,7 +121,9 @@ const About = () => {
     }
 
     cardRefs.current.forEach((card) => {
-      if (card) observer.observe(card);
+      if (card) {
+        observer.observe(card);
+      }
     });
 
     return () => observer.disconnect();
@@ -131,36 +134,28 @@ const About = () => {
       title: 'Certified (WHO, CGMP)',
       description: 'We are collaborated with top manufacturers of India with WHO, CGMP certificate',
       icon: (
-        <svg className="w-12 h-12 text-teal" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
+        <img src="/certificate.png" alt="Certified WHO CGMP" className="w-20 h-20" />
       )
     },
     {
       title: 'Experienced Team',
       description: 'We have experienced and knowledgeable professional.',
       icon: (
-        <svg className="w-12 h-12 text-teal" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
+        <img src="/expertise.png" alt="Experienced Team" className="w-16 h-16 object-cover rounded-full" />
       )
     },
     {
       title: 'Technology Driven',
       description: 'We are technology driven company.',
       icon: (
-        <svg className="w-12 h-12 text-teal" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
+        <img src="/tech.jpg" alt="Technology Driven" className="w-16 h-16 object-cover rounded-full" />
       )
     },
     {
       title: 'Quality Maintain',
       description: 'Our strong policies reflects in product quality.',
       icon: (
-        <svg className="w-12 h-12 text-teal" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        </svg>
+        <img src="/public/quality.jpg" alt="Experienced Team" className="w-16 h-16 object-cover rounded-full" />
       )
     }
   ];
@@ -214,14 +209,28 @@ const About = () => {
             <div
               key={index}
               ref={el => cardRefs.current[index] = el}
-              className="bg-white rounded-lg p-8 shadow-lg text-center hover-lift fade-in-section"
-              style={{ animationDelay: `${0.2 * index}s` }}
+              className="relative rounded-xl p-8 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl fade-in-section group"
+              style={{ backgroundColor: '#b3e7ff', animationDelay: `${0.2 * index}s` }}
             >
-              <div className="flex justify-center mb-4">
-                {card.icon}
-              </div>
-              <h3 className="text-xl font-semibold text-navy mb-3">{card.title}</h3>
-              <p className="text-gray-600">{card.description}</p>
+                             <div className="flex justify-center mb-6 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                 <div className="rounded-full overflow-hidden">
+                   {card.icon}
+                 </div>
+               </div>
+              <h3 className="text-xl font-bold text-navy mb-4 group-hover:text-blue-800 transition-colors duration-300">
+                {card.title}
+              </h3>
+              <p className="text-blue-700 leading-relaxed group-hover:text-navy transition-colors duration-300">
+                {card.description}
+              </p>
+
+              {/* Animated border effect */}
+              <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+
+              {/* Floating particles effect */}
+              <div className="absolute top-4 right-4 w-2 h-2 bg-blue-300/60 rounded-full animate-pulse"></div>
+              <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-400/70 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute top-1/2 left-4 w-1.5 h-1.5 bg-blue-200/60 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
             </div>
           ))}
         </div>
@@ -237,7 +246,8 @@ const About = () => {
 
         {/* Statistics Section */}
         <div className="mt-16">
-          <h3 className="text-2xl font-bold text-navy text-center mb-12">Our Achievements</h3>
+          <h3 className="text-2xl font-bold text-navy text-center mb-12">
+          We Rise in Glory...</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <StatCard
               number={250}
@@ -247,7 +257,7 @@ const About = () => {
             />
             <StatCard
               number={15}
-              label="Years of Excellence"
+              label="Years of Experience"
               suffix="+"
               color="blue"
             />

@@ -13,15 +13,15 @@ const Hero = () => {
       accent: "Welcome To"
     },
     {
-      image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1974&auto=format",
+      image: "/public/images/beyza-yurtkuran-P9afJG5BqEQ-unsplash.jpg",
       title: "Leading Innovation in Healthcare",
       subtitle: "Committed to achieve and maintain excellence in our products.",
       accent: "Trusted by Healthcare Professionals"
     },
     {
-      image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=1974&auto=format",
-      title: "Quality Pharmaceuticals",
-      subtitle: "Advanced formulations for comprehensive healthcare.",
+      image: "/quality.jpg",
+      title: "Serving World Class Medicines",
+      subtitle: "To the Humanity",
       accent: "WHO & CGMP Certified"
     }
   ];

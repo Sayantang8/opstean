@@ -16,7 +16,7 @@ export const productCategories: ProductCategory[] = [
     color: "bg-blue-500"
   },
   {
-    id: "eye-care", 
+    id: "eye-care",
     name: "Eye Care",
     description: "Eye drops, solutions and vision care products",
     icon: "eye",
@@ -24,7 +24,7 @@ export const productCategories: ProductCategory[] = [
   },
   {
     id: "child-care",
-    name: "Child Care", 
+    name: "Child Care",
     description: "Pediatric medicines and child healthcare products",
     icon: "baby",
     color: "bg-pink-500"
@@ -32,15 +32,15 @@ export const productCategories: ProductCategory[] = [
   {
     id: "cardio-care",
     name: "Cardio Care",
-    description: "Cardiovascular medications and heart health products", 
-    icon: "heart",
+    description: "Cardiovascular medications and heart health products",
+    icon: "stethoscope",
     color: "bg-red-500"
   },
   {
     id: "gastro",
     name: "Gastro",
     description: "Digestive health and gastrointestinal medications",
-    icon: "activity",
+    icon: "stomach",
     color: "bg-orange-500"
   },
   {
@@ -54,28 +54,28 @@ export const productCategories: ProductCategory[] = [
     id: "urology-care",
     name: "Urology Care",
     description: "Urological health and treatment products",
-    icon: "activity",
+    icon: "droplets",
     color: "bg-indigo-500"
   },
   {
     id: "pain-care",
     name: "Pain Care",
     description: "Pain management and relief medications",
-    icon: "zap",
+    icon: "bandage",
     color: "bg-red-600"
   },
   {
     id: "gyno-care",
     name: "Gyno Care",
     description: "Gynecological health and women's care products",
-    icon: "heart",
+    icon: "fetus",
     color: "bg-pink-600"
   },
   {
     id: "ortho-care",
     name: "Ortho Care",
     description: "Orthopedic and bone health products",
-    icon: "shield",
+    icon: "knee",
     color: "bg-gray-600"
   },
   {
