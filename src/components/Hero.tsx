@@ -13,10 +13,10 @@ const Hero = () => {
       accent: "Welcome To"
     },
     {
-      image: "/public/images/beyza-yurtkuran-P9afJG5BqEQ-unsplash.jpg",
-      title: "Leading Innovation in Healthcare",
-      subtitle: "Committed to achieve and maintain excellence in our products.",
-      accent: "Trusted by Healthcare Professionals"
+      image: "/images/beyza-yurtkuran-P9afJG5BqEQ-unsplash.jpg",
+      title: "Fastest Growing Pharmaceutical Company",
+      subtitle: "in the Indian Pharma Industry",
+      accent: "We are the"
     },
     {
       image: "/quality.jpg",

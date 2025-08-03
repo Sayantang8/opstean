@@ -69,7 +69,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 const ProductCatalog = () => {
     const navigate = useNavigate();
-    const { categoryCounts, isLoading } = useCategoryCounts();
+    const { isLoading } = useCategoryCounts();
 
     const handleCategoryClick = (categoryName: string) => {
         navigate(`/products?category=${encodeURIComponent(categoryName)}`);
@@ -126,7 +126,6 @@ const ProductCatalog = () => {
                         <div className="flex gap-1 overflow-x-auto pb-2 pt-2 scrollbar-hide">
                             {productCategories.map((category) => {
                                 const IconComponent = iconMap[category.icon] || Plus;
-                                const categoryCount = categoryCounts.find(c => c.category === category.name)?.count || 0;
 
                                 return (
                                     <div
@@ -134,10 +133,6 @@ const ProductCatalog = () => {
                                         onClick={() => handleCategoryClick(category.name)}
                                         className="relative cursor-pointer flex-shrink-0 transform transition-transform hover:scale-110"
                                     >
-                                        {/* Counter Badge - Centered on top */}
-                                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-teal text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-md z-10">
-                                            {categoryCount}
-                                        </div>
                                         <div className="bg-white border border-gray-200 rounded-full p-3 text-center w-28 h-28 flex flex-col items-center justify-center" style={{ backgroundColor: '#b3e7ff' }}>
                                             <div className={`w-10 h-10 ${category.color} rounded-full flex items-center justify-center mx-auto mb-2`}>
                                                 <IconComponent className="w-5 h-5 text-white" />
@@ -164,12 +159,6 @@ const ProductCatalog = () => {
                     <div className="hidden md:flex flex-wrap gap-1 justify-center">
                         {productCategories.map((category) => {
                             const IconComponent = iconMap[category.icon] || Plus;
-                            const categoryCount = categoryCounts.find(c => c.category === category.name)?.count || 0;
-
-                            // Debug log to check if custom icons are being used
-                            if (category.icon === 'stomach' || category.icon === 'knee' || category.icon === 'fetus') {
-                                console.log(`Using custom icon: ${category.icon} for ${category.name}`);
-                            }
 
                             return (
                                 <div
@@ -177,10 +166,6 @@ const ProductCatalog = () => {
                                     onClick={() => handleCategoryClick(category.name)}
                                     className="relative cursor-pointer transform transition-transform hover:scale-110"
                                 >
-                                    {/* Counter Badge - Centered on top */}
-                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-teal text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-md z-10">
-                                        {categoryCount}
-                                    </div>
                                     <div className="bg-white border border-gray-200 rounded-full p-4 text-center w-32 h-32 flex flex-col items-center justify-center" style={{ backgroundColor: '#b3e7ff' }}>
                                         <div className={`w-12 h-12 ${category.color} rounded-full flex items-center justify-center mx-auto mb-2`}>
                                             <IconComponent className="w-6 h-6 text-white" />

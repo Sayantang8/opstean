@@ -155,7 +155,7 @@ const About = () => {
       title: 'Quality Maintain',
       description: 'Our strong policies reflects in product quality.',
       icon: (
-        <img src="/public/quality.jpg" alt="Experienced Team" className="w-16 h-16 object-cover rounded-full" />
+        <img src="/quality.jpg" alt="Experienced Team" className="w-16 h-16 object-cover rounded-full" />
       )
     }
   ];
