@@ -127,7 +127,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
       case "eye-care": return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "child-care": return "bg-pink-50 text-pink-700 border-pink-200";
       case "cardio-care": return "bg-red-50 text-red-700 border-red-200";
-      case "gastro": return "bg-orange-50 text-orange-700 border-orange-200";
+      case "Gastro Care": return "bg-orange-50 text-orange-700 border-orange-200";
       case "general-segment": return "bg-purple-50 text-purple-700 border-purple-200";
       case "urology-care": return "bg-indigo-50 text-indigo-700 border-indigo-200";
       case "pain-care": return "bg-red-50 text-red-700 border-red-200";

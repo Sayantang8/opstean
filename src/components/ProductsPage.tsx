@@ -119,7 +119,7 @@ const ProductsPage = () => {
     if (typeof categoryData === 'string') {
       const trimmed = categoryData.trim();
 
-      // Handle nested JSON strings like "[\"Women Care\",\"General Segment\"]"
+      // Handle nested JSON strings like "[\"Women Care\",\"General Care\"]"
       if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
         try {
           // Parse the JSON-like string
@@ -251,7 +251,7 @@ const ProductsPage = () => {
         return "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100";
       case "cardio-care":
         return "bg-red-50 text-red-700 border-red-200 hover:bg-red-100";
-      case "gastro":
+      case "Gastro Care":
         return "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100";
       case "general-segment":
         return "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100";

@@ -167,10 +167,10 @@ const About = () => {
           <div>
             <h2 className="text-3xl font-bold text-navy mb-6">About Opstean Healthcare Pvt. Ltd.</h2>
             <p className="text-gray-700 mb-6 leading-relaxed">
-              Opstean Healthcare Pvt. Ltd. is one of the most trusted pharmaceutical companies, marketing a wide range of drugs including Ortho, Gyno, Cardio, Derma, Gastro, Cold Management, Antibiotic, Pain Management and General Segment.
+              Opstean Healthcare Pvt. Ltd. is one of the most fastest growing pharmaceutical Company, marketing a wide range of drugs including Ortho, Gyno, Cardio, Derma, Gastro Care, Cold Management, Antibiotic, Pain Management and General Care.
             </p>
             <p className="text-gray-700 mb-6 leading-relaxed">
-              We are Kolkata based one of the fast growing pharmaceutical company in India. We came into existence in 2010, and in 2021, the company was formed into a legal corporation. We are going to start our new manufacturing facility 'OPSTEAN LABORATORIES' very soon.
+              We are Kolkata based one of the leading pharmaceutical company in India. We came into existence in 2010, and in 2021, the company was formed into a legal corporation. We are going to start our new manufacturing facility 'OPSTEAN LABORATORIES' very soon.
             </p>
 
             {/* Minimal Leadership Team Section */}

@@ -37,22 +37,22 @@ export const productCategories: ProductCategory[] = [
     color: "bg-red-500"
   },
   {
-    id: "gastro",
-    name: "Gastro",
-    description: "Digestive health and gastrointestinal medications",
+    id: "Gastro Care",
+    name: "Gastro Care",
+    description: "Digestive health and Gastro Careintestinal medications",
     icon: "stomach",
     color: "bg-orange-500"
   },
   {
     id: "general-segment",
-    name: "General Segment",
+    name: "General Care",
     description: "General healthcare and wellness products",
     icon: "plus",
     color: "bg-purple-500"
   },
   {
     id: "urology-care",
-    name: "Urology Care",
+    name: "Uro Care",
     description: "Urological health and treatment products",
     icon: "droplets",
     color: "bg-indigo-500"

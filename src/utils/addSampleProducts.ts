@@ -47,7 +47,7 @@ export const addSampleProducts = async () => {
         {
             name: 'Digestive Aid Capsules',
             description: 'Natural digestive support',
-            category: ['Gastro', 'General Segment'],
+            category: ['Gastro Care', 'General Care'],
             status: 'active',
             featured: false,
             manufacturer: 'Opstean Healthcare',
@@ -67,7 +67,7 @@ export const addSampleProducts = async () => {
         {
             name: 'Women\'s Health Vitamins',
             description: 'Complete vitamin complex for women',
-            category: ['Gyno Care', 'General Segment'],
+            category: ['Gyno Care', 'General Care'],
             status: 'active',
             featured: false,
             manufacturer: 'Opstean Healthcare',
@@ -97,7 +97,7 @@ export const addSampleProducts = async () => {
         {
             name: 'Urinary Health Support',
             description: 'Natural urinary tract support',
-            category: ['Urology Care'],
+            category: ['Uro Care'],
             status: 'active',
             featured: false,
             manufacturer: 'Opstean Healthcare',

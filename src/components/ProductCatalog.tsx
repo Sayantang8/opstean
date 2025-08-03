@@ -71,6 +71,11 @@ const ProductCatalog = () => {
     const navigate = useNavigate();
     const { isLoading } = useCategoryCounts();
 
+    // Sort categories alphabetically
+    const sortedCategories = [...productCategories].sort((a, b) => 
+        a.name.localeCompare(b.name)
+    );
+
     const handleCategoryClick = (categoryName: string) => {
         navigate(`/products?category=${encodeURIComponent(categoryName)}`);
     };
@@ -124,7 +129,7 @@ const ProductCatalog = () => {
                     {/* Mobile Layout - Horizontal Scroll */}
                     <div className="md:hidden">
                         <div className="flex gap-1 overflow-x-auto pb-2 pt-2 scrollbar-hide">
-                            {productCategories.map((category) => {
+                            {sortedCategories.map((category) => {
                                 const IconComponent = iconMap[category.icon] || Plus;
 
                                 return (
@@ -157,7 +162,7 @@ const ProductCatalog = () => {
 
                     {/* Desktop Layout - Grid */}
                     <div className="hidden md:flex flex-wrap gap-1 justify-center">
-                        {productCategories.map((category) => {
+                        {sortedCategories.map((category) => {
                             const IconComponent = iconMap[category.icon] || Plus;
 
                             return (

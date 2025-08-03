@@ -64,13 +64,13 @@ const Navbar = () => {
     'Cold Care',
     'Derma Care',
     'Eye Care',
-    'Gastro',
-    'General Segment',
+    'Gastro Care',
+    'General Care',
     'Gyno Care',
     'Neuro Care',
     'Ortho Care',
     'Pain Care',
-    'Urology Care',
+    'Uro Care',
   ];
 
   const navItems = [
