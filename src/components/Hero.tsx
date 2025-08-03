@@ -9,7 +9,7 @@ const Hero = () => {
     {
       image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1974&auto=format",
       title: "Opstean Healthcare Pvt. Ltd.",
-      subtitle: "Our mission is to serve the best quality medicine to humanity…",
+      subtitle: "Our Vision is to Make Quality Healthcare accessible to all.",
       accent: "Welcome To"
     },
     {
