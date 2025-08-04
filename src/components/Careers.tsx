@@ -7,8 +7,11 @@ import { useJobsQuery } from '@/hooks/useJobsQuery';
 
 const Careers = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { data: jobs = [] } = useJobsQuery();
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -18,14 +21,46 @@ const Careers = () => {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.05 }
     );
-    
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-    
-    return () => observer.disconnect();
+
+    // Observe all fade-in sections
+    const elementsToObserve = [
+      sectionRef.current,
+      headerRef.current,
+      ctaRef.current,
+      ...cardRefs.current
+    ].filter(Boolean);
+
+    elementsToObserve.forEach((element) => {
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    // Immediate fallback: Make all elements visible right away
+    const immediateTimer = setTimeout(() => {
+      elementsToObserve.forEach((element) => {
+        if (element) {
+          element.classList.add('is-visible');
+        }
+      });
+    }, 100);
+
+    // Secondary fallback: Ensure visibility
+    const fallbackTimer = setTimeout(() => {
+      elementsToObserve.forEach((element) => {
+        if (element && !element.classList.contains('is-visible')) {
+          element.classList.add('is-visible');
+        }
+      });
+    }, 500);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(immediateTimer);
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   const benefits = [
@@ -45,15 +80,15 @@ const Careers = () => {
       description: "Work with passionate professionals making a difference"
     }
   ];
-  
+
   return (
-    <section 
-      id="careers" 
+    <section
+      id="careers"
       className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
-        <div className="text-center fade-in-section mb-12">
+        <div className="text-center fade-in-section mb-12" ref={headerRef}>
           <h2 className="text-4xl font-bold text-navy mb-4">Join Our Team</h2>
           <p className="text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
             Be part of a team that's making a difference in global healthcare. We offer exciting career opportunities with competitive packages and growth potential.
@@ -67,34 +102,47 @@ const Careers = () => {
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           {benefits.map((benefit, index) => (
-            <Card 
+            <div
               key={benefit.title}
-              className="text-center hover-lift fade-in-section transition-all duration-300 hover:shadow-xl"
-              style={{ animationDelay: `${index * 0.2}s` }}
+              ref={el => cardRefs.current[index] = el}
+              className="relative rounded-xl p-8 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl fade-in-section group"
+              style={{ backgroundColor: '#b3e7ff', animationDelay: `${index * 0.2}s`, minHeight: '200px' }}
             >
-              <CardContent className="p-6">
-                <div className="text-teal mb-4 flex justify-center">
-                  {benefit.icon}
+              <div className="flex justify-center mb-6 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                <div className="bg-white/80 backdrop-blur-sm rounded-full p-4 group-hover:bg-white transition-all duration-300">
+                  <div className="text-blue-600">
+                    {benefit.icon}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-navy mb-3">{benefit.title}</h3>
-                <p className="text-gray-600">{benefit.description}</p>
-              </CardContent>
-            </Card>
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-4 group-hover:text-blue-800 transition-colors duration-300">
+                {benefit.title}
+              </h3>
+              <p className="text-blue-700 leading-relaxed group-hover:text-navy transition-colors duration-300">
+                {benefit.description}
+              </p>
+              {/* Animated border effect */}
+              <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+              {/* Floating particles effect */}
+              <div className="absolute top-4 right-4 w-2 h-2 bg-blue-300/60 rounded-full animate-pulse"></div>
+              <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-400/70 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute top-1/2 left-4 w-1.5 h-1.5 bg-blue-200/60 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
+            </div>
           ))}
         </div>
 
-        <div className="text-center fade-in-section">
+        <div className="text-center fade-in-section" ref={ctaRef}>
           <Card className="max-w-3xl mx-auto bg-gradient-to-r from-teal to-navy text-white">
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold mb-4">Ready to Start Your Career Journey?</h3>
               <p className="text-lg mb-6 opacity-90">
-                {jobs.length > 0 
+                {jobs.length > 0
                   ? `Explore our ${jobs.length} current job opening${jobs.length > 1 ? 's' : ''} and find the perfect opportunity to grow with us.`
                   : 'Stay tuned for exciting career opportunities to grow with us.'
                 }
               </p>
               <Link to="/careers">
-                <Button 
+                <Button
                   size="lg"
                   className="bg-white text-navy hover:bg-gray-100 transition-all duration-300 btn-hover-effect flex items-center gap-2 mx-auto"
                 >

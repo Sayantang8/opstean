@@ -156,7 +156,7 @@ const Contact = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-navy mb-4 fade-in-section">Contact Us</h2>
-          <p className="text-xl text-teal font-medium fade-in-section">I WOULD LOVE TO HEAR FROM YOU. PLEASE DROP YOUR MAIL.</p>
+          <p className="text-xl text-teal font-medium fade-in-section">WE WOULD LOVE TO HEAR FROM YOU. PLEASE DROP YOUR MAIL.</p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

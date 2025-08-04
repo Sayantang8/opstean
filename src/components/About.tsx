@@ -1,104 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Users } from 'lucide-react';
-
-// Animated Counter Component with Circular Progress
-const StatCard = ({ number, label, suffix = '', color }: {
-  number: number;
-  label: string;
-  suffix?: string;
-  color: string;
-}) => {
-  const [count, setCount] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const animateCounter = useCallback(() => {
-    const duration = 2000; // 2 seconds
-    const steps = 60;
-    const increment = number / steps;
-    const stepDuration = duration / steps;
-
-    let currentCount = 0;
-    const timer = setInterval(() => {
-      currentCount += increment;
-      if (currentCount >= number) {
-        currentCount = number;
-        clearInterval(timer);
-      }
-      setCount(Math.floor(currentCount));
-      setProgress((currentCount / number) * 100);
-    }, stepDuration);
-  }, [number, setCount, setProgress]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isVisible) {
-            setIsVisible(true);
-            animateCounter();
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [animateCounter, isVisible]);
-
-  const circumference = 2 * Math.PI * 45; // radius = 45
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-
-  return (
-    <div
-      ref={cardRef}
-      className="rounded-xl p-8 shadow-lg text-center hover-lift transform transition-all duration-300"
-      style={{ backgroundColor: '#b3e7ff' }}
-    >
-      <div className="relative w-32 h-32 mx-auto mb-6">
-        {/* Background Circle */}
-        <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
-          <circle
-            cx="50"
-            cy="50"
-            r="45"
-            stroke="rgba(255, 255, 255, 0.3)"
-            strokeWidth="8"
-            fill="none"
-          />
-          {/* Animated Progress Circle */}
-          <circle
-            cx="50"
-            cy="50"
-            r="45"
-            stroke="#00aeff"
-            strokeWidth="8"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-1000 ease-out"
-          />
-        </svg>
-
-        {/* Counter Number */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-3xl font-bold" style={{ color: '#007ab3' }}>
-            {count}{suffix}
-          </span>
-        </div>
-      </div>
-
-      <h4 className="text-lg font-semibold mb-2" style={{ color: '#007ab3' }}>{label}</h4>
-      <div className="w-16 h-1 mx-auto rounded-full" style={{ backgroundColor: '#007ab3' }}></div>
-    </div>
-  );
-};
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -212,11 +113,11 @@ const About = () => {
               className="relative rounded-xl p-8 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl fade-in-section group"
               style={{ backgroundColor: '#b3e7ff', animationDelay: `${0.2 * index}s` }}
             >
-                             <div className="flex justify-center mb-6 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                 <div className="rounded-full overflow-hidden">
-                   {card.icon}
-                 </div>
-               </div>
+              <div className="flex justify-center mb-6 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                <div className="rounded-full overflow-hidden">
+                  {card.icon}
+                </div>
+              </div>
               <h3 className="text-xl font-bold text-navy mb-4 group-hover:text-blue-800 transition-colors duration-300">
                 {card.title}
               </h3>
@@ -235,40 +136,7 @@ const About = () => {
           ))}
         </div>
 
-        <div className="mt-16">
-          <h3 className="text-2xl font-bold text-navy text-center mb-8">Our Vision & Mission</h3>
-          <div className="bg-gray-50 rounded-lg p-8">
-            <p className="text-gray-700 text-center text-lg leading-relaxed">
-              <strong>Vision & Mission:</strong> To establish Opstean Healthcare Pvt. Ltd. as the Pharmaceutical and Pharmaceutical Impurity Company, recognized as the leader in this field by one and all.
-            </p>
-          </div>
-        </div>
 
-        {/* Statistics Section */}
-        <div className="mt-16">
-          <h3 className="text-2xl font-bold text-navy text-center mb-12">
-          We Rise in Glory...</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <StatCard
-              number={250}
-              label="Field of Expertise"
-              suffix="+"
-              color="teal"
-            />
-            <StatCard
-              number={15}
-              label="Years of Experience"
-              suffix="+"
-              color="blue"
-            />
-            <StatCard
-              number={83}
-              label="Products"
-              suffix="+"
-              color="purple"
-            />
-          </div>
-        </div>
       </div>
     </section>
   );

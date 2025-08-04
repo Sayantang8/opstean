@@ -3,11 +3,11 @@ import { Linkedin, MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+
   const handleMapClick = () => {
     window.open('https://maps.google.com/?q=3+Uttarag+Apartment+Vivekananda+Road+Thakurpukur+Kolkata+700063', '_blank');
   };
-  
+
   return (
     <footer className="bg-[#355083] text-white py-12">
       <div className="container mx-auto px-6">
@@ -15,7 +15,7 @@ const Footer = () => {
           {/* Logo and Company Info */}
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center space-x-2 mb-4">
-              <img 
+              <img
                 src="/lovable-uploads/dc77f5ec-2925-4e96-ab0d-51a138dee8d7.png"
                 alt="Opstean Healthcare Logo"
                 className="h-10 w-auto"
@@ -32,7 +32,7 @@ const Footer = () => {
               All rights reserved.
             </p>
           </div>
-          
+
           {/* Quick Links */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
@@ -43,7 +43,7 @@ const Footer = () => {
               <a href="#contact" className="text-gray-300 hover:text-teal transition-colors duration-300">Contact</a>
             </div>
           </div>
-          
+
           {/* Contact Information */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
@@ -70,55 +70,68 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Social Links */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
             <div className="flex space-x-4 mb-6">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="w-10 h-10 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-teal transition-all duration-300"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a 
-                href="mailto:info@opsteanhealthcare.com" 
+              <a
+                href="mailto:info@opsteanhealthcare.com"
                 className="w-10 h-10 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-teal transition-all duration-300"
                 aria-label="Email"
               >
                 <Mail className="w-5 h-5" />
               </a>
             </div>
-            
+
             {/* Google Map Integration */}
             <div className="w-full">
               <h4 className="text-sm font-semibold mb-2">Our Location</h4>
-              <div 
+              <div
                 className="w-full h-32 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity relative"
                 onClick={handleMapClick}
                 title="Click to open in Google Maps"
               >
-                <iframe 
+                <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3687.0722354332956!2d88.3068886768592!3d22.463919636941903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027ba740e84c69%3A0xe90c52c1d7cc2898!2sOpstean%20Healthcare%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1753259389554!5m2!1sen!2sin"
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0 }} 
-                  allowFullScreen 
-                  loading="lazy" 
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Opstean Healthcare Location - Footer Map"
-                className="w-full h-full"
+                  className="w-full h-full"
                 ></iframe>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-700 pt-6">
-          <p className="text-center text-sm text-gray-400">
+          <p className="text-center text-sm text-gray-400 mb-3">
             Opstean Healthcare Pvt. Ltd. - Leading Pharmaceutical Company in India
           </p>
+          <div className="text-center">
+            <p className="text-xs text-gray-500">
+              Designed & Developed by{' '}
+              <a
+                href="https://www.linkedin.com/in/g-sayantan08"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-teal hover:text-white transition-colors duration-300 font-medium"
+              >
+                Sayantan Ghatak
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
