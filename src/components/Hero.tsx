@@ -15,7 +15,7 @@ const Hero = () => {
     {
       image: "/images/beyza-yurtkuran-P9afJG5BqEQ-unsplash.jpg",
       title: "Fastest Growing Pharmaceutical Company",
-      subtitle: "in the Indian Pharma Industry",
+      subtitle: "In the Indian Pharma Industry",
       accent: "We are the"
     },
     {
