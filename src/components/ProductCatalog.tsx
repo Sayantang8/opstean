@@ -288,11 +288,17 @@ const ProductCatalog = () => {
 
                 {/* Vision & Mission Section */}
                 <div className="mt-16">
-                    <h3 className="text-2xl font-bold text-navy text-center mb-8">Our Vision & Mission</h3>
-                    <div className="bg-gray-50 rounded-lg p-8">
-                        <p className="text-gray-700 text-center text-lg leading-relaxed">
-                            <strong>Vision & Mission:</strong> To establish Opstean Healthcare Pvt. Ltd. as the Pharmaceutical and Pharmaceutical Impurity Company, recognized as the leader in this field by one and all.
-                        </p>
+                    <div className="flex justify-center">
+                        <div
+                            className="rounded-xl p-12 shadow-lg text-center hover-lift transform transition-all duration-300 max-w-5xl w-full min-h-[300px] flex flex-col justify-center"
+                            style={{ backgroundColor: '#b3e7ff' }}
+                        >
+                            <h3 className="text-3xl font-bold mb-6 text-navy">Our Vision & Mission</h3>
+                            <div className="w-24 h-1 mx-auto rounded-full mb-8" style={{ backgroundColor: '#007ab3' }}></div>
+                            <p className="text-xl leading-relaxed font-medium" style={{ color: '#007ab3' }}>
+                            Creating a World where Quality Medicines are Affordable and Accessible to Every Individual, Ensuring Health is a Right, Not a Privilege.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
