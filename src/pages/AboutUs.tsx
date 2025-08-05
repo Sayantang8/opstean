@@ -45,7 +45,7 @@ const AboutUs = () => {
             <section className="pt-32 pb-20 bg-gradient-to-br from-gray-50 to-blue-50">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-12">
-                        <h1 className="text-4xl md:text-5xl font-bold text-navy mb-6">About Opstean Healthcare</h1>
+                        <h1 className="text-4xl md:text-5xl font-bold text-navy mb-6">About Us</h1>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
                             Leading the way in pharmaceutical excellence since 2010
                         </p>
@@ -118,7 +118,7 @@ const AboutUs = () => {
                             <div className="w-24 h-1 mx-auto rounded-full mb-8" style={{ backgroundColor: '#007ab3' }}></div>
 
                             <p className="text-blue-700 leading-relaxed text-lg mb-8 group-hover:text-navy transition-colors duration-300">
-                                Opstean Healthcare Pvt. Ltd. is the leading and best Pharmaceuticals company. We are popular in the segment for our world class high quality medicines. Our aim is to provide best medicines to our customers at an affordable price with uncompromising quality.
+                                Opstean Healthcare Pvt. Ltd. is the leading Pharma company. We are popular in the segment for our world class high quality medicines. Our aim is to provide best medicines to our customers at an affordable price with uncompromising quality.
                             </p>
                             <p className="text-blue-700 leading-relaxed text-lg group-hover:text-navy transition-colors duration-300">
                                 We offer high quality medicines to our clients which are made with superior quality ingredients which are free from any side effects. Every single product that rolls out of Opstean Healthcare Pvt. Ltd. is made under the supervision of medical experts. We have a well-qualified and knowledgeable team of professionals for each department in our organization.
