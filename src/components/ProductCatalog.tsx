@@ -216,7 +216,7 @@ const ProductCatalog = () => {
         <section className="py-6 md:py-8 bg-white">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="text-center mb-6">
-                    <h2 className="text-xl md:text-2xl font-bold text-navy mb-2">Explore Our Product Categories</h2>
+                    <h2 className="text-xl md:text-2xl font-bold text-navy mb-2">Explore Our Therapeutic Categories</h2>
                     <p className="text-gray-600 max-w-xl mx-auto text-xs md:text-sm">
                         Explore our pharmaceutical products across therapeutic categories
                     </p>
@@ -290,13 +290,13 @@ const ProductCatalog = () => {
                 <div className="mt-16">
                     <div className="flex justify-center">
                         <div
-                            className="rounded-xl p-12 shadow-lg text-center hover-lift transform transition-all duration-300 max-w-5xl w-full min-h-[300px] flex flex-col justify-center"
+                            className="rounded-xl p-8 shadow-lg text-center hover-lift transform transition-all duration-300 max-w-4xl w-full flex flex-col justify-center"
                             style={{ backgroundColor: '#b3e7ff' }}
                         >
-                            <h3 className="text-3xl font-bold mb-6 text-navy">Our Vision & Mission</h3>
-                            <div className="w-24 h-1 mx-auto rounded-full mb-8" style={{ backgroundColor: '#007ab3' }}></div>
-                            <p className="text-xl leading-relaxed font-medium" style={{ color: '#007ab3' }}>
-                            Creating a World where Quality Medicines are Affordable and Accessible to Every Individual, Ensuring Health is a Right, Not a Privilege.
+                            <h3 className="text-2xl font-bold mb-4 text-navy">Our Vision & Mission</h3>
+                            <div className="w-16 h-1 mx-auto rounded-full mb-6" style={{ backgroundColor: '#007ab3' }}></div>
+                            <p className="text-lg leading-relaxed font-medium" style={{ color: '#007ab3' }}>
+                                Creating a World where Quality Medicines are Affordable and Accessible to Every Individual, Ensuring Health is a Right, Not a Privilege.
                             </p>
                         </div>
                     </div>
@@ -320,7 +320,7 @@ const ProductCatalog = () => {
                             color="blue"
                         />
                         <StatCard
-                            number={83}
+                            number={84}
                             label="Products"
                             suffix="+"
                             color="purple"
