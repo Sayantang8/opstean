@@ -49,13 +49,55 @@ const AboutUs = () => {
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
                             Leading the way in pharmaceutical excellence since 2010
                         </p>
-                        <div className="max-w-4xl mx-auto">
-                            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                                At Opstean Healthcare, we believe that quality healthcare should be accessible to everyone. Our journey began with a simple yet powerful vision: to become India's most trusted pharmaceutical company by delivering world-class medicines that improve lives and bring hope to millions.
-                            </p>
-                            <p className="text-lg text-gray-700 leading-relaxed">
-                                From our humble beginnings in Kolkata to our ambitious plans for expansion, we have remained committed to innovation, quality, and the unwavering belief that every life matters. Today, we stand proud as one of India's fastest-growing pharmaceutical companies, touching lives across the nation.
-                            </p>
+                        {/* Key Highlights Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                            <div
+                                className="relative rounded-xl p-6 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl group"
+                                style={{ backgroundColor: '#b3e7ff' }}
+                            >
+                                <div className="flex justify-center mb-4">
+                                    <div className="w-12 h-12 bg-navy rounded-full flex items-center justify-center">
+                                        <span className="text-xl">🏥</span>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-bold text-navy mb-2 group-hover:text-blue-800 transition-colors duration-300">Healthcare Excellence</h3>
+                                <p className="text-blue-700 text-sm group-hover:text-navy transition-colors duration-300">
+                                    Quality medicines accessible to everyone
+                                </p>
+                                <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+                            </div>
+
+                            <div
+                                className="relative rounded-xl p-6 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl group"
+                                style={{ backgroundColor: '#b3e7ff' }}
+                            >
+                                <div className="flex justify-center mb-4">
+                                    <div className="w-12 h-12 bg-teal rounded-full flex items-center justify-center">
+                                        <span className="text-xl">🚀</span>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-bold text-navy mb-2 group-hover:text-blue-800 transition-colors duration-300">Fastest Growing</h3>
+                                <p className="text-blue-700 text-sm group-hover:text-navy transition-colors duration-300">
+                                    One of India's fastest-growing pharma company
+                                </p>
+                                <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+                            </div>
+
+                            <div
+                                className="relative rounded-xl p-6 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl group"
+                                style={{ backgroundColor: '#b3e7ff' }}
+                            >
+                                <div className="flex justify-center mb-4">
+                                    <div className="w-12 h-12 bg-navy rounded-full flex items-center justify-center">
+                                        <span className="text-xl">💊</span>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-bold text-navy mb-2 group-hover:text-blue-800 transition-colors duration-300">Trusted Partner</h3>
+                                <p className="text-blue-700 text-sm group-hover:text-navy transition-colors duration-300">
+                                    India's most trusted pharmaceutical partner
+                                </p>
+                                <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
