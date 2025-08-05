@@ -75,9 +75,9 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'HOME', sectionId: 'home' },
-    { name: 'ABOUT US', sectionId: 'about' },
+    { name: 'ABOUT US', sectionId: 'about', isPage: true },
     { name: 'PRODUCTS', sectionId: 'products', hasDropdown: true },
-    { name: 'CAREERS', sectionId: 'careers' },
+    { name: 'CAREERS', sectionId: 'careers', isPage: true },
     { name: 'CONTACT', sectionId: 'contact' }
   ];
 
@@ -126,6 +126,14 @@ const Navbar = () => {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+            ) : item.isPage ? (
+              <Link
+                key={item.name}
+                to={item.name === 'ABOUT US' ? '/about' : '/careers'}
+                className="text-sm uppercase tracking-wider font-medium text-navy transition-all duration-300 hover:text-teal hover:scale-105"
+              >
+                {item.name}
+              </Link>
             ) : (
               <button
                 key={item.name}
@@ -154,12 +162,22 @@ const Navbar = () => {
         <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg py-4 px-6 animate-slide-down">
           {navItems.map((item) => (
             <div key={item.name}>
-              <button
-                onClick={() => smoothScrollToSection(item.sectionId)}
-                className="block py-2 text-sm uppercase tracking-wider font-medium text-navy transition-colors duration-300 hover:text-teal w-full text-left"
-              >
-                {item.name}
-              </button>
+              {item.isPage ? (
+                <Link
+                  to={item.name === 'ABOUT US' ? '/about' : '/careers'}
+                  className="block py-2 text-sm uppercase tracking-wider font-medium text-navy transition-colors duration-300 hover:text-teal w-full text-left"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <button
+                  onClick={() => smoothScrollToSection(item.sectionId)}
+                  className="block py-2 text-sm uppercase tracking-wider font-medium text-navy transition-colors duration-300 hover:text-teal w-full text-left"
+                >
+                  {item.name}
+                </button>
+              )}
               {item.hasDropdown && (
                 <div className="ml-4 mt-2 space-y-2">
                   <Link

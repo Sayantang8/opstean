@@ -14,20 +14,38 @@ const About = () => {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    // Observe all fade-in sections
+    const fadeInElements = document.querySelectorAll('.fade-in-section');
+    fadeInElements.forEach((element) => {
+      observer.observe(element);
+    });
 
+    // Observe cards individually
     cardRefs.current.forEach((card) => {
       if (card) {
         observer.observe(card);
       }
     });
 
-    return () => observer.disconnect();
+    // Fallback: Make all elements visible immediately
+    const fallbackTimer = setTimeout(() => {
+      fadeInElements.forEach((element) => {
+        element.classList.add('is-visible');
+      });
+      cardRefs.current.forEach((card) => {
+        if (card) {
+          card.classList.add('is-visible');
+        }
+      });
+    }, 100);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   const featureCards = [
@@ -64,79 +82,98 @@ const About = () => {
   return (
     <section id="about" className="py-20 bg-white" ref={sectionRef}>
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center fade-in-section">
-          <div>
-            <h2 className="text-3xl font-bold text-navy mb-6">About Opstean Healthcare Pvt. Ltd.</h2>
-            <p className="text-gray-700 mb-6 leading-relaxed">
-              Opstean Healthcare Pvt. Ltd. is one of the most fastest growing pharmaceutical Company, marketing a wide range of drugs including Ortho, Gyno, Cardio, Derma, Gastro Care, Cold Management, Antibiotic, Pain Management and General Care.
-            </p>
-            <p className="text-gray-700 mb-6 leading-relaxed">
-              We are Kolkata based one of the leading pharmaceutical company in India. We came into existence in 2010, and in 2021, the company was formed into a legal corporation. We are going to start our new manufacturing facility 'OPSTEAN LABORATORIES' very soon.
-            </p>
-
-            {/* Minimal Leadership Team Section */}
-            <div className="bg-gray-50 rounded-lg p-3 mb-6 border-l-2 border-teal">
-              <h3 className="text-base font-semibold text-navy mb-1 flex items-center">
-                <Users className="w-4 h-4 text-teal mr-2" />
-                Leadership Team
-              </h3>
-              <div className="text-xs text-gray-600">
-                <span className="font-medium">Directors:</span> Mr. Pintu Goswami, Mrs. Mahuya Goswami, Mrs. Nivedita Goswami
-              </div>
-            </div>
-
-            <p className="text-gray-700 leading-relaxed">
-              'OPSTEAN' means 'RISE' in Frisian language. We are focused on our customer's need and necessities, it has resulted into new high-tech products and we are known to give prompt & high value services to our customers. Opstean Healthcare Pvt. Ltd. is committed to achieve and maintain excellence in our products and for the complete satisfaction of our customers.
-            </p>
-          </div>
-          <div className="rounded-lg overflow-hidden shadow-xl">
-            <img
-              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80"
-              alt="Opstean Healthcare Facility"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-
-        <div className="mt-16 mb-12">
-          <h3 className="text-2xl font-bold text-navy text-center mb-8">Why Are We the Best in India?</h3>
-          <p className="text-gray-700 text-center max-w-4xl mx-auto leading-relaxed">
-            Opstean Healthcare Pvt. Ltd. is the leading and best Pharmaceuticals company. We are popular in the segment for our world class high quality medicines. Our aim is to provide best medicines to our customers at an affordable price with uncompromising quality. We offer high quality medicines to our clients which are made with superior quality ingredients which are free from any side effects. Every single product that rolls out of Opstean Healthcare Pvt. Ltd. is made under the supervision of medical experts. We have a well- qualified and knowledgeable team of professionals for each department in our organization.
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-navy mb-4">Why Choose Opstean Healthcare?</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Discover what makes us a trusted leader in pharmaceutical excellence
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featureCards.map((card, index) => (
-            <div
-              key={index}
-              ref={el => cardRefs.current[index] = el}
-              className="relative rounded-xl p-8 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl fade-in-section group"
-              style={{ backgroundColor: '#b3e7ff', animationDelay: `${0.2 * index}s` }}
-            >
-              <div className="flex justify-center mb-6 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                <div className="rounded-full overflow-hidden">
-                  {card.icon}
+        {/* Blended Layout: Description + Feature Cards */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
+
+            {/* Left Column: Company Description (2 columns) */}
+            <div className="lg:col-span-2">
+              <div
+                className="relative rounded-xl p-8 shadow-xl transform transition-all duration-500 hover:scale-105 group h-full flex flex-col justify-between"
+                style={{ backgroundColor: '#b3e7ff' }}
+              >
+                <div>
+                  <h3 className="text-2xl font-bold text-navy mb-6">Our Story</h3>
+                  <p className="text-blue-700 leading-relaxed mb-6">
+                    Since 2010, <span className="font-semibold text-navy">Opstean Healthcare Pvt. Ltd.</span> has been at the forefront of pharmaceutical innovation in India, transforming healthcare delivery across the nation.
+                  </p>
+                  <p className="text-blue-700 leading-relaxed mb-6">
+                    We specialize in comprehensive therapeutic areas including Ortho, Cardio, Derma, Gastro Care, and Pain Management, serving healthcare providers nationwide with unwavering commitment to excellence.
+                  </p>
                 </div>
+
+                {/* Achievement Badges */}
+                <div className="space-y-4">
+                  <div className="flex items-center text-sm font-medium text-navy">
+                    <div className="w-3 h-3 bg-navy rounded-full mr-3 animate-pulse"></div>
+                    <span>💊 Trusted by Healthcare Professionals</span>
+                  </div>
+                  <div className="flex items-center text-sm font-medium text-navy">
+                    <div className="w-3 h-3 bg-navy rounded-full mr-3 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                    <span>🌍 Pan-India Distribution Network</span>
+                  </div>
+                  <div className="flex items-center text-sm font-medium text-navy">
+                    <div className="w-3 h-3 bg-navy rounded-full mr-3 animate-pulse" style={{ animationDelay: '1s' }}></div>
+                    <span>⚡ Rapid Product Development</span>
+                  </div>
+                  <div className="flex items-center text-sm font-medium text-navy">
+                    <div className="w-3 h-3 bg-navy rounded-full mr-3 animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+                    <span>🤝 Customer-Centric Approach</span>
+                  </div>
+                </div>
+
+                {/* Animated border effect */}
+                <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+
+                {/* Floating particles effect */}
+                <div className="absolute top-4 right-4 w-2 h-2 bg-blue-300/60 rounded-full animate-pulse"></div>
+                <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-400/70 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute top-1/2 left-4 w-1.5 h-1.5 bg-blue-200/60 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
               </div>
-              <h3 className="text-xl font-bold text-navy mb-4 group-hover:text-blue-800 transition-colors duration-300">
-                {card.title}
-              </h3>
-              <p className="text-blue-700 leading-relaxed group-hover:text-navy transition-colors duration-300">
-                {card.description}
-              </p>
-
-              {/* Animated border effect */}
-              <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
-
-              {/* Floating particles effect */}
-              <div className="absolute top-4 right-4 w-2 h-2 bg-blue-300/60 rounded-full animate-pulse"></div>
-              <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-400/70 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-              <div className="absolute top-1/2 left-4 w-1.5 h-1.5 bg-blue-200/60 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
             </div>
-          ))}
+
+            {/* Right Column: Feature Cards Grid (3 columns) */}
+            <div className="lg:col-span-3 h-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+                {featureCards.map((card, index) => (
+                  <div
+                    key={index}
+                    ref={el => cardRefs.current[index] = el}
+                    className="relative rounded-xl p-8 shadow-xl text-center transform transition-all duration-500 hover:scale-105 hover:shadow-2xl group"
+                    style={{ backgroundColor: '#b3e7ff', animationDelay: `${0.2 * index}s` }}
+                  >
+                    <div className="flex justify-center mb-6 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                      <div className="rounded-full overflow-hidden">
+                        {card.icon}
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-navy mb-4 group-hover:text-blue-800 transition-colors duration-300">
+                      {card.title}
+                    </h3>
+                    <p className="text-blue-700 leading-relaxed group-hover:text-navy transition-colors duration-300">
+                      {card.description}
+                    </p>
+
+                    {/* Animated border effect */}
+                    <div className="absolute inset-0 rounded-xl border-2 border-blue-200/50 group-hover:border-blue-300/70 transition-all duration-300"></div>
+
+                    {/* Floating particles effect */}
+                    <div className="absolute top-4 right-4 w-2 h-2 bg-blue-300/60 rounded-full animate-pulse"></div>
+                    <div className="absolute bottom-6 left-6 w-1 h-1 bg-blue-400/70 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute top-1/2 left-4 w-1.5 h-1.5 bg-blue-200/60 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-
-
       </div>
     </section>
   );

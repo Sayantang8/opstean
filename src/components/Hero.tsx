@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1974&auto=format",
@@ -30,14 +30,14 @@ const Hero = () => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3500); // Changed to 3.5 seconds
-    
+
     return () => clearInterval(timer);
   }, []);
 
   const smoothScrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ 
+      element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
@@ -50,15 +50,14 @@ const Hero = () => {
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
         >
-          <div 
-            className="w-full h-full bg-cover bg-center" 
-            style={{ 
+          <div
+            className="w-full h-full bg-cover bg-center"
+            style={{
               backgroundImage: `url('${slide.image}')`,
-              backgroundAttachment: "fixed" 
+              backgroundAttachment: "fixed"
             }}
           >
             {/* Enhanced overlay for better text visibility */}
@@ -66,29 +65,29 @@ const Hero = () => {
           </div>
         </div>
       ))}
-      
+
       {/* Content with enhanced text visibility */}
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="mb-4 text-teal-400 font-medium tracking-wider animate-fade-in text-lg">
           {slides[currentSlide].accent}
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in drop-shadow-2xl" 
-            style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)' }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in drop-shadow-2xl"
+          style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)' }}>
           {slides[currentSlide].title}
         </h1>
-        <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto animate-fade-in drop-shadow-xl" 
-           style={{ animationDelay: "0.2s", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+        <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto animate-fade-in drop-shadow-xl"
+          style={{ animationDelay: "0.2s", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
           {slides[currentSlide].subtitle}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Button 
+          <Button
             onClick={() => smoothScrollToSection('contact')}
             className="bg-teal hover:bg-navy text-white px-8 py-6 text-lg rounded-lg transition-all duration-300 btn-hover-effect animate-fade-in shadow-2xl"
             style={{ animationDelay: "0.4s" }}
           >
             Contact Us
           </Button>
-          <Button 
+          <Button
             onClick={() => smoothScrollToSection('products')}
             variant="outline"
             className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-navy px-8 py-6 text-lg rounded-lg transition-all duration-300 animate-fade-in shadow-2xl"
@@ -98,16 +97,15 @@ const Hero = () => {
           </Button>
         </div>
       </div>
-      
+
       {/* Slide Indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-teal w-8' : 'bg-white/50'
-            }`}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-teal w-8' : 'bg-white/50'
+              }`}
           />
         ))}
       </div>
