@@ -26,7 +26,7 @@ const CompanyGrowthChart = () => {
 
   // Create smooth SVG path
   const createSmoothPath = (points: typeof pathPoints) => {
-    if (points.length < 2) {return ''};
+    if (points.length < 2) { return '' };
 
     let path = `M ${points[0].x} ${points[0].y}`;
 
@@ -65,7 +65,7 @@ const CompanyGrowthChart = () => {
 
   // Calculate path segment lengths for perfect timing
   const calculatePathTiming = useCallback(() => {
-    if (!pathRef.current) {return [0, 0.33, 0.66, 1]};
+    if (!pathRef.current) { return [0, 0.33, 0.66, 1] };
 
     const pathLength = pathRef.current.getTotalLength();
     const segmentLengths = [];
@@ -96,7 +96,7 @@ const CompanyGrowthChart = () => {
 
   // Animation sequence - logo moves with the tip of the drawing line
   const startAnimation = useCallback(async () => {
-    if (!pathRef.current || hasAnimated) {return};
+    if (!pathRef.current || hasAnimated) { return };
 
     setHasAnimated(true);
     const pathLength = pathRef.current.getTotalLength();
@@ -251,7 +251,7 @@ const CompanyGrowthChart = () => {
               Growth Type
             </text>
             <text x={width / 2} y={height - 20} textAnchor="middle" className="fill-gray-600 text-sm">
-              
+
             </text>
 
             {/* Animated path */}

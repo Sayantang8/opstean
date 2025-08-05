@@ -83,8 +83,8 @@ const About = () => {
     <section id="about" className="py-20 bg-white" ref={sectionRef}>
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-navy mb-4">Discover What Makes Us a Trusted Leader in Pharmaceutical Excellence</h2>
-          
+          <h2 className="text-3xl font-bold text-navy mb-4">Discover What Makes Us a Trusted One in Pharmaceutical Excellence</h2>
+
         </div>
 
         {/* Blended Layout: Description + Feature Cards */}
@@ -100,7 +100,7 @@ const About = () => {
                 <div>
                   <h3 className="text-2xl font-bold text-navy mb-6">'OPSTEAN'<br></br>means 'RISE' in Frisian language.</h3>
                   <p className="text-blue-700 leading-relaxed mb-6">
-                   <span className="font-semibold text-navy"></span>  In 2010, We came into existence, at the forefront of pharmaceutical innovation in India, transforming healthcare delivery across the nation.
+                    <span className="font-semibold text-navy"></span>  In 2010, We came into existence, at the forefront of pharmaceutical innovation in India, transforming healthcare delivery across the nation.
                   </p>
                   <p className="text-blue-700 leading-relaxed mb-6">
                     We specialize in comprehensive therapeutic areas including Ortho, Cardio, Derma, Gastro Care, and Pain Management, serving healthcare providers nationwide with unwavering commitment to excellence.
