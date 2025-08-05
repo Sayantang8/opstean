@@ -64,44 +64,7 @@ const AboutUs = () => {
             {/* Main Content Section */}
             <section className="py-20 bg-white" ref={sectionRef}>
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center fade-in-section">
-                        <div>
-                            <h2 className="text-3xl font-bold text-navy mb-6">About Opstean Healthcare Pvt. Ltd.</h2>
-                            <p className="text-gray-700 mb-6 leading-relaxed">
-                                Opstean Healthcare Pvt. Ltd. is one of the most fastest growing pharmaceutical Company, marketing a wide range of drugs including Ortho, Gyno, Cardio, Derma, Gastro Care, Cold Management, Antibiotic, Pain Management and General Care.
-                            </p>
-                            <p className="text-gray-700 mb-6 leading-relaxed">
-                                We are Kolkata based one of the leading pharmaceutical company in India. We came into existence in 2010, and in 2021, the company was formed into a legal corporation. We are going to start our new manufacturing facility 'OPSTEAN LABORATORIES' very soon.
-                            </p>
 
-                            {/* Leadership Team Section */}
-                            <div className="bg-gray-50 rounded-lg p-4 mb-6 border-l-4 border-teal">
-                                <h3 className="text-lg font-semibold text-navy mb-2 flex items-center">
-                                    <Users className="w-5 h-5 text-teal mr-2" />
-                                    Leadership Team
-                                </h3>
-                                <div className="text-sm text-gray-600">
-                                    <p><span className="font-medium">Directors:</span></p>
-                                    <ul className="ml-4 mt-1">
-                                        <li>• Mr. Pintu Goswami</li>
-                                        <li>• Mrs. Mahuya Goswami</li>
-                                        <li>• Mrs. Nivedita Goswami</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <p className="text-gray-700 leading-relaxed">
-                                'OPSTEAN' means 'RISE' in Frisian language. We are focused on our customer's need and necessities, it has resulted into new high-tech products and we are known to give prompt & high value services to our customers. Opstean Healthcare Pvt. Ltd. is committed to achieve and maintain excellence in our products and for the complete satisfaction of our customers.
-                            </p>
-                        </div>
-                        <div className="rounded-lg overflow-hidden shadow-xl">
-                            <img
-                                src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80"
-                                alt="Opstean Healthcare Facility"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
 
                     {/* Why We Are The Best Section */}
                     <div className="mt-20 mb-12">
@@ -243,7 +206,7 @@ const AboutUs = () => {
                                 <div>
                                     <h4 className="text-2xl font-semibold text-navy mb-6">Quality Assurance</h4>
                                     <p className="text-gray-700 leading-relaxed mb-6">
-                                        Every product that bears the Opstean name undergoes rigorous quality testing and meets international standards. Our WHO and CGMP certifications ensure that we maintain the highest levels of pharmaceutical excellence.
+                                        Every product that bears the Opstean name undergoes rigorous quality testing and meets international standards. Our manufacturer's WHO and CGMP certifications ensure that we maintain the highest levels of pharmaceutical excellence.
                                     </p>
                                     <p className="text-gray-700 leading-relaxed">
                                         We work exclusively with certified manufacturers across India, ensuring that our supply chain maintains the same commitment to quality that defines our brand.
@@ -252,7 +215,7 @@ const AboutUs = () => {
                                 <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-8">
                                     <div className="grid grid-cols-2 gap-6 text-center">
                                         <div>
-                                            <div className="text-3xl font-bold text-navy mb-2">250+</div>
+                                            <div className="text-3xl font-bold text-navy mb-2">85+</div>
                                             <div className="text-sm text-gray-600">Products</div>
                                         </div>
                                         <div>

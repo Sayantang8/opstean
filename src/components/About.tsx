@@ -102,7 +102,7 @@ const About = () => {
                 <div>
                   <h3 className="text-2xl font-bold text-navy mb-6">Our Story</h3>
                   <p className="text-blue-700 leading-relaxed mb-6">
-                    Since 2010, <span className="font-semibold text-navy">Opstean Healthcare Pvt. Ltd.</span> has been at the forefront of pharmaceutical innovation in India, transforming healthcare delivery across the nation.
+                    We came in existence  <span className="font-semibold text-navy">into 2010,</span> at the forefront of pharmaceutical innovation in India, transforming healthcare delivery across the nation.
                   </p>
                   <p className="text-blue-700 leading-relaxed mb-6">
                     We specialize in comprehensive therapeutic areas including Ortho, Cardio, Derma, Gastro Care, and Pain Management, serving healthcare providers nationwide with unwavering commitment to excellence.
