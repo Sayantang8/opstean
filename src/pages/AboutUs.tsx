@@ -9,15 +9,17 @@ const AboutUs = () => {
     // Add custom styles for timeline animations
     const timelineStyles = `
         .timeline-line {
-            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 3s ease-out;
+            background: linear-gradient(to bottom, #14b8a6, #1e40af);
+            box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
         }
         
         .timeline-item {
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         
         .timeline-dot {
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 0 4px 15px rgba(0, 122, 179, 0.3);
         }
         
@@ -34,38 +36,55 @@ const AboutUs = () => {
             transform: scale(1) !important;
         }
         
-        @keyframes slideInFromRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
+        @keyframes flowDown {
+            0% {
+                transform: translateX(-50%) scaleY(0);
             }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+            100% {
+                transform: translateX(-50%) scaleY(1);
             }
         }
         
-        @keyframes slideInFromLeft {
-            from {
+        @keyframes popIn {
+            0% {
                 opacity: 0;
-                transform: translateX(-50px);
+                transform: translateY(20px) scale(0.8);
             }
-            to {
+            60% {
+                transform: translateY(-5px) scale(1.05);
+            }
+            100% {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0) scale(1);
             }
         }
         
-        @keyframes dotPop {
+        @keyframes dotBounce {
             0% {
                 transform: scale(0);
             }
             50% {
-                transform: scale(1.2);
+                transform: scale(1.3);
+            }
+            70% {
+                transform: scale(0.9);
             }
             100% {
                 transform: scale(1);
             }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(20, 184, 166, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.8), 0 0 30px rgba(20, 184, 166, 0.4);
+            }
+        }
+        
+        .timeline-line {
+            animation: pulseGlow 2s ease-in-out infinite;
         }
     `;
 
@@ -86,29 +105,86 @@ const AboutUs = () => {
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        // Animate the timeline line first
-                        const timelineLine = entry.target.querySelector('.timeline-line') as HTMLElement;
-                        if (timelineLine) {
-                            timelineLine.style.transform = 'translateX(-50%) scaleY(1)';
-                        }
+                        const timelineContainer = entry.target;
+                        const timelineItems = timelineContainer.querySelectorAll('.timeline-item');
 
-                        // Then animate timeline items with staggered delays
-                        const timelineItems = entry.target.querySelectorAll('.timeline-item');
-                        timelineItems.forEach((item, index) => {
-                            const htmlItem = item as HTMLElement;
-                            setTimeout(() => {
-                                htmlItem.style.opacity = '1';
-                                htmlItem.style.transform = 'translateX(0)';
+                        // Create segmented line animation with stops
+                        const originalLine = timelineContainer.querySelector('.timeline-line') as HTMLElement;
 
-                                // Animate the dot
+                        if (originalLine && timelineItems.length > 0) {
+                            // Use the original line but control its growth progressively
+                            originalLine.style.transform = 'translateX(-50%) scaleY(0)';
+                            originalLine.style.transformOrigin = 'top';
+                            originalLine.style.transition = 'none';
+
+                            // Calculate precise stopping points for each timeline item
+                            // Since timeline items are evenly spaced, we need to stop at the center of each item
+                            const getTargetScale = (segmentIndex: number) => {
+                                const totalItems = timelineItems.length;
+                                // Each item takes up 1/totalItems of the space
+                                // We want to stop at the center of each item
+                                const itemHeight = 1 / totalItems;
+                                const itemCenter = (segmentIndex * itemHeight) + (itemHeight / 2);
+                                return itemCenter;
+                            };
+
+                            // Create animated segments for each timeline item
+                            const animateSegment = (segmentIndex: number) => {
+                                if (segmentIndex >= timelineItems.length) return;
+
+                                const item = timelineItems[segmentIndex];
+                                const htmlItem = item as HTMLElement;
                                 const dot = item.querySelector('.timeline-dot') as HTMLElement;
-                                if (dot) {
+
+                                // Calculate the exact center position for this item
+                                const targetScale = getTargetScale(segmentIndex);
+
+                                // Start flowing this segment
+                                setTimeout(() => {
+                                    originalLine.style.transition = 'transform 1s ease-out';
+                                    originalLine.style.transform = `translateX(-50%) scaleY(${targetScale})`;
+
+                                    // When segment completes, reveal the card
                                     setTimeout(() => {
-                                        dot.style.transform = 'scale(1)';
-                                    }, 200);
-                                }
-                            }, index * 600); // 600ms delay between each item
-                        });
+                                        // Pop up the timeline item
+                                        htmlItem.style.opacity = '1';
+                                        htmlItem.style.transform = 'translateX(0)';
+                                        htmlItem.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+
+                                        // Animate the dot
+                                        if (dot) {
+                                            setTimeout(() => {
+                                                dot.style.transform = 'scale(1.4)';
+                                                dot.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+
+                                                setTimeout(() => {
+                                                    dot.style.transform = 'scale(1)';
+                                                    dot.style.transition = 'transform 0.2s ease-out';
+                                                }, 150);
+                                            }, 100);
+                                        }
+
+                                        // After card is revealed, start the next segment or extend to end
+                                        setTimeout(() => {
+                                            if (segmentIndex + 1 < timelineItems.length) {
+                                                // Continue to next segment
+                                                animateSegment(segmentIndex + 1);
+                                            } else {
+                                                // This is the last item, extend line to the end
+                                                setTimeout(() => {
+                                                    originalLine.style.transition = 'transform 0.8s ease-out';
+                                                    originalLine.style.transform = 'translateX(-50%) scaleY(1)';
+                                                }, 400); // Wait a bit before extending to end
+                                            }
+                                        }, 800); // Wait 800ms before starting next segment
+
+                                    }, 1000); // Card appears 1s after segment starts flowing
+                                }, 100);
+                            };
+
+                            // Start the first segment
+                            animateSegment(0);
+                        }
                     }
                 });
             },
