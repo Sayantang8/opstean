@@ -29,7 +29,7 @@ const ScrollToTop = () => {
     <button
       onClick={scrollToTop}
       className={cn(
-        'fixed bottom-8 right-8 z-50 p-3 rounded-full bg-teal shadow-lg transition-all duration-300 hover:bg-navy',
+        'fixed bottom-8 right-24 z-50 p-3 rounded-full bg-teal shadow-lg transition-all duration-300 hover:bg-navy',
         isVisible ? 'opacity-100 visible' : 'opacity-0 invisible'
       )}
     >

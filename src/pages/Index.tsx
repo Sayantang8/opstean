@@ -11,6 +11,7 @@ import Careers from "@/components/Careers";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import ContactToggle from '@/components/ContactToggle';
 import { logger } from "@/utils/logger";
 
 const Index = () => {
@@ -54,7 +55,8 @@ const Index = () => {
       <Careers />
       <Contact />
       <Footer />
-      <ScrollToTop />
+  <ScrollToTop />
+  <ContactToggle />
     </div>
   );
 };
