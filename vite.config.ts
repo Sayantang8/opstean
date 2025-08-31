@@ -24,13 +24,16 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          vendor: ['react', 'react-dom', 'react-icons'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
           charts: ['recharts'],
           query: ['@tanstack/react-query'],
           supabase: ['@supabase/supabase-js']
         }
       }
+    },
+    optimizeDeps: {
+      include: ['react-icons']
     },
     sourcemap: mode === 'development',
     minify: mode === 'production' ? 'terser' : false,

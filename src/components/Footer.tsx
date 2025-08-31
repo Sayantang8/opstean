@@ -1,4 +1,3 @@
-
 import { Linkedin, MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const Footer = () => {
@@ -88,6 +87,17 @@ const Footer = () => {
                 aria-label="Email"
               >
                 <Mail className="w-5 h-5" />
+              </a>
+              <a
+                href="https://wa.me/+919474860402"
+                className="w-10 h-10 rounded-full bg-white bg-opacity-10 flex items-center justify-center hover:bg-teal transition-all duration-300"
+                aria-label="WhatsApp"
+              >
+                <img
+                  src="/icons/whatsapp.svg"
+                  alt="WhatsApp"
+                  className="w-5 h-5 filter brightness-0 invert"
+                />
               </a>
             </div>
 
