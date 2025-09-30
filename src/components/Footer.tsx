@@ -55,10 +55,10 @@ const Footer = () => {
                   Thakurpukur, Kolkata, West Bengal 700063
                 </p>
               </div>
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-teal" />
                 <p className="text-sm text-gray-300">+91 947486 0402</p>
-              </div>
+              </div> */}
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-teal" />
                 <p className="text-sm text-gray-300">info@opsteanhealthcare.com</p>

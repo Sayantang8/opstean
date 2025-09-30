@@ -8,9 +8,12 @@ export interface Job {
   title: string;
   description?: string;
   location?: string;
+  head_quarter?: string;
   experience_level?: string;
   salary_min?: number;
   salary_max?: number;
+  age_limit_min?: number;
+  age_limit_max?: number;
   requirements?: string;
   benefits?: string;
   is_active?: boolean;

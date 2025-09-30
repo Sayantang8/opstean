@@ -20,12 +20,13 @@ interface GeneralApplicationFormProps {
 
 export const GeneralApplicationForm = ({ isOpen, onOpenChange }: GeneralApplicationFormProps) => {
   const [resume, setResume] = useState<File | null>(null);
-  
+
   const { mutate: submitApplication, isPending } = useSubmitGeneralApplication();
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -36,10 +37,18 @@ export const GeneralApplicationForm = ({ isOpen, onOpenChange }: GeneralApplicat
     console.log('🚀 Form submission started');
     console.log('📋 Form data:', data);
     console.log('📄 Resume file:', resume);
-    
+
     // Validate required fields
-    if (!data.name || !data.email || !data.phone || !data.jobTitle || !data.experience || !data.coverLetter) {
-      console.error('❌ Missing required fields');
+    const requiredFields = [
+      'name', 'email', 'dateOfBirth', 'mobileNumber', 'gender', 'religion',
+      'nationality', 'address', 'qualification', 'jobTitle', 'experience',
+      'headQuarter', 'coverLetter'
+    ];
+
+    const missingFields = requiredFields.filter(field => !data[field as keyof FormData]);
+
+    if (missingFields.length > 0) {
+      console.error('❌ Missing required fields:', missingFields);
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields.",
@@ -51,9 +60,17 @@ export const GeneralApplicationForm = ({ isOpen, onOpenChange }: GeneralApplicat
     const applicationData: GeneralApplicationData = {
       name: data.name,
       email: data.email,
-      phone: data.phone,
+      dateOfBirth: data.dateOfBirth,
+      mobileNumber: data.mobileNumber,
+      gender: data.gender,
+      religion: data.religion,
+      nationality: data.nationality,
+      address: data.address,
+      qualification: data.qualification,
       jobTitle: data.jobTitle,
       experience: data.experience,
+      presentCompany: data.presentCompany,
+      headQuarter: data.headQuarter,
       coverLetter: data.coverLetter,
       resume,
     };
@@ -104,8 +121,8 @@ export const GeneralApplicationForm = ({ isOpen, onOpenChange }: GeneralApplicat
           </p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <PersonalInfoSection register={register} errors={errors} />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <PersonalInfoSection register={register} errors={errors} control={control} />
             <JobInfoSection register={register} errors={errors} />
             <CoverLetterSection register={register} errors={errors} />
             <ResumeUploadSection resume={resume} setResume={setResume} />

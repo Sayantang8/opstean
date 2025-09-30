@@ -4,7 +4,9 @@ export interface GeneralApplicationCardProps {
   onViewApplication: (application: any) => void;
   onStatusChange: (applicationId: string, newStatus: string) => void;
   onDownloadResume: (application: any) => void;
+  onDeleteApplication?: (applicationId: string, applicantName: string) => void;
   isUpdating: boolean;
+  isDeleting?: boolean;
 }
 
 export interface GeneralApplicationDetailDialogProps {
@@ -12,6 +14,8 @@ export interface GeneralApplicationDetailDialogProps {
   onOpenChange: (open: boolean) => void;
   application: any;
   onDownloadResume: (application: any) => void;
+  onDeleteApplication?: (applicationId: string, applicantName: string) => void;
+  isDeleting?: boolean;
 }
 
 export interface GeneralApplicationFiltersProps {

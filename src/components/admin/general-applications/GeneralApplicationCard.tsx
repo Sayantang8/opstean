@@ -3,16 +3,17 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Eye, 
-  Download, 
+import {
+  Eye,
+  Download,
   Calendar,
   Mail,
   Phone,
   User,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  Trash2
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { GeneralApplicationCardProps, statusOptions } from './types';
@@ -23,7 +24,9 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
   onViewApplication,
   onStatusChange,
   onDownloadResume,
-  isUpdating
+  onDeleteApplication,
+  isUpdating,
+  isDeleting
 }) => {
   const getIcon = (iconName: string) => {
     const icons = {
@@ -56,13 +59,23 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
               </span>
               <span className="flex items-center gap-1">
                 <Phone className="w-4 h-4" />
-                {application.applicant_phone}
+                {application.mobile_number || application.applicant_phone}
               </span>
               <span className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 {format(new Date(application.created_at), 'MMM dd, yyyy')}
               </span>
             </div>
+            {(application.nationality || application.qualification) && (
+              <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+                {application.nationality && (
+                  <span>📍 {application.nationality}</span>
+                )}
+                {application.qualification && (
+                  <span>🎓 {application.qualification}</span>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <Badge className={getStatusColor(application.application_status)}>
@@ -70,7 +83,7 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
             </Badge>
           </div>
         </div>
-        
+
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4 text-sm text-gray-600">
             {application.years_of_experience && (
@@ -80,7 +93,7 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
               </span>
             )}
           </div>
-          
+
           <div className="flex gap-2 flex-wrap">
             {/* Status Change Buttons */}
             <div className="flex gap-1">
@@ -102,7 +115,7 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
                 );
               })}
             </div>
-            
+
             {/* Action Buttons */}
             <div className="flex gap-2">
               {application.resume_file_data && (
@@ -111,6 +124,7 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
                   size="sm"
                   onClick={() => onDownloadResume(application)}
                   className="flex items-center gap-1"
+                  disabled={isDeleting}
                 >
                   <Download className="w-4 h-4" />
                   Resume
@@ -121,9 +135,20 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
                 size="sm"
                 onClick={() => onViewApplication(application)}
                 className="flex items-center gap-1"
+                disabled={isDeleting}
               >
                 <Eye className="w-4 h-4" />
                 View
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => onDeleteApplication?.(application.id, application.applicant_name)}
+                className="flex items-center gap-1"
+                disabled={isDeleting || isUpdating}
+              >
+                <Trash2 className="w-4 h-4" />
+                {isDeleting ? 'Deleting...' : 'Delete'}
               </Button>
             </div>
           </div>

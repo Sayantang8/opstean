@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { BirthDatePicker } from '@/components/ui/birth-date-picker';
 import { Send, Loader2 } from 'lucide-react';
 import { useSubmitJobApplication } from '@/hooks/useJobApplications';
 import { useToast } from '@/hooks/use-toast';
@@ -19,6 +20,7 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
     name: '',
     email: '',
     phone: '',
+    dateOfBirth: null as Date | null,
     experience: '',
     coverLetter: '',
     resume: null as File | null
@@ -37,9 +39,13 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
     setApplicationData(prev => ({ ...prev, resume: file }));
   };
 
+  const handleDateChange = (date: Date | undefined) => {
+    setApplicationData(prev => ({ ...prev, dateOfBirth: date || null }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     submitApplication(
       { jobId, applicationData },
       {
@@ -52,6 +58,7 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
             name: '',
             email: '',
             phone: '',
+            dateOfBirth: null,
             experience: '',
             coverLetter: '',
             resume: null
@@ -111,6 +118,16 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
           />
         </div>
         <div>
+          <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+          <BirthDatePicker
+            date={applicationData.dateOfBirth || undefined}
+            onDateChange={handleDateChange}
+            placeholder="Select your date of birth"
+            disabled={isPending}
+            className="mt-1"
+          />
+        </div>
+        <div>
           <Label htmlFor="experience">Years of Experience</Label>
           <Input
             id="experience"
@@ -147,8 +164,8 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
           disabled={isPending}
         />
       </div>
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         className="bg-teal hover:bg-navy text-white px-8 py-2 transition-all duration-300 btn-hover-effect flex items-center gap-2"
         disabled={isPending}
       >

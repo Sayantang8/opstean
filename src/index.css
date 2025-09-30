@@ -1,7 +1,9 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* React Day Picker styles */
+@import "react-day-picker/dist/style.css";
 
 @layer base {
   :root {
@@ -73,7 +75,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -199,7 +201,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -254,13 +257,18 @@ html {
 }
 
 .btn-hover-effect::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.7s ease;
 }
 
@@ -285,7 +293,8 @@ html {
 }
 
 @keyframes productImageFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -294,7 +303,8 @@ html {
 }
 
 @keyframes productCardGlow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 4px 15px rgba(13, 148, 136, 0.1);
   }
   50% {
@@ -317,13 +327,17 @@ html {
 
 /* Enhanced hover effects for product cards */
 .product-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(31, 60, 92, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(13, 148, 136, 0.1) 0%,
+    rgba(31, 60, 92, 0.1) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 0.75rem;
@@ -341,12 +355,24 @@ html {
   animation: categorySlideIn 0.6s ease-out forwards;
 }
 
-.category-card:nth-child(1) { animation-delay: 0.1s; }
-.category-card:nth-child(2) { animation-delay: 0.2s; }
-.category-card:nth-child(3) { animation-delay: 0.3s; }
-.category-card:nth-child(4) { animation-delay: 0.4s; }
-.category-card:nth-child(5) { animation-delay: 0.5s; }
-.category-card:nth-child(6) { animation-delay: 0.6s; }
+.category-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.category-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.category-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.category-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.category-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.category-card:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 @keyframes categorySlideIn {
   from {
@@ -392,12 +418,17 @@ html {
 
 /* Gradient overlays */
 .gradient-overlay {
-  background: linear-gradient(135deg, rgba(20, 83, 109, 0.8) 0%, rgba(13, 148, 136, 0.6) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(20, 83, 109, 0.8) 0%,
+    rgba(13, 148, 136, 0.6) 100%
+  );
 }
 
 /* Enhanced Pulse animation for directors */
 @keyframes gentlePulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
   }
@@ -413,7 +444,8 @@ html {
 
 /* Enhanced parallax and scroll effects */
 @keyframes parallaxFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -492,10 +524,43 @@ html {
 
 /* Hide scrollbar for horizontal scroll */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
+  display: none; /* Safari and Chrome */
+}
+/* Custom Date Picker Styles */
+.rdp {
+  --rdp-cell-size: 36px;
+  --rdp-accent-color: hsl(var(--primary));
+  --rdp-background-color: hsl(var(--background));
+  --rdp-accent-color-dark: hsl(var(--primary));
+  --rdp-background-color-dark: hsl(var(--background));
+  --rdp-outline: 2px solid hsl(var(--primary));
+  --rdp-outline-selected: 2px solid hsl(var(--primary));
+}
+
+.rdp-head_cell {
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.rdp-day_selected {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.rdp-day_today {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  font-weight: 500;
+}
+
+.rdp-day:hover:not(.rdp-day_selected) {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
 }

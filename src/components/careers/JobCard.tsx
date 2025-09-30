@@ -1,9 +1,8 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, DollarSign, Users } from 'lucide-react';
 import { Job } from '@/hooks/useJobsQuery';
 
 interface JobCardProps {
@@ -14,51 +13,106 @@ interface JobCardProps {
 export const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
   const formatSalary = (min?: number, max?: number) => {
     if (!min && !max) return 'Salary not specified';
-    if (min && max) return `₹${min.toLocaleString()} - ₹${max.toLocaleString()}`;
-    if (min) return `₹${min.toLocaleString()}+`;
-    return `Up to ₹${max?.toLocaleString()}`;
+    if (min && max) return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+    if (min) return `$${min.toLocaleString()}+`;
+    return `Up to $${max?.toLocaleString()}`;
   };
 
   return (
     <Card className="hover-lift transition-all duration-300 hover:shadow-xl border-l-4 border-l-teal">
-      <CardHeader>
-        <div className="flex justify-between items-start flex-wrap gap-4">
+      <CardContent className="p-6">
+        <div className="flex justify-between items-start mb-4">
           <div>
-            <CardTitle className="text-xl text-navy mb-2">{job.title}</CardTitle>
-            <CardDescription className="text-gray-600 mb-3">
-              {job.description || 'Join our team and make a difference in healthcare.'}
-            </CardDescription>
-            <div className="flex flex-wrap gap-2 mb-3">
-              {job.location && (
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <MapPin className="w-3 h-3" />
-                  {job.location}
-                </Badge>
-              )}
-              {job.experience_level && (
-                <Badge variant="secondary" className="flex items-center gap-1 capitalize">
-                  <Users className="w-3 h-3" />
-                  {job.experience_level} Level
-                </Badge>
-              )}
-              <Badge variant="outline" className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                Full-time
+            <h3 className="text-xl font-bold text-navy mb-2">{job.title}</h3>
+            <div className="flex items-center gap-2 mb-2">
+              <Badge variant={job.is_active ? 'default' : 'secondary'}>
+                {job.is_active ? 'Active' : 'Inactive'}
               </Badge>
-              <Badge variant="outline" className="flex items-center gap-1">
-                <DollarSign className="w-3 h-3" />
-                {formatSalary(job.salary_min, job.salary_max)}
-              </Badge>
+              <span className="text-sm text-gray-500">
+                Posted: {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'Recently'}
+              </span>
             </div>
           </div>
-          <Button 
+          <Button
             onClick={() => onViewDetails(job)}
             className="bg-teal hover:bg-navy text-white transition-all duration-300"
           >
             View Details & Apply
           </Button>
         </div>
-      </CardHeader>
+
+        {/* Job Description */}
+        {job.description && (
+          <div className="mb-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Job Description</h4>
+            <p className="text-gray-700 text-sm leading-relaxed">{job.description}</p>
+          </div>
+        )}
+
+        {/* Job Details Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div className="space-y-3">
+            <h4 className="font-semibold text-gray-900 border-b pb-1">Location Details</h4>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Job Location:</span>
+              <p className="text-sm text-gray-800">{job.location || 'Remote'}</p>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
+              <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-semibold text-gray-900 border-b pb-1">Requirements</h4>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Experience Level:</span>
+              <p className="text-sm text-gray-800 capitalize">{job.experience_level || 'Not specified'}</p>
+            </div>
+
+            {job.age_limit_max && job.age_limit_max > 0 && (
+              <div>
+                <span className="text-sm font-medium text-gray-600">Maximum Age Limit:</span>
+                <p className="text-sm text-gray-800">{job.age_limit_max} years</p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-semibold text-gray-900 border-b pb-1">Compensation</h4>
+            <div>
+              <span className="text-sm font-medium text-gray-600">Minimum Salary (In-hand):</span>
+              <p className="text-sm text-gray-800">
+                {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Requirements Section */}
+        {job.requirements && (
+          <div className="mb-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Job Requirements</h4>
+            <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{job.requirements}</p>
+          </div>
+        )}
+
+        {/* Benefits Section */}
+        {job.benefits && (
+          <div className="mb-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Benefits & Perks</h4>
+            <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{job.benefits}</p>
+          </div>
+        )}
+
+        {/* Job Status Footer */}
+        <div className="border-t pt-3 mt-4">
+          <div className="flex justify-between items-center text-sm text-gray-500">
+            <span>Job ID: {job.id}</span>
+            <span>Status: {job.is_active ? 'Currently accepting applications' : 'Not accepting applications'}</span>
+          </div>
+        </div>
+      </CardContent>
     </Card>
   );
 };

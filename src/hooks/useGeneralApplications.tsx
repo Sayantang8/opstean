@@ -7,8 +7,17 @@ export interface GeneralApplication {
   applicant_name: string;
   applicant_email: string;
   applicant_phone: string;
+  mobile_number?: string;
+  date_of_birth?: string;
+  gender?: string;
+  religion?: string;
+  nationality?: string;
+  address?: string;
+  qualification?: string;
   job_title?: string;
   years_of_experience?: string;
+  present_company?: string;
+  head_quarter?: string;
   cover_letter?: string;
   resume_file_name?: string;
   resume_file_data?: string;
@@ -18,11 +27,24 @@ export interface GeneralApplication {
 }
 
 export interface GeneralApplicationData {
+  // Personal Information
   name: string;
   email: string;
-  phone: string;
+  dateOfBirth: Date;
+  mobileNumber: string;
+  gender: string;
+  religion: string;
+  nationality: string;
+  address: string;
+
+  // Professional Information
+  qualification: string;
   jobTitle: string;
   experience: string;
+  presentCompany?: string;
+  headQuarter: string;
+
+  // Application Details
   coverLetter: string;
   resume: File | null;
 }
@@ -32,7 +54,7 @@ export const useGeneralApplications = () => {
     queryKey: ['general_applications'],
     queryFn: async () => {
       console.log('🔧 Fetching general applications from Supabase...');
-      
+
       const { data, error } = await supabase
         .from('general_applications')
         .select('*')
@@ -61,11 +83,11 @@ export const useSubmitGeneralApplication = () => {
         // Convert file to base64 if present
         let resumeData = null;
         let resumeFileName = null;
-        
+
         if (applicationData.resume) {
           console.log('📄 Processing resume file:', applicationData.resume.name);
           resumeFileName = applicationData.resume.name;
-          
+
           try {
             // Use FileReader for more reliable base64 conversion
             const base64String = await new Promise<string>((resolve, reject) => {
@@ -79,7 +101,7 @@ export const useSubmitGeneralApplication = () => {
               reader.onerror = () => reject(new Error('Failed to read file'));
               reader.readAsDataURL(applicationData.resume!);
             });
-            
+
             resumeData = base64String;
             console.log('✅ Resume converted to base64 successfully');
           } catch (fileError) {
@@ -91,9 +113,18 @@ export const useSubmitGeneralApplication = () => {
         const submissionData = {
           applicant_name: applicationData.name,
           applicant_email: applicationData.email,
-          applicant_phone: applicationData.phone,
+          applicant_phone: applicationData.mobileNumber, // Using mobile number as the primary phone
+          mobile_number: applicationData.mobileNumber,
+          date_of_birth: applicationData.dateOfBirth.toISOString().split('T')[0], // Convert to YYYY-MM-DD format
+          gender: applicationData.gender,
+          religion: applicationData.religion,
+          nationality: applicationData.nationality,
+          address: applicationData.address,
+          qualification: applicationData.qualification,
           job_title: applicationData.jobTitle,
           years_of_experience: applicationData.experience,
+          present_company: applicationData.presentCompany || null,
+          head_quarter: applicationData.headQuarter,
           cover_letter: applicationData.coverLetter,
           resume_file_name: resumeFileName,
           resume_file_data: resumeData,
@@ -141,7 +172,7 @@ export const useUpdateGeneralApplicationStatus = () => {
 
       const { data, error } = await supabase
         .from('general_applications')
-        .update({ 
+        .update({
           application_status: status,
           updated_at: new Date().toISOString()
         })
@@ -163,6 +194,38 @@ export const useUpdateGeneralApplicationStatus = () => {
     },
     onError: (error) => {
       console.error('💥 Failed to update general application status:', error);
+    },
+  });
+};
+
+export const useDeleteGeneralApplication = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (applicationId: string) => {
+      console.log('🗑️ Deleting general application...', { applicationId });
+
+      const { data, error } = await supabase
+        .from('general_applications')
+        .delete()
+        .eq('id', applicationId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('❌ Error deleting general application:', error);
+        throw error;
+      }
+
+      console.log('✅ General application deleted successfully:', data);
+      return data;
+    },
+    onSuccess: () => {
+      console.log('🎉 Invalidating queries after successful deletion');
+      queryClient.invalidateQueries({ queryKey: ['general_applications'] });
+    },
+    onError: (error) => {
+      console.error('💥 Failed to delete general application:', error);
     },
   });
 };

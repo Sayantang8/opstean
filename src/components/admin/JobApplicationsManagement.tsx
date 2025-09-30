@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, Eye, Download, Mail, Phone, Calendar, User, MapPin, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { useJobApplications, useUpdateApplicationStatus } from '@/hooks/useJobApplications';
+import { Loader2, Eye, Download, Mail, Phone, Calendar, User, MapPin, CheckCircle, XCircle, Clock, Trash2 } from 'lucide-react';
+import { useJobApplications, useUpdateApplicationStatus, useDeleteJobApplication } from '@/hooks/useJobApplications';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 const JobApplicationsManagement = () => {
   const { data: applications = [], isLoading, error } = useJobApplications();
   const updateStatusMutation = useUpdateApplicationStatus();
+  const deleteApplicationMutation = useDeleteJobApplication();
   const [selectedApplication, setSelectedApplication] = useState<any>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -24,14 +25,14 @@ const JobApplicationsManagement = () => {
   const handleStatusChange = async (applicationId: string, newStatus: string) => {
     try {
       console.log('Starting job application status update:', { applicationId, newStatus });
-      
-      const result = await updateStatusMutation.mutateAsync({ 
-        applicationId, 
-        status: newStatus 
+
+      const result = await updateStatusMutation.mutateAsync({
+        applicationId,
+        status: newStatus
       });
-      
+
       console.log('Job application status update result:', result);
-      
+
       toast({
         title: "Status Updated",
         description: `Application status changed to ${newStatus}`,
@@ -41,6 +42,32 @@ const JobApplicationsManagement = () => {
       toast({
         title: "Error",
         description: `Failed to update application status: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteApplication = async (applicationId: string, applicantName: string) => {
+    if (!window.confirm(`Are you sure you want to delete the application from ${applicantName}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      console.log('Starting job application deletion:', { applicationId, applicantName });
+
+      const result = await deleteApplicationMutation.mutateAsync(applicationId);
+
+      console.log('Job application deletion result:', result);
+
+      toast({
+        title: "Application Deleted",
+        description: `Application from ${applicantName} has been deleted successfully.`,
+      });
+    } catch (error) {
+      console.error('Error deleting job application:', error);
+      toast({
+        title: "Error",
+        description: `Failed to delete application: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
     }
@@ -56,7 +83,7 @@ const JobApplicationsManagement = () => {
         }
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: 'application/pdf' });
-        
+
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -152,7 +179,7 @@ const JobApplicationsManagement = () => {
                     </Badge>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     {application.years_of_experience && (
@@ -166,7 +193,7 @@ const JobApplicationsManagement = () => {
                       {application.jobs.location || 'Remote'}
                     </span>
                   </div>
-                  
+
                   <div className="flex gap-2 flex-wrap">
                     {/* Status Change Buttons */}
                     <div className="flex gap-1">
@@ -188,7 +215,7 @@ const JobApplicationsManagement = () => {
                         );
                       })}
                     </div>
-                    
+
                     {/* Action Buttons */}
                     <div className="flex gap-2">
                       {application.resume_file_name && (
@@ -211,6 +238,16 @@ const JobApplicationsManagement = () => {
                         <Eye className="w-4 h-4" />
                         View
                       </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDeleteApplication(application.id, application.applicant_name)}
+                        disabled={deleteApplicationMutation.isPending}
+                        className="flex items-center gap-1"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -226,7 +263,7 @@ const JobApplicationsManagement = () => {
           <DialogHeader>
             <DialogTitle className="text-xl">Application Details</DialogTitle>
           </DialogHeader>
-          
+
           {selectedApplication && (
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
@@ -241,14 +278,14 @@ const JobApplicationsManagement = () => {
                     )}
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold mb-2">Application Info</h4>
                   <div className="space-y-2 text-sm">
                     <p><strong>Position:</strong> {selectedApplication.jobs?.title}</p>
                     <p><strong>Location:</strong> {selectedApplication.jobs?.location || 'Remote'}</p>
                     <p><strong>Applied:</strong> {format(new Date(selectedApplication.created_at), 'MMM dd, yyyy')}</p>
-                    <p><strong>Status:</strong> 
+                    <p><strong>Status:</strong>
                       <Badge className={`ml-2 ${getStatusColor(selectedApplication.application_status)}`}>
                         {selectedApplication.application_status}
                       </Badge>
@@ -256,7 +293,7 @@ const JobApplicationsManagement = () => {
                   </div>
                 </div>
               </div>
-              
+
               {selectedApplication.cover_letter && (
                 <div>
                   <h4 className="font-semibold mb-2">Cover Letter</h4>
@@ -265,7 +302,7 @@ const JobApplicationsManagement = () => {
                   </div>
                 </div>
               )}
-              
+
               <div className="flex gap-2 pt-4 border-t">
                 {selectedApplication.resume_file_name && (
                   <Button
@@ -283,6 +320,18 @@ const JobApplicationsManagement = () => {
                 >
                   <Mail className="w-4 h-4" />
                   Contact Applicant
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    handleDeleteApplication(selectedApplication.id, selectedApplication.applicant_name);
+                    setIsDetailDialogOpen(false);
+                  }}
+                  disabled={deleteApplicationMutation.isPending}
+                  className="flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete Application
                 </Button>
               </div>
             </div>

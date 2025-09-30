@@ -37,12 +37,60 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
         <DialogHeader>
           <DialogTitle className="text-2xl text-navy">{job.title}</DialogTitle>
         </DialogHeader>
-        
+
         <CardContent className="pt-6 animate-slide-down">
+          {/* Job Description */}
+          {job.description && (
+            <div className="mb-6">
+              <h4 className="font-semibold text-navy mb-3">Job Description</h4>
+              <p className="text-gray-700 leading-relaxed">{job.description}</p>
+            </div>
+          )}
+
+          {/* Job Details Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div className="space-y-3">
+              <h4 className="font-semibold text-navy border-b pb-1">Location Details</h4>
+              <div>
+                <span className="text-sm font-medium text-gray-600">Job Location:</span>
+                <p className="text-sm text-gray-800">{job.location || 'Remote'}</p>
+              </div>
+              <div>
+                <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
+                <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="font-semibold text-navy border-b pb-1">Requirements</h4>
+              <div>
+                <span className="text-sm font-medium text-gray-600">Experience Level:</span>
+                <p className="text-sm text-gray-800 capitalize">{job.experience_level || 'Not specified'}</p>
+              </div>
+
+              {job.age_limit_max && job.age_limit_max > 0 && (
+                <div>
+                  <span className="text-sm font-medium text-gray-600">Maximum Age Limit:</span>
+                  <p className="text-sm text-gray-800">{job.age_limit_max} years</p>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="font-semibold text-navy border-b pb-1">Compensation</h4>
+              <div>
+                <span className="text-sm font-medium text-gray-600">Minimum Salary (In-hand):</span>
+                <p className="text-sm text-gray-800">
+                  {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {requirements.length > 0 && (
               <div>
-                <h4 className="font-semibold text-navy mb-3">Requirements:</h4>
+                <h4 className="font-semibold text-navy mb-3">Detailed Requirements:</h4>
                 <ul className="space-y-2">
                   {requirements.map((req, idx) => (
                     <li key={idx} className="flex items-start gap-2">
@@ -53,10 +101,10 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
                 </ul>
               </div>
             )}
-            
+
             {benefits.length > 0 && (
               <div>
-                <h4 className="font-semibold text-navy mb-3">Benefits:</h4>
+                <h4 className="font-semibold text-navy mb-3">Benefits & Perks:</h4>
                 <ul className="space-y-2">
                   {benefits.map((benefit, idx) => (
                     <li key={idx} className="flex items-start gap-2">
@@ -68,13 +116,13 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
               </div>
             )}
           </div>
-          
+
           <div className="border-t pt-6">
             <h4 className="font-semibold text-navy mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5" />
               Apply for this position
             </h4>
-            <JobApplicationForm 
+            <JobApplicationForm
               jobId={job.id}
               jobTitle={job.title}
               onSubmit={handleApplicationSubmit}
