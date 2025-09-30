@@ -33,6 +33,9 @@ const GeneralApplicationDetailDialog: React.FC<GeneralApplicationDetailDialogPro
                 <p><strong>Name:</strong> {application.applicant_name}</p>
                 <p><strong>Email:</strong> {application.applicant_email}</p>
                 <p><strong>Mobile:</strong> {application.mobile_number || application.applicant_phone}</p>
+                {application.date_of_birth && (
+                  <p><strong>Date of Birth:</strong> {format(new Date(application.date_of_birth), 'MMMM dd, yyyy')}</p>
+                )}
                 {application.gender && (
                   <p><strong>Gender:</strong> {application.gender}</p>
                 )}

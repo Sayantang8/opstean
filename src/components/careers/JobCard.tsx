@@ -79,13 +79,25 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-semibold text-gray-900 border-b pb-1">Compensation</h4>
+            <h4 className="font-semibold text-gray-900 border-b pb-1">Application Details</h4>
             <div>
               <span className="text-sm font-medium text-gray-600">Minimum Salary (In-hand):</span>
               <p className="text-sm text-gray-800">
                 {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
               </p>
             </div>
+            {job.apply_before && (
+              <div>
+                <span className="text-sm font-medium text-gray-600">Apply Before:</span>
+                <p className="text-sm font-medium text-red-600">
+                  {new Date(job.apply_before).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

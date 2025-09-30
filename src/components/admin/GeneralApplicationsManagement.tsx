@@ -60,7 +60,7 @@ const GeneralApplicationsManagement = () => {
     }
 
     const headers = [
-      'Name', 'Email', 'Mobile Number', 'Gender', 'Religion', 'Nationality',
+      'Name', 'Email', 'Mobile Number', 'Date of Birth', 'Gender', 'Religion', 'Nationality',
       'Address', 'Qualification', 'Position Interest', 'Years of Experience',
       'Present Company', 'Preferred HQ', 'Application Status', 'Applied Date'
     ];
@@ -69,6 +69,7 @@ const GeneralApplicationsManagement = () => {
       app.applicant_name || '',
       app.applicant_email || '',
       app.mobile_number || app.applicant_phone || '',
+      app.date_of_birth ? new Date(app.date_of_birth).toLocaleDateString() : '',
       app.gender || '',
       app.religion || '',
       app.nationality || '',

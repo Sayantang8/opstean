@@ -273,6 +273,9 @@ const JobApplicationsManagement = () => {
                     <p><strong>Name:</strong> {selectedApplication.applicant_name}</p>
                     <p><strong>Email:</strong> {selectedApplication.applicant_email}</p>
                     <p><strong>Phone:</strong> {selectedApplication.applicant_phone}</p>
+                    {selectedApplication.date_of_birth && (
+                      <p><strong>Date of Birth:</strong> {format(new Date(selectedApplication.date_of_birth), 'MMMM dd, yyyy')}</p>
+                    )}
                     {selectedApplication.years_of_experience && (
                       <p><strong>Experience:</strong> {selectedApplication.years_of_experience} years</p>
                     )}

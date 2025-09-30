@@ -14,6 +14,7 @@ export interface Job {
   salary_max?: number;
   age_limit_min?: number;
   age_limit_max?: number;
+  apply_before?: string;
   requirements?: string;
   benefits?: string;
   is_active?: boolean;

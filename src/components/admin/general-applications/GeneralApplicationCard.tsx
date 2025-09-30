@@ -66,16 +66,23 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
                 {format(new Date(application.created_at), 'MMM dd, yyyy')}
               </span>
             </div>
-            {(application.nationality || application.qualification) && (
-              <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                {application.nationality && (
-                  <span>📍 {application.nationality}</span>
-                )}
-                {application.qualification && (
-                  <span>🎓 {application.qualification}</span>
-                )}
-              </div>
-            )}
+            <div className="flex items-center gap-4 text-sm text-gray-500 mt-1 flex-wrap">
+              {application.date_of_birth && (
+                <span>🎂 {format(new Date(application.date_of_birth), 'MMM dd, yyyy')}</span>
+              )}
+              {application.gender && (
+                <span>👤 {application.gender}</span>
+              )}
+              {application.nationality && (
+                <span>📍 {application.nationality}</span>
+              )}
+              {application.qualification && (
+                <span>🎓 {application.qualification}</span>
+              )}
+              {application.religion && (
+                <span>🕊️ {application.religion}</span>
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Badge className={getStatusColor(application.application_status)}>

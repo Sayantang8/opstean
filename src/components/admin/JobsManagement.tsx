@@ -15,9 +15,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Search, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Loader2, Calendar } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { BirthDatePicker } from '@/components/ui/birth-date-picker';
 
 interface Job {
   id: number;
@@ -30,6 +31,7 @@ interface Job {
   salary_max?: number;
   age_limit_min?: number;
   age_limit_max?: number;
+  apply_before?: string;
   requirements?: string;
   benefits?: string;
   is_active?: boolean;
@@ -54,6 +56,7 @@ export const JobsManagement = () => {
     salary_max: 0,
     age_limit_min: 0,
     age_limit_max: 0,
+    apply_before: '',
     requirements: '',
     benefits: '',
     is_active: true
@@ -101,6 +104,7 @@ export const JobsManagement = () => {
         salary_max: 0,
         age_limit_min: 0,
         age_limit_max: 0,
+        apply_before: '',
         requirements: '',
         benefits: '',
         is_active: true
@@ -339,6 +343,17 @@ export const JobsManagement = () => {
               </div>
 
               <div>
+                <Label>Apply Before Date</Label>
+                <Input
+                  type="date"
+                  value={newJob.apply_before}
+                  onChange={(e) => setNewJob({ ...newJob, apply_before: e.target.value })}
+                  placeholder="Select application deadline"
+                  className="w-full"
+                />
+              </div>
+
+              <div>
                 <Label>Requirements</Label>
                 <Textarea
                   value={newJob.requirements}
@@ -486,14 +501,25 @@ export const JobsManagement = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900 border-b pb-1">Compensation</h4>
+                  <h4 className="font-semibold text-gray-900 border-b pb-1">Application Details</h4>
                   <div>
                     <span className="text-sm font-medium text-gray-600">Minimum Salary (In-hand):</span>
                     <p className="text-sm text-gray-800">
                       {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
                     </p>
                   </div>
-
+                  {job.apply_before && (
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Apply Before:</span>
+                      <p className="text-sm text-gray-800">
+                        {new Date(job.apply_before).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -621,6 +647,16 @@ export const JobsManagement = () => {
                     onChange={(e) => setEditingJob({ ...editingJob, age_limit_max: parseInt(e.target.value) || 0 })}
                   />
                 </div>
+              </div>
+
+              <div>
+                <Label>Apply Before Date</Label>
+                <Input
+                  type="date"
+                  value={editingJob.apply_before || ''}
+                  onChange={(e) => setEditingJob({ ...editingJob, apply_before: e.target.value })}
+                  className="w-full"
+                />
               </div>
 
               <div>
