@@ -53,10 +53,6 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
             <div className="space-y-3">
               <h4 className="font-semibold text-navy border-b pb-1">Location Details</h4>
               <div>
-                <span className="text-sm font-medium text-gray-600">Job Location:</span>
-                <p className="text-sm text-gray-800">{job.location || 'Remote'}</p>
-              </div>
-              <div>
                 <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
                 <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
               </div>

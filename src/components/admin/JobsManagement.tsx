@@ -288,6 +288,7 @@ export const JobsManagement = () => {
                     <SelectItem value="Aspiring">Aspiring</SelectItem>
                     <SelectItem value="experienced">Experienced</SelectItem>
                     <SelectItem value="aspiring-experienced">Aspiring/Experienced</SelectItem>
+                    <SelectItem value="freshers-experienced">Freshers/Experienced</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -586,6 +587,7 @@ export const JobsManagement = () => {
                     <SelectItem value="Aspiring">Aspiring</SelectItem>
                     <SelectItem value="experienced">Experienced</SelectItem>
                     <SelectItem value="aspiring-experienced">Aspiring/Experienced</SelectItem>
+                    <SelectItem value="freshers-experienced">Freshers/Experienced</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

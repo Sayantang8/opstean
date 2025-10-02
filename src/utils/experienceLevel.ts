@@ -6,7 +6,8 @@ export const formatExperienceLevel = (experienceLevel: string | undefined): stri
         'entry': 'Freshers',
         'Aspiring': 'Aspiring',
         'experienced': 'Experienced',
-        'aspiring-experienced': 'Aspiring/Experienced'
+        'aspiring-experienced': 'Aspiring/Experienced',
+        'freshers-experienced': 'Freshers/Experienced'
     };
 
     return levelMap[experienceLevel] || experienceLevel;

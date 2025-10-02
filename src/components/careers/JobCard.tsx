@@ -55,10 +55,6 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
           <div className="space-y-3">
             <h4 className="font-semibold text-gray-900 border-b pb-1">Location Details</h4>
             <div>
-              <span className="text-sm font-medium text-gray-600">Job Location:</span>
-              <p className="text-sm text-gray-800">{job.location || 'Remote'}</p>
-            </div>
-            <div>
               <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
               <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
             </div>
