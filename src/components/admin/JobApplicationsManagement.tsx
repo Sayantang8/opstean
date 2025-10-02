@@ -149,7 +149,7 @@ const JobApplicationsManagement = () => {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {applications.map((application: any) => (
+          {applications.map((application: unknown) => (
             <Card key={application.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -275,6 +275,15 @@ const JobApplicationsManagement = () => {
                     <p><strong>Phone:</strong> {selectedApplication.applicant_phone}</p>
                     {selectedApplication.date_of_birth && (
                       <p><strong>Date of Birth:</strong> {format(new Date(selectedApplication.date_of_birth), 'MMMM dd, yyyy')}</p>
+                    )}
+                    {selectedApplication.gender && (
+                      <p><strong>Gender:</strong> {selectedApplication.gender}</p>
+                    )}
+                    {selectedApplication.religion && (
+                      <p><strong>Religion:</strong> {selectedApplication.religion}</p>
+                    )}
+                    {selectedApplication.current_company && (
+                      <p><strong>Current Company:</strong> {selectedApplication.current_company}</p>
                     )}
                     {selectedApplication.years_of_experience && (
                       <p><strong>Experience:</strong> {selectedApplication.years_of_experience} years</p>

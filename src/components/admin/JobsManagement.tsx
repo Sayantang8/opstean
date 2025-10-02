@@ -19,6 +19,7 @@ import { Plus, Edit, Trash2, Search, Loader2, Calendar } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { BirthDatePicker } from '@/components/ui/birth-date-picker';
+import { formatExperienceLevel } from '@/utils/experienceLevel';
 
 interface Job {
   id: number;
@@ -267,23 +268,13 @@ export const JobsManagement = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Location</Label>
-                  <Input
-                    value={newJob.location}
-                    onChange={(e) => setNewJob({ ...newJob, location: e.target.value })}
-                    placeholder="Job location"
-                  />
-                </div>
-                <div>
-                  <Label>Head Quarter</Label>
-                  <Input
-                    value={newJob.head_quarter}
-                    onChange={(e) => setNewJob({ ...newJob, head_quarter: e.target.value })}
-                    placeholder="Headquarters location"
-                  />
-                </div>
+              <div>
+                <Label>Head Quarter</Label>
+                <Input
+                  value={newJob.head_quarter}
+                  onChange={(e) => setNewJob({ ...newJob, head_quarter: e.target.value })}
+                  placeholder="Headquarters location"
+                />
               </div>
 
               <div>
@@ -296,13 +287,14 @@ export const JobsManagement = () => {
                     <SelectItem value="entry">Freshers</SelectItem>
                     <SelectItem value="Aspiring">Aspiring</SelectItem>
                     <SelectItem value="experienced">Experienced</SelectItem>
+                    <SelectItem value="aspiring-experienced">Aspiring/Experienced</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label>Minimum Salary (In-hand)</Label>
+                  <Label>Minimum Gross Salary</Label>
                   <Input
                     type="number"
                     value={newJob.salary_min}
@@ -471,10 +463,6 @@ export const JobsManagement = () => {
                 <div className="space-y-3">
                   <h4 className="font-semibold text-gray-900 border-b pb-1">Location Details</h4>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Job Location:</span>
-                    <p className="text-sm text-gray-800">{job.location || 'Remote'}</p>
-                  </div>
-                  <div>
                     <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
                     <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
                   </div>
@@ -484,7 +472,7 @@ export const JobsManagement = () => {
                   <h4 className="font-semibold text-gray-900 border-b pb-1">Requirements</h4>
                   <div>
                     <span className="text-sm font-medium text-gray-600">Experience Level:</span>
-                    <p className="text-sm text-gray-800 capitalize">{job.experience_level || 'Not specified'}</p>
+                    <p className="text-sm text-gray-800">{formatExperienceLevel(job.experience_level)}</p>
                   </div>
                   {job.age_limit_min && job.age_limit_min > 0 && (
                     <div>
@@ -503,7 +491,7 @@ export const JobsManagement = () => {
                 <div className="space-y-3">
                   <h4 className="font-semibold text-gray-900 border-b pb-1">Application Details</h4>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Minimum Salary (In-hand):</span>
+                    <span className="text-sm font-medium text-gray-600">Minimum Gross Salary:</span>
                     <p className="text-sm text-gray-800">
                       {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
                     </p>
@@ -576,21 +564,12 @@ export const JobsManagement = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Location</Label>
-                  <Input
-                    value={editingJob.location || ''}
-                    onChange={(e) => setEditingJob({ ...editingJob, location: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label>Head Quarter</Label>
-                  <Input
-                    value={editingJob.head_quarter || ''}
-                    onChange={(e) => setEditingJob({ ...editingJob, head_quarter: e.target.value })}
-                  />
-                </div>
+              <div>
+                <Label>Head Quarter</Label>
+                <Input
+                  value={editingJob.head_quarter || ''}
+                  onChange={(e) => setEditingJob({ ...editingJob, head_quarter: e.target.value })}
+                />
               </div>
 
               <div>
@@ -603,17 +582,17 @@ export const JobsManagement = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="entry">Entry Level</SelectItem>
-                    <SelectItem value="mid">Mid Level</SelectItem>
-                    <SelectItem value="senior">Senior Level</SelectItem>
-                    <SelectItem value="executive">Executive</SelectItem>
+                    <SelectItem value="entry">Freshers</SelectItem>
+                    <SelectItem value="Aspiring">Aspiring</SelectItem>
+                    <SelectItem value="experienced">Experienced</SelectItem>
+                    <SelectItem value="aspiring-experienced">Aspiring/Experienced</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label>Minimum Salary</Label>
+                  <Label>Minimum Gross Salary</Label>
                   <Input
                     type="number"
                     value={editingJob.salary_min || 0}

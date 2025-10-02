@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BirthDatePicker } from '@/components/ui/birth-date-picker';
 import { Send, Loader2 } from 'lucide-react';
 import { useSubmitJobApplication } from '@/hooks/useJobApplications';
@@ -21,6 +22,9 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
     email: '',
     phone: '',
     dateOfBirth: null as Date | null,
+    gender: '',
+    religion: '',
+    currentCompany: '',
     experience: '',
     coverLetter: '',
     resume: null as File | null
@@ -59,6 +63,9 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
             email: '',
             phone: '',
             dateOfBirth: null,
+            gender: '',
+            religion: '',
+            currentCompany: '',
             experience: '',
             coverLetter: '',
             resume: null
@@ -125,6 +132,45 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
             placeholder="Select your date of birth"
             disabled={isPending}
             className="mt-1"
+          />
+        </div>
+        <div>
+          <Label htmlFor="gender">Gender *</Label>
+          <Select value={applicationData.gender} onValueChange={(value) => setApplicationData(prev => ({ ...prev, gender: value }))}>
+            <SelectTrigger className="mt-1">
+              <SelectValue placeholder="Select your gender" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="male">Male</SelectItem>
+              <SelectItem value="female">Female</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+              <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="religion">Religion *</Label>
+          <Input
+            id="religion"
+            name="religion"
+            value={applicationData.religion}
+            onChange={handleInputChange}
+            placeholder="Your religion"
+            className="mt-1"
+            disabled={isPending}
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="currentCompany">Current Company</Label>
+          <Input
+            id="currentCompany"
+            name="currentCompany"
+            value={applicationData.currentCompany}
+            onChange={handleInputChange}
+            placeholder="Your current company (if any)"
+            className="mt-1"
+            disabled={isPending}
           />
         </div>
         <div>

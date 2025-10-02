@@ -5,6 +5,7 @@ import { CardContent } from '@/components/ui/card';
 import { FileText } from 'lucide-react';
 import { Job } from '@/hooks/useJobsQuery';
 import { JobApplicationForm } from './JobApplicationForm';
+import { formatExperienceLevel } from '@/utils/experienceLevel';
 
 interface JobDetailsDialogProps {
   job: Job | null;
@@ -65,7 +66,7 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
               <h4 className="font-semibold text-navy border-b pb-1">Requirements</h4>
               <div>
                 <span className="text-sm font-medium text-gray-600">Experience Level:</span>
-                <p className="text-sm text-gray-800 capitalize">{job.experience_level || 'Not specified'}</p>
+                <p className="text-sm text-gray-800">{formatExperienceLevel(job.experience_level)}</p>
               </div>
 
               {job.age_limit_max && job.age_limit_max > 0 && (
@@ -79,7 +80,7 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
             <div className="space-y-3">
               <h4 className="font-semibold text-navy border-b pb-1">Application Details</h4>
               <div>
-                <span className="text-sm font-medium text-gray-600">Minimum Salary (In-hand):</span>
+                <span className="text-sm font-medium text-gray-600">Minimum Gross Salary:</span>
                 <p className="text-sm text-gray-800">
                   {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
                 </p>

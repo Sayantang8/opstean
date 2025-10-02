@@ -9,6 +9,9 @@ export interface JobApplication {
   applicant_email: string;
   applicant_phone: string;
   date_of_birth?: string;
+  gender?: string;
+  religion?: string;
+  current_company?: string;
   years_of_experience?: string;
   cover_letter?: string;
   resume_file_name?: string;
@@ -23,6 +26,9 @@ export interface JobApplicationData {
   email: string;
   phone: string;
   dateOfBirth: Date | null;
+  gender: string;
+  religion: string;
+  currentCompany: string;
   experience: string;
   coverLetter: string;
   resume: File | null;
@@ -89,6 +95,9 @@ export const useSubmitJobApplication = () => {
           applicant_email: applicationData.email,
           applicant_phone: applicationData.phone,
           date_of_birth: applicationData.dateOfBirth ? applicationData.dateOfBirth.toISOString().split('T')[0] : null,
+          gender: applicationData.gender,
+          religion: applicationData.religion,
+          current_company: applicationData.currentCompany || null,
           years_of_experience: applicationData.experience,
           cover_letter: applicationData.coverLetter,
           resume_file_name: resumeFileName,
