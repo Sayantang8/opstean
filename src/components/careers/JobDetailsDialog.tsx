@@ -56,6 +56,12 @@ export const JobDetailsDialog: React.FC<JobDetailsDialogProps> = ({
                 <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
                 <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
               </div>
+              {job.division && (
+                <div>
+                  <span className="text-sm font-medium text-gray-600">Division:</span>
+                  <p className="text-sm text-gray-800">{job.division}</p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-3">

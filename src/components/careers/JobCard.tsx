@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Job } from '@/hooks/useJobsQuery';
 import { formatExperienceLevel } from '@/utils/experienceLevel';
+import { formatDateWithOrdinal } from '@/utils/dateFormat';
 
 interface JobCardProps {
   job: Job;
@@ -30,7 +31,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
                 {job.is_active ? 'Active' : 'Inactive'}
               </Badge>
               <span className="text-sm text-gray-500">
-                Posted: {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'Recently'}
+                Posted: {job.created_at ? formatDateWithOrdinal(job.created_at) : 'Recently'}
               </span>
             </div>
           </div>
@@ -58,6 +59,12 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
               <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
               <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
             </div>
+            {job.division && (
+              <div>
+                <span className="text-sm font-medium text-gray-600">Division:</span>
+                <p className="text-sm text-gray-800">{job.division}</p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-3">

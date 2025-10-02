@@ -27,6 +27,7 @@ interface Job {
   description?: string;
   location?: string;
   head_quarter?: string;
+  division?: string;
   experience_level?: string;
   salary_min?: number;
   salary_max?: number;
@@ -52,6 +53,7 @@ export const JobsManagement = () => {
     description: '',
     location: '',
     head_quarter: '',
+    division: '',
     experience_level: 'entry',
     salary_min: 0,
     salary_max: 0,
@@ -100,6 +102,7 @@ export const JobsManagement = () => {
         description: '',
         location: '',
         head_quarter: '',
+        division: '',
         experience_level: 'entry',
         salary_min: 0,
         salary_max: 0,
@@ -268,13 +271,23 @@ export const JobsManagement = () => {
                 />
               </div>
 
-              <div>
-                <Label>Head Quarter</Label>
-                <Input
-                  value={newJob.head_quarter}
-                  onChange={(e) => setNewJob({ ...newJob, head_quarter: e.target.value })}
-                  placeholder="Headquarters location"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Head Quarter</Label>
+                  <Input
+                    value={newJob.head_quarter}
+                    onChange={(e) => setNewJob({ ...newJob, head_quarter: e.target.value })}
+                    placeholder="Headquarters location"
+                  />
+                </div>
+                <div>
+                  <Label>Division</Label>
+                  <Input
+                    value={newJob.division}
+                    onChange={(e) => setNewJob({ ...newJob, division: e.target.value })}
+                    placeholder="Division/Department (e.g., IT/Marketing)"
+                  />
+                </div>
               </div>
 
               <div>
@@ -467,6 +480,12 @@ export const JobsManagement = () => {
                     <span className="text-sm font-medium text-gray-600">Head Quarter:</span>
                     <p className="text-sm text-gray-800">{job.head_quarter || 'Not specified'}</p>
                   </div>
+                  {job.division && (
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Division:</span>
+                      <p className="text-sm text-gray-800">{job.division}</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -565,12 +584,22 @@ export const JobsManagement = () => {
                 />
               </div>
 
-              <div>
-                <Label>Head Quarter</Label>
-                <Input
-                  value={editingJob.head_quarter || ''}
-                  onChange={(e) => setEditingJob({ ...editingJob, head_quarter: e.target.value })}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Head Quarter</Label>
+                  <Input
+                    value={editingJob.head_quarter || ''}
+                    onChange={(e) => setEditingJob({ ...editingJob, head_quarter: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label>Division</Label>
+                  <Input
+                    value={editingJob.division || ''}
+                    onChange={(e) => setEditingJob({ ...editingJob, division: e.target.value })}
+                    placeholder="Division/Department (e.g., IT/Marketing)"
+                  />
+                </div>
               </div>
 
               <div>

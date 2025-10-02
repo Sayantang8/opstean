@@ -9,6 +9,7 @@ export interface Job {
   description?: string;
   location?: string;
   head_quarter?: string;
+  division?: string;
   experience_level?: string;
   salary_min?: number;
   salary_max?: number;
