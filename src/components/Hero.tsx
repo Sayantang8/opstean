@@ -1,10 +1,11 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Slides data with images for mobile and text for all
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1974&auto=format",
@@ -29,9 +30,16 @@ const Hero = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3500); // Changed to 3.5 seconds
+    }, 3500); // 3.5 seconds per slide
 
     return () => clearInterval(timer);
+  }, [slides.length]);
+
+  // Auto-play video when component mounts
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(console.error);
+    }
   }, []);
 
   const smoothScrollToSection = (sectionId: string) => {
@@ -44,40 +52,66 @@ const Hero = () => {
     }
   };
 
+  const currentSlide_data = slides[currentSlide];
+
   return (
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Sliding Background Images */}
-      {slides.map((slide, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-        >
+      {/* Mobile: Sliding Background Images (hidden on lg and above) */}
+      <div className="lg:hidden">
+        {slides.map((slide, index) => (
           <div
-            className="w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage: `url('${slide.image}')`,
-              backgroundAttachment: "fixed"
-            }}
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
           >
-            {/* Enhanced overlay for better text visibility */}
-            <div className="w-full h-full bg-gradient-to-r from-black/70 via-navy/60 to-black/50"></div>
+            <div
+              className="w-full h-full bg-cover bg-center"
+              style={{
+                backgroundImage: `url('${slide.image}')`,
+                backgroundAttachment: "fixed"
+              }}
+            >
+              {/* Enhanced overlay for better text visibility */}
+              <div className="w-full h-full bg-gradient-to-r from-black/70 via-navy/60 to-black/50"></div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      {/* Content with enhanced text visibility */}
+      {/* Desktop: Full Screen Video Background (visible on lg and above) */}
+      <div className="hidden lg:block absolute inset-0">
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover"
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        >
+          <source src="/Hero.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Video overlay for better text visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-navy/50 to-black/60"></div>
+      </div>
+
+      {/* Text Content Overlay */}
       <div className="container mx-auto px-6 relative z-10 text-center">
         <div className="mb-4 text-teal-400 font-medium tracking-wider animate-fade-in text-lg">
-          {slides[currentSlide].accent}
+          {currentSlide_data.accent}
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in drop-shadow-2xl"
-          style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)' }}>
-          {slides[currentSlide].title}
+        <h1
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in drop-shadow-2xl"
+          style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)' }}
+        >
+          {currentSlide_data.title}
         </h1>
-        <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto animate-fade-in drop-shadow-xl"
-          style={{ animationDelay: "0.2s", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-          {slides[currentSlide].subtitle}
+        <p
+          className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto animate-fade-in drop-shadow-xl"
+          style={{ animationDelay: "0.2s", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}
+        >
+          {currentSlide_data.subtitle}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Button
@@ -108,6 +142,14 @@ const Hero = () => {
               }`}
           />
         ))}
+      </div>
+
+      {/* Video indicator - only show on desktop */}
+      <div className="hidden lg:block absolute top-8 right-8 z-10">
+        <div className="bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm flex items-center gap-2">
+          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+          Video Background
+        </div>
       </div>
     </section>
   );
