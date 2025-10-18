@@ -35,11 +35,33 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  // Auto-play video when component mounts
+  // Auto-play video when component mounts and handle custom looping with 8-second pause
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(console.error);
-    }
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleVideoEnd = () => {
+      // Pause the video at the last frame
+      video.pause();
+
+      // Wait 8 seconds then restart the video
+      setTimeout(() => {
+        video.currentTime = 0; // Reset to beginning
+        video.play().catch(console.error);
+      }, 8000); // 8 second delay
+    };
+
+    // Remove the loop attribute and handle looping manually
+    video.loop = false;
+    video.addEventListener('ended', handleVideoEnd);
+
+    // Start playing the video
+    video.play().catch(console.error);
+
+    // Cleanup
+    return () => {
+      video.removeEventListener('ended', handleVideoEnd);
+    };
   }, []);
 
   const smoothScrollToSection = (sectionId: string) => {
@@ -55,7 +77,7 @@ const Hero = () => {
   const currentSlide_data = slides[currentSlide];
 
   return (
-    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative h-screen flex items-center lg:items-end justify-center overflow-hidden">
       {/* Mobile: Sliding Background Images (hidden on lg and above) */}
       <div className="lg:hidden">
         {slides.map((slide, index) => (
@@ -84,7 +106,6 @@ const Hero = () => {
           ref={videoRef}
           className="w-full h-full object-cover"
           muted
-          loop
           playsInline
           preload="metadata"
         >
@@ -96,27 +117,27 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-navy/50 to-black/60"></div>
       </div>
 
-      {/* Text Content Overlay */}
-      <div className="container mx-auto px-6 relative z-10 text-center">
-        <div className="mb-4 text-teal-400 font-medium tracking-wider animate-fade-in text-lg">
+      {/* Text Content Overlay - Centered on mobile, bottom on desktop */}
+      <div className="container mx-auto px-6 relative z-10 text-center lg:mb-20 xl:mb-24 2xl:mb-28">
+        <div className="mb-4 lg:mb-3 text-teal-400 font-medium tracking-wider animate-fade-in text-lg">
           {currentSlide_data.accent}
         </div>
         <h1
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-fade-in drop-shadow-2xl"
+          className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-4 lg:mb-3 animate-fade-in drop-shadow-2xl"
           style={{ textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)' }}
         >
           {currentSlide_data.title}
         </h1>
         <p
-          className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto animate-fade-in drop-shadow-xl"
+          className="text-xl md:text-2xl lg:text-2xl text-white mb-8 lg:mb-6 max-w-3xl mx-auto animate-fade-in drop-shadow-xl"
           style={{ animationDelay: "0.2s", textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}
         >
           {currentSlide_data.subtitle}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 lg:gap-3 justify-center items-center">
           <Button
             onClick={() => smoothScrollToSection('contact')}
-            className="bg-teal hover:bg-navy text-white px-8 py-6 text-lg rounded-lg transition-all duration-300 btn-hover-effect animate-fade-in shadow-2xl"
+            className="bg-teal hover:bg-navy text-white px-8 py-6 lg:py-4 text-lg lg:text-base rounded-lg transition-all duration-300 btn-hover-effect animate-fade-in shadow-2xl"
             style={{ animationDelay: "0.4s" }}
           >
             Contact Us
@@ -124,7 +145,7 @@ const Hero = () => {
           <Button
             onClick={() => smoothScrollToSection('products')}
             variant="outline"
-            className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-navy px-8 py-6 text-lg rounded-lg transition-all duration-300 animate-fade-in shadow-2xl"
+            className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-navy px-8 py-6 lg:py-4 text-lg lg:text-base rounded-lg transition-all duration-300 animate-fade-in shadow-2xl"
             style={{ animationDelay: "0.6s" }}
           >
             View Products
