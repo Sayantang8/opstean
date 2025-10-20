@@ -114,7 +114,7 @@ const Hero = () => {
         </video>
 
         {/* Video overlay for better text visibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-navy/50 to-black/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-navy/20 to-black/35"></div>
       </div>
 
       {/* Text Content Overlay - Centered on mobile, bottom on desktop */}
@@ -145,7 +145,7 @@ const Hero = () => {
           <Button
             onClick={() => smoothScrollToSection('products')}
             variant="outline"
-            className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-navy px-8 py-6 lg:py-4 text-lg lg:text-base rounded-lg transition-all duration-300 animate-fade-in shadow-2xl"
+            className="border-2 border-white bg-white/30 backdrop-blur-sm text-white lg:text-navy hover:bg-white hover:text-teal px-8 py-6 lg:py-4 text-lg lg:text-base rounded-lg transition-all duration-300 animate-fade-in shadow-2xl"
             style={{ animationDelay: "0.6s" }}
           >
             View Products
