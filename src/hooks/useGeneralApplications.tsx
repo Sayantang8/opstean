@@ -17,6 +17,7 @@ export interface GeneralApplication {
   job_title?: string;
   years_of_experience?: string;
   present_company?: string;
+  division?: string;
   head_quarter?: string;
   cover_letter?: string;
   resume_file_name?: string;
@@ -42,6 +43,7 @@ export interface GeneralApplicationData {
   jobTitle: string;
   experience: string;
   presentCompany?: string;
+  division?: string;
   headQuarter: string;
 
   // Application Details
@@ -124,6 +126,7 @@ export const useSubmitGeneralApplication = () => {
           job_title: applicationData.jobTitle,
           years_of_experience: applicationData.experience,
           present_company: applicationData.presentCompany || null,
+          division: applicationData.division || null,
           head_quarter: applicationData.headQuarter,
           cover_letter: applicationData.coverLetter,
           resume_file_name: resumeFileName,

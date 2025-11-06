@@ -53,6 +53,18 @@ export const JobInfoSection = ({ register, errors }: JobInfoSectionProps) => {
         </div>
 
         <div>
+          <Label htmlFor="division">Division</Label>
+          <Input
+            id="division"
+            {...register('division')}
+            placeholder="e.g., Sales, Marketing, Operations"
+          />
+          {errors.division && (
+            <p className="text-red-500 text-sm mt-1">{errors.division.message}</p>
+          )}
+        </div>
+
+        <div>
           <Label htmlFor="headQuarter">Preferred Head Quarter *</Label>
           <Input
             id="headQuarter"

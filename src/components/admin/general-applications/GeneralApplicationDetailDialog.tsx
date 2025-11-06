@@ -64,6 +64,9 @@ const GeneralApplicationDetailDialog: React.FC<GeneralApplicationDetailDialogPro
                 {application.present_company && (
                   <p><strong>Current Company:</strong> {application.present_company}</p>
                 )}
+                {application.division && (
+                  <p><strong>Division:</strong> {application.division}</p>
+                )}
                 {application.head_quarter && (
                   <p><strong>Preferred HQ:</strong> {application.head_quarter}</p>
                 )}

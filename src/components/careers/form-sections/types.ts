@@ -19,6 +19,7 @@ const formSchema = z.object({
   jobTitle: z.string().min(2, 'Please specify the position you are interested in'),
   experience: z.string().min(1, 'Please specify your years of experience'),
   presentCompany: z.string().optional(),
+  division: z.string().optional(),
   headQuarter: z.string().min(2, 'Please specify your preferred headquarters location'),
 
   // Application Details

@@ -82,6 +82,9 @@ const GeneralApplicationCard: React.FC<GeneralApplicationCardProps> = ({
               {application.religion && (
                 <span>🕊️ {application.religion}</span>
               )}
+              {application.division && (
+                <span>🏢 {application.division}</span>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">

@@ -26,6 +26,8 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
     religion: '',
     currentCompany: '',
     experience: '',
+    division: '',
+    headQuarter: '',
     coverLetter: '',
     resume: null as File | null
   });
@@ -67,12 +69,14 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
             religion: '',
             currentCompany: '',
             experience: '',
+            division: '',
+            headQuarter: '',
             coverLetter: '',
             resume: null
           });
           onSubmit();
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
           toast({
             title: "Submission Failed",
             description: "There was an error submitting your application. Please try again.",
@@ -182,6 +186,31 @@ export const JobApplicationForm: React.FC<JobApplicationFormProps> = ({ jobId, j
             onChange={handleInputChange}
             className="mt-1"
             disabled={isPending}
+          />
+        </div>
+        <div>
+          <Label htmlFor="division">Division</Label>
+          <Input
+            id="division"
+            name="division"
+            value={applicationData.division}
+            onChange={handleInputChange}
+            placeholder="e.g.,OLIGO / SAVIOR / PROSPER / TABOR ..."
+            className="mt-1"
+            disabled={isPending}
+          />
+        </div>
+        <div>
+          <Label htmlFor="headQuarter">Headquarter Applied For *</Label>
+          <Input
+            id="headQuarter"
+            name="headQuarter"
+            value={applicationData.headQuarter}
+            onChange={handleInputChange}
+            placeholder="e.g., Kolkata, Burdwan, Siliguri"
+            className="mt-1"
+            disabled={isPending}
+            required
           />
         </div>
       </div>

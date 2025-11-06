@@ -62,7 +62,7 @@ const GeneralApplicationsManagement = () => {
     const headers = [
       'Name', 'Email', 'Mobile Number', 'Date of Birth', 'Gender', 'Religion', 'Nationality',
       'Address', 'Qualification', 'Position Interest', 'Years of Experience',
-      'Present Company', 'Preferred HQ', 'Application Status', 'Applied Date'
+      'Present Company', 'Division', 'Preferred HQ', 'Application Status', 'Applied Date'
     ];
 
     const csvData = applications.map(app => [
@@ -78,6 +78,7 @@ const GeneralApplicationsManagement = () => {
       app.job_title || '',
       app.years_of_experience || '',
       app.present_company || '',
+      app.division || '',
       app.head_quarter || '',
       app.application_status || '',
       new Date(app.created_at).toLocaleDateString()
@@ -134,7 +135,8 @@ const GeneralApplicationsManagement = () => {
     (app.job_title && app.job_title.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (app.nationality && app.nationality.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (app.qualification && app.qualification.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (app.present_company && app.present_company.toLowerCase().includes(searchTerm.toLowerCase()))
+    (app.present_company && app.present_company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (app.division && app.division.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   if (isLoading) {

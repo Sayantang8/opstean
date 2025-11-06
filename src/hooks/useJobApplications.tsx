@@ -13,6 +13,8 @@ export interface JobApplication {
   religion?: string;
   current_company?: string;
   years_of_experience?: string;
+  division?: string;
+  head_quarter?: string;
   cover_letter?: string;
   resume_file_name?: string;
   resume_file_data?: string;
@@ -30,6 +32,8 @@ export interface JobApplicationData {
   religion: string;
   currentCompany: string;
   experience: string;
+  division: string;
+  headQuarter: string;
   coverLetter: string;
   resume: File | null;
 }
@@ -99,6 +103,8 @@ export const useSubmitJobApplication = () => {
           religion: applicationData.religion,
           current_company: applicationData.currentCompany || null,
           years_of_experience: applicationData.experience,
+          division: applicationData.division || null,
+          head_quarter: applicationData.headQuarter,
           cover_letter: applicationData.coverLetter,
           resume_file_name: resumeFileName,
           resume_file_data: resumeData,

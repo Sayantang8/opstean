@@ -190,7 +190,7 @@ const JobApplicationsManagement = () => {
                     )}
                     <span className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
-                      {application.jobs.location || 'Remote'}
+                      {application.jobs.head_quarter || 'Not specified'}
                     </span>
                   </div>
 
@@ -288,6 +288,12 @@ const JobApplicationsManagement = () => {
                     {selectedApplication.years_of_experience && (
                       <p><strong>Experience:</strong> {selectedApplication.years_of_experience} years</p>
                     )}
+                    {selectedApplication.division && (
+                      <p><strong>Division:</strong> {selectedApplication.division}</p>
+                    )}
+                    {selectedApplication.head_quarter && (
+                      <p><strong>Headquarter Applied For:</strong> {selectedApplication.head_quarter}</p>
+                    )}
                   </div>
                 </div>
 
@@ -295,7 +301,7 @@ const JobApplicationsManagement = () => {
                   <h4 className="font-semibold mb-2">Application Info</h4>
                   <div className="space-y-2 text-sm">
                     <p><strong>Position:</strong> {selectedApplication.jobs?.title}</p>
-                    <p><strong>Location:</strong> {selectedApplication.jobs?.location || 'Remote'}</p>
+                    <p><strong>Job Head Quarter:</strong> {selectedApplication.jobs?.head_quarter || 'Not specified'}</p>
                     <p><strong>Applied:</strong> {format(new Date(selectedApplication.created_at), 'MMM dd, yyyy')}</p>
                     <p><strong>Status:</strong>
                       <Badge className={`ml-2 ${getStatusColor(selectedApplication.application_status)}`}>

@@ -70,6 +70,7 @@ export const GeneralApplicationForm = ({ isOpen, onOpenChange }: GeneralApplicat
       jobTitle: data.jobTitle,
       experience: data.experience,
       presentCompany: data.presentCompany,
+      division: data.division,
       headQuarter: data.headQuarter,
       coverLetter: data.coverLetter,
       resume,
