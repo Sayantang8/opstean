@@ -48,6 +48,19 @@ export const JobsManagement = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Helper function to check if job deadline has passed
+  const isJobExpired = (applyBefore?: string) => {
+    if (!applyBefore) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const deadline = new Date(applyBefore);
+    deadline.setHours(23, 59, 59, 999);
+
+    return deadline < today;
+  };
+
   const [newJob, setNewJob] = useState({
     title: '',
     description: '',
@@ -428,15 +441,29 @@ export const JobsManagement = () => {
         </div>
 
         {jobs.map((job) => (
-          <Card key={job.id} className="hover:shadow-md transition-shadow">
+          <Card key={job.id} className={`hover:shadow-md transition-shadow ${isJobExpired(job.apply_before) ? 'border-l-4 border-l-red-500 bg-red-50/30' : ''}`}>
             <CardContent className="p-6">
+              {isJobExpired(job.apply_before) && (
+                <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-md">
+                  <p className="text-sm text-red-800 font-medium">
+                    ⚠️ This job posting has expired and is no longer visible on the careers page.
+                    You can extend the deadline or mark it as inactive.
+                  </p>
+                </div>
+              )}
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-xl font-bold text-navy mb-2">{job.title}</h3>
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant={job.is_active ? 'default' : 'secondary'}>
-                      {job.is_active ? 'Active' : 'Inactive'}
-                    </Badge>
+                    {isJobExpired(job.apply_before) ? (
+                      <Badge variant="destructive">
+                        Expired
+                      </Badge>
+                    ) : (
+                      <Badge variant={job.is_active ? 'default' : 'secondary'}>
+                        {job.is_active ? 'Active' : 'Inactive'}
+                      </Badge>
+                    )}
                     <span className="text-sm text-gray-500">
                       Created: {job.created_at ? new Date(job.created_at).toLocaleDateString() : 'N/A'}
                     </span>
@@ -519,12 +546,17 @@ export const JobsManagement = () => {
                   {job.apply_before && (
                     <div>
                       <span className="text-sm font-medium text-gray-600">Apply Before:</span>
-                      <p className="text-sm text-gray-800">
+                      <p className={`text-sm font-medium ${isJobExpired(job.apply_before) ? 'text-red-600' : 'text-gray-800'}`}>
                         {new Date(job.apply_before).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric'
                         })}
+                        {isJobExpired(job.apply_before) && (
+                          <span className="ml-2 text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+                            EXPIRED
+                          </span>
+                        )}
                       </p>
                     </div>
                   )}
@@ -551,7 +583,13 @@ export const JobsManagement = () => {
               <div className="border-t pt-3 mt-4">
                 <div className="flex justify-between items-center text-sm text-gray-500">
                   <span>Job ID: {job.id}</span>
-                  <span>Status: {job.is_active ? 'Currently accepting applications' : 'Not accepting applications'}</span>
+                  <span>
+                    Status: {isJobExpired(job.apply_before)
+                      ? 'Application deadline has passed'
+                      : job.is_active
+                        ? 'Currently accepting applications'
+                        : 'Not accepting applications'}
+                  </span>
                 </div>
               </div>
             </CardContent>

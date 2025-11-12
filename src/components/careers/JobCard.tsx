@@ -90,18 +90,37 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onViewDetails }) => {
                 {job.salary_min && job.salary_min > 0 ? `₹${job.salary_min.toLocaleString()}` : 'Not specified'}
               </p>
             </div>
-            {job.apply_before && (
-              <div>
-                <span className="text-sm font-medium text-gray-600">Apply Before:</span>
-                <p className="text-sm font-medium text-red-600">
-                  {new Date(job.apply_before).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
-                </p>
-              </div>
-            )}
+            {job.apply_before && (() => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const deadline = new Date(job.apply_before);
+              deadline.setHours(23, 59, 59, 999);
+              const diffTime = deadline.getTime() - today.getTime();
+              const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+              return (
+                <div>
+                  <span className="text-sm font-medium text-gray-600">Apply Before:</span>
+                  <p className="text-sm font-medium text-red-600">
+                    {new Date(job.apply_before).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </p>
+                  {daysRemaining <= 7 && daysRemaining > 0 && (
+                    <Badge variant="destructive" className="mt-1 text-xs">
+                      {daysRemaining === 1 ? 'Last day!' : `${daysRemaining} days left`}
+                    </Badge>
+                  )}
+                  {daysRemaining === 0 && (
+                    <Badge variant="destructive" className="mt-1 text-xs">
+                      Deadline today!
+                    </Badge>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         </div>
 
