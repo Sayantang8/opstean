@@ -28,7 +28,7 @@ const AdminLogin = () => {
     // Check for existing rate limit
     const lastFailedAttempt = localStorage.getItem('adminLoginLastFailed');
     const failedAttempts = parseInt(localStorage.getItem('adminLoginAttempts') || '0');
-    
+
     if (lastFailedAttempt && failedAttempts >= MAX_ATTEMPTS) {
       const timeSinceLastAttempt = Date.now() - parseInt(lastFailedAttempt);
       if (timeSinceLastAttempt < BLOCK_DURATION) {
@@ -41,7 +41,7 @@ const AdminLogin = () => {
         localStorage.removeItem('adminLoginLastFailed');
       }
     }
-    
+
     setAttemptCount(failedAttempts);
   }, []);
 
@@ -55,9 +55,9 @@ const AdminLogin = () => {
         navigate('/admin');
       } else {
         setError('Access denied. Admin or manager role required.');
-        logger.security('Unauthorized admin access attempt', { 
+        logger.security('Unauthorized admin access attempt', {
           userEmail: user.email,
-          userRole: profile.role 
+          userRole: profile.role
         });
       }
     }
@@ -87,23 +87,23 @@ const AdminLogin = () => {
   const handleFailedAttempt = () => {
     const newAttemptCount = attemptCount + 1;
     setAttemptCount(newAttemptCount);
-    
+
     localStorage.setItem('adminLoginAttempts', newAttemptCount.toString());
     localStorage.setItem('adminLoginLastFailed', Date.now().toString());
-    
+
     if (newAttemptCount >= MAX_ATTEMPTS) {
       setIsBlocked(true);
       setError(`Too many failed attempts. Try again in 15 minutes.`);
-      logger.security('Admin login blocked due to too many attempts', { 
+      logger.security('Admin login blocked due to too many attempts', {
         email: email,
-        attemptCount: newAttemptCount 
+        attemptCount: newAttemptCount
       });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isBlocked) {
       setError('Account temporarily locked. Please try again later.');
       return;
@@ -118,13 +118,13 @@ const AdminLogin = () => {
 
     try {
       const { error } = await signIn(email.toLowerCase().trim(), password);
-      
+
       if (error) {
         handleFailedAttempt();
         setError('Invalid login credentials');
-        logger.security('Failed admin login attempt', { 
+        logger.security('Failed admin login attempt', {
           email: email,
-          error: error.message 
+          error: error.message
         });
         setIsSubmitting(false);
       } else {
@@ -174,7 +174,7 @@ const AdminLogin = () => {
                 </AlertDescription>
               </Alert>
             )}
-            
+
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -188,7 +188,7 @@ const AdminLogin = () => {
                 maxLength={254}
               />
             </div>
-            
+
             <div>
               <Label htmlFor="password">Password</Label>
               <Input
@@ -202,10 +202,10 @@ const AdminLogin = () => {
                 maxLength={128}
               />
             </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
+
+            <Button
+              type="submit"
+              className="w-full"
               disabled={isSubmitting || isBlocked}
             >
               {isSubmitting ? (
@@ -218,15 +218,6 @@ const AdminLogin = () => {
               )}
             </Button>
           </form>
-          
-          <div className="mt-4 text-sm text-gray-500 text-center">
-            <p className="font-medium">Test Credentials:</p>
-            <p>Email: admin@opstean.com</p>
-            <p>Password: admin123</p>
-            <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
-              <p>If login keeps loading, create the admin user in Supabase first!</p>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>
