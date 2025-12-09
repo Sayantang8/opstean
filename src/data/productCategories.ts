@@ -98,5 +98,12 @@ export const productCategories: ProductCategory[] = [
     description: "Dermatological and skin care products",
     icon: "sun",
     color: "bg-amber-500"
+  },
+  {
+    id: "cns-care",
+    name: "CNS Care",
+    description: "Central Nervous System care and neuropsychiatric products",
+    icon: "brain",
+    color: "bg-teal-600"
   }
 ];

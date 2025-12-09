@@ -61,6 +61,7 @@ const Navbar = () => {
     'Antibiotics',
     'Cardio Care',
     'Child Care',
+    'CNS Care',
     'Cold Care',
     'Derma Care',
     'Eye Care',

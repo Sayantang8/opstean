@@ -54,7 +54,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   // Enhanced category parsing to handle nested JSON strings
   const parseCategories = (categoryData: string[] | string): string[] => {
     console.log('🔧 ProductForm - Parsing category data:', categoryData, typeof categoryData);
-    
+
     if (Array.isArray(categoryData)) {
       // Handle array that might contain stringified JSON
       const flatCategories: string[] = [];
@@ -81,10 +81,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       });
       return flatCategories.filter(cat => cat && cat.trim());
     }
-    
+
     if (typeof categoryData === 'string') {
       const trimmed = categoryData.trim();
-      
+
       // Handle nested JSON strings like "[\"Women Care\",\"General Care\"]"
       if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
         try {
@@ -125,13 +125,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           return manualParsed;
         }
       }
-      
+
       // If it's just a regular string, return as single item array
       if (trimmed) {
         return [trimmed];
       }
     }
-    
+
     return [];
   };
 
@@ -170,6 +170,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         return "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100";
       case "derma-care":
         return "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100";
+      case "cns-care":
+        return "bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100";
       default:
         return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
     }
@@ -234,7 +236,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         {parseCategories(product.category || []).map((categoryName: string, idx: number) => {
                           const cleanCategoryName = categoryName.trim();
                           if (!cleanCategoryName) return null;
-                          
+
                           return (
                             <Badge
                               key={`edit-category-${idx}-${cleanCategoryName}`}
@@ -256,7 +258,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Add new categories dropdown */}
                   <div>
                     <p className="text-xs text-gray-600 mb-2">Add Categories:</p>
@@ -330,7 +332,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </div>
               </div>
             )}
-            
+
             <div className="flex items-center gap-2">
               <div className="flex-1">
                 <Input
