@@ -51,7 +51,7 @@ const About = () => {
   const featureCards = [
     {
       title: 'Certified (WHO, CGMP)',
-      description: 'We are collaborated with top manufacturers of India with WHO, CGMP certificate',
+      description: ' We are collaborated with top manufacturers of India with WHO, CGMP certificate',
       icon: (
         <img src="/certificate.png" alt="Certified WHO CGMP" className="w-20 h-20" />
       )
