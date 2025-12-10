@@ -40,13 +40,15 @@ export const ProductSearchFilter: React.FC<ProductSearchFilterProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              {productCategories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
-              ))}
+              {productCategories
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((cat) => (
+                  <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="mt-4 text-sm text-gray-600">
           Total products in database: {productsCount}
           {searchQuery && ` (filtered by "${searchQuery}")`}

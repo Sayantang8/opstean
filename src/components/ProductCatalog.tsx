@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productCategories } from '@/data/productCategories';
 import { useCategoryCounts } from '@/hooks/useCategoryCounts';
-import { Pill, Eye, Baby, Heart, Activity, Plus, Zap, Shield, Thermometer, Brain, Sun, Stethoscope, Bone, Droplets, User, Bandage, ArrowRight } from 'lucide-react';
+import { Pill, Eye, Baby, Heart, Activity, Plus, Zap, Shield, Thermometer, Brain, Sun, Stethoscope, Bone, Droplets, User, Bandage } from 'lucide-react';
+import { FaHeartbeat } from "react-icons/fa";
+import { GiCrossedBones } from "react-icons/gi";
 
 // Animated Counter Component with Circular Progress
 const StatCard = ({ number, label, suffix = '', color }: {
@@ -149,6 +151,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
     eye: Eye,
     baby: Baby,
     heart: Heart,
+    heartbeat: FaHeartbeat,
     activity: Activity,
     plus: Plus,
     zap: Zap,
@@ -158,6 +161,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
     sun: Sun,
     stethoscope: Stethoscope,
     bone: Bone,
+    'crossed-bones': GiCrossedBones,
     droplets: Droplets,
     user: User,
     bandage: Bandage,

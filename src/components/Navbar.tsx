@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { productCategories as categoryData } from '@/data/productCategories';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -57,22 +58,10 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   };
 
-  const productCategories = [
-    'Antibiotics',
-    'Cardio Care',
-    'Child Care',
-    'CNS Care',
-    'Cold Care',
-    'Derma Care',
-    'Eye Care',
-    'Gastro Care',
-    'General Care',
-    'Gyno Care',
-    'Neuro Care',
-    'Ortho Care',
-    'Pain Care',
-    'Uro Care',
-  ];
+  // Get categories from data file and sort alphabetically
+  const productCategories = categoryData
+    .map(cat => cat.name)
+    .sort((a, b) => a.localeCompare(b));
 
   const navItems = [
     { name: 'HOME', sectionId: 'home' },

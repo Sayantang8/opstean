@@ -265,8 +265,7 @@ const ProductsPage = () => {
         return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
       case "cold-care":
         return "bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100";
-      case "neuro-care":
-        return "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100";
+
       case "derma-care":
         return "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100";
       default:
@@ -345,9 +344,11 @@ const ProductsPage = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    {productCategories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
-                    ))}
+                    {productCategories
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((cat) => (
+                        <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
                 <Button onClick={() => refetch()} variant="outline">

@@ -33,7 +33,7 @@ export const productCategories: ProductCategory[] = [
     id: "cardio-care",
     name: "Cardio Care",
     description: "Cardiovascular medications and heart health products",
-    icon: "stethoscope",
+    icon: "heartbeat",
     color: "bg-red-500"
   },
   {
@@ -75,7 +75,7 @@ export const productCategories: ProductCategory[] = [
     id: "ortho-care",
     name: "Ortho Care",
     description: "Orthopedic and bone health products",
-    icon: "knee",
+    icon: "crossed-bones",
     color: "bg-gray-600"
   },
   {
@@ -85,13 +85,7 @@ export const productCategories: ProductCategory[] = [
     icon: "thermometer",
     color: "bg-cyan-500"
   },
-  {
-    id: "neuro-care",
-    name: "Neuro Care",
-    description: "Neurological and brain health products",
-    icon: "brain",
-    color: "bg-violet-600"
-  },
+
   {
     id: "derma-care",
     name: "Derma Care",
