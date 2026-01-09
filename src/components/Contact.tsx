@@ -276,7 +276,7 @@ const Contact = () => {
               <p className="text-gray-600 mb-4">
                 <strong>Email:</strong> info@opsteanhealthcare.com<br />
                 <strong>WhatsApp:</strong> +91 947486 0402<br />
-                <strong className="text-red-400"><em>WhatsApp us for any queries. We’ll respond shortly.</em></strong><br />
+                <strong className="text-red-600"><em>WhatsApp us for any queries. We’ll respond shortly.</em></strong><br />
                 <strong>Working Hours:</strong> 10 AM To 6 PM
               </p>
             </div>
